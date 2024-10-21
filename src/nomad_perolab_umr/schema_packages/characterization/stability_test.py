@@ -36,8 +36,8 @@ from baseclasses.helper.utilities import get_encoding, get_reference
 from baseclasses import BaseMeasurement
 
 # Imports UMR
-from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass, UMR_TrackingData, UMR_JVParameters, UMR_CollectedJVMeasurements
-from ..characterization.jv_measurement import UMR_JVMeasurement
+from .measurement_baseclasses import UMR_MeasurementBaseclass, UMR_TrackingData, UMR_JVParameters, UMR_CollectedJVMeasurements
+from .jv_measurement import UMR_JVMeasurement
 from ..categories import *
 from ..helper_functions import *
 

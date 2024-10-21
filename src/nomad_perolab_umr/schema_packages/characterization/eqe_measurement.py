@@ -179,9 +179,9 @@ class UMR_EQEMeasurement(BaseMeasurement, PlotSection, EntryData, UMR_Measuremen
 
             with archive.m_context.raw_file(self.data_file, encoding=encoding) as f:
                 log_info(self, logger, f"Normalize EQE Measurement: Parse data from file: {f.name} | Encoding: {encoding}")
-                from UMR_schemas.read_and_parse.general_parser import parse_general_info          
+                from ..read_and_parse.general_parser import parse_general_info          
                 parse_general_info(self, f.name, encoding)
-                from UMR_schemas.read_and_parse.eqe_parser import parse_eqe_data_to_archive
+                from ..read_and_parse.eqe_parser import parse_eqe_data_to_archive
                 parse_eqe_data_to_archive(self, f.name, encoding)
             
             # Normalize advanced eqe section
@@ -193,7 +193,7 @@ class UMR_EQEMeasurement(BaseMeasurement, PlotSection, EntryData, UMR_Measuremen
           
         # REFERENCE SAMPLE
         if self.data_file and not self.solar_cell_was_referenced:
-            from UMR_schemas.read_and_parse.general_parser import reference_sample          
+            from ..read_and_parse.general_parser import reference_sample          
             reference_sample(self, logger, archive)
 
 

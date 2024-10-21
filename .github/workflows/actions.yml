@@ -15,7 +15,7 @@ jobs:
         pip install '.[dev]' --index-url https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple
         pip install coverage coveralls
         # Installiere das baseclasses-Modul
-        pip install -e git+https://github.com/nomad-hzb/nomad-baseclasses.git#egg=baseclasses
+        pip install -e git+https://github.com/nomad-hzb/nomad-baseclasses.git#egg=nomad-baseclasses
     - name: Test with pytest
       run: |
         python -m coverage run -m pytest -sv

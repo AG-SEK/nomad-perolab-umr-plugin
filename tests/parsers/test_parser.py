@@ -2,7 +2,7 @@ import logging
 
 from nomad.datamodel import EntryArchive
 
-from nomad_perolab_umr.parsers.parser import NewParser
+from nomad_perolab_umr.parsers.parser import CicciTXTParser # Original: NewParser
 
 
 def test_parse_file():

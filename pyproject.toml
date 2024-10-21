@@ -139,8 +139,6 @@ stability_test_schema = "nomad_perolab_umr.schema_packages.characterization:stab
 cicci_txt_parser_entry_point = "nomad_perolab_umr.parsers:cicci_txt_parser_entry_point"
 
 
-schema_package_entry_point = "nomad_perolab_umr.schema_packages:schema_package_entry_point"
-
 app_entry_point = "nomad_perolab_umr.apps:app_entry_point"
 example_upload_entry_point = "nomad_perolab_umr.example_uploads:example_upload_entry_point"
 

@@ -139,6 +139,11 @@ cicci_txt_parser_entry_point = "nomad_perolab_umr.parsers:cicci_txt_parser_entry
 app_entry_point = "nomad_perolab_umr.apps:app_entry_point"
 example_upload_entry_point = "nomad_perolab_umr.example_uploads:example_upload_entry_point"
 
+# Die Module stability_test.py und connection_test.py dürfen nicht von pytest als Test Dateien erkannt werden.
+[tool.pytest.ini_options]
+addopts = "--ignore=src/nomad_perolab_umr/schema_packages/characterization/connection_test.py --ignore=src/nomad_perolab_umr/schema_packages/characterization/stability_test.py"
+
+
 #[tool.cruft]
 # Avoid updating workflow files, this leads to permissions issues
 #skip = [".github/*"]

@@ -36,16 +36,16 @@ from nomad.datamodel import EntryArchive
 from baseclasses.helper.utilities import get_encoding, search_entry_by_id, create_archive, get_reference
 
 # My classes and methods
-from schema_packages.helper_functions import *
-from schema_packages.read_and_parse.read_header_line import read_header_line
+from ..schema_packages.helper_functions import *
+from ..schema_packages.read_and_parse.read_header_line import read_header_line
 
-from schema_packages.characterization.jv_measurement import UMR_JVMeasurement
-from schema_packages.characterization.eqe_measurement import UMR_EQEMeasurement
-from schema_packages.characterization.connection_test import UMR_ConnectionTest, UMR_StabilizedShortCircuitCurrent, UMR_StabilizedOpenCircuitVoltage, UMR_ConnectionTestExtraData
-from schema_packages.characterization.mpp_tracking import UMR_MPPTracking, UMR_MPPTrackingParameters, UMR_MPPTrackingJVMeasurement
-from schema_packages.characterization.stability_test import UMR_StabilityTest, UMR_StabilityParameters, UMR_StabilityJVMeasurement
+from ..schema_packages.characterization.jv_measurement import UMR_JVMeasurement
+from ..schema_packages.characterization.eqe_measurement import UMR_EQEMeasurement
+from ..schema_packages.characterization.connection_test import UMR_ConnectionTest, UMR_StabilizedShortCircuitCurrent, UMR_StabilizedOpenCircuitVoltage, UMR_ConnectionTestExtraData
+from ..schema_packages.characterization.mpp_tracking import UMR_MPPTracking, UMR_MPPTrackingParameters, UMR_MPPTrackingJVMeasurement
+from ..schema_packages.characterization.stability_test import UMR_StabilityTest, UMR_StabilityParameters, UMR_StabilityJVMeasurement
 
-from schema_packages.read_and_parse.general_parser import add_data_file, add_standard_instrument
+from ..schema_packages.read_and_parse.general_parser import add_data_file, add_standard_instrument
 
 #from UMR_schemas import UMR_TimeResolvedPhotoluminescence, UMR_PLmeasurement, UMR_Measurement, UMR_UVvismeasurement, UMR_trSPVmeasurement
 

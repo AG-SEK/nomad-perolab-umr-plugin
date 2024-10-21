@@ -223,14 +223,14 @@ class UMR_JVParameters(UMR_MeasurementBaseclass, BaseMeasurement, EntryData, Plo
 
             with archive.m_context.raw_file(self.data_file, encoding=encoding) as f:
                 log_info(self, logger, f"Normalize JV Parameters Measurement: Parse data from file: {f.name} | Encoding: {encoding}")
-                from UMR_schemas.read_and_parse.general_parser import parse_general_info          
+                from ..read_and_parse.general_parser import parse_general_info          
                 parse_general_info(self, f.name, encoding)
-                from UMR_schemas.read_and_parse.parameters_parser import parse_parameters_data_to_archive
+                from ..read_and_parse.parameters_parser import parse_parameters_data_to_archive
                 parse_parameters_data_to_archive(self, f.name, encoding)
          
         # REFERENCE SAMPLE
         if self.data_file and not self.solar_cell_was_referenced:
-            from UMR_schemas.read_and_parse.general_parser import reference_sample          
+            from ..read_and_parse.general_parser import reference_sample          
             reference_sample(self, logger, archive)
  
         super(UMR_JVParameters, self).normalize(archive, logger)

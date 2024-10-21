@@ -37,7 +37,7 @@ from baseclasses.helper.utilities import get_encoding
 from baseclasses import BaseMeasurement # TODO
 
 # Imports UMR
-from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass, UMR_TrackingData
+from .measurement_baseclasses import UMR_MeasurementBaseclass, UMR_TrackingData
 from ..categories import *
 from ..helper_functions import *
 

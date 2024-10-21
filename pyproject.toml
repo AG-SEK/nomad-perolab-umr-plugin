@@ -117,7 +117,7 @@ where = ["src"]
 
 batch_schema = "nomad_perolab_umr.schema_packages:batch_schema"
 solar_cell_schema = "nomad_perolab_umr.schema_packages:solar_cell_schema"
-substrate_schema = "nomad_perolob_umr.schema_packages:substrate_schema"
+substrate_schema = "nomad_perolab_umr.schema_packages:substrate_schema"
 external_batch_plan_schema = "nomad_perolab_umr.schema_packages:external_batch_plan_schema"
 internal_batch_plan_schema = "nomad_perolab_umr.schema_packages:internal_batch_plan_schema"
 baseclasses_schema = "nomad_perolab_umr.schema_packages:baseclasses_schema"

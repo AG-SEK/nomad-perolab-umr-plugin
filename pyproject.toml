@@ -115,24 +115,24 @@ where = ["src"]
 
 
 
-batch_schema = "nomad_perolob_umr.schema_packages:batch_schema"
-solar_cell_schema = "nomad_perolob_umr.schema_packages:solar_cell_schema"
+batch_schema = "nomad_perolab_umr.schema_packages:batch_schema"
+solar_cell_schema = "nomad_perolab_umr.schema_packages:solar_cell_schema"
 substrate_schema = "nomad_perolob_umr.schema_packages:substrate_schema"
-external_batch_plan_schema = "nomad_perolob_umr.schema_packages:external_batch_plan_schema"
-internal_batch_plan_schema = "nomad_perolob_umr.schema_packages:internal_batch_plan_schema"
-baseclasses_schema = "nomad_perolob_umr.schema_packages:baseclasses_schema"
-synthesis_schema = "nomad_perolob_umr.schema_packages:synthesis_schema"
+external_batch_plan_schema = "nomad_perolab_umr.schema_packages:external_batch_plan_schema"
+internal_batch_plan_schema = "nomad_perolab_umr.schema_packages:internal_batch_plan_schema"
+baseclasses_schema = "nomad_perolab_umr.schema_packages:baseclasses_schema"
+synthesis_schema = "nomad_perolab_umr.schema_packages:synthesis_schema"
 
-blade_coating_schema = "nomad_perolob_umr.schema_packages.processes:blade_coating_schema"
-cleaning_coating_schema = "nomad_perolob_umr.schema_packages.processes:cleaning_coating_schema"
-spin_coating_schema = "nomad_perolob_umr.schema_packages.processes:spin_coating_schema"
-spray_pyrolysis_schema = "nomad_perolob_umr.schema_packages.processes:spray_pyrolysis_schema"
+blade_coating_schema = "nomad_perolab_umr.schema_packages.processes:blade_coating_schema"
+cleaning_coating_schema = "nomad_perolab_umr.schema_packages.processes:cleaning_coating_schema"
+spin_coating_schema = "nomad_perolab_umr.schema_packages.processes:spin_coating_schema"
+spray_pyrolysis_schema = "nomad_perolab_umr.schema_packages.processes:spray_pyrolysis_schema"
 
-connection_test_schema = "nomad_perolob_umr.schema_packages.characterization:connection_test_schema"
-eqe_schema = "nomad_perolob_umr.schema_packages.characterization:eqe_schema"
-jv_schema = "nomad_perolob_umr.schema_packages.characterization:jv_schema"
-mpp_tracking_schema = "nomad_perolob_umr.schema_packages.characterization:mpp_tracking_schema"
-stability_test_schema = "nomad_perolob_umr.schema_packages.characterization:stability_test_schema"
+connection_test_schema = "nomad_perolab_umr.schema_packages.characterization:connection_test_schema"
+eqe_schema = "nomad_perolab_umr.schema_packages.characterization:eqe_schema"
+jv_schema = "nomad_perolab_umr.schema_packages.characterization:jv_schema"
+mpp_tracking_schema = "nomad_perolab_umr.schema_packages.characterization:mpp_tracking_schema"
+stability_test_schema = "nomad_perolab_umr.schema_packages.characterization:stability_test_schema"
 
 
 

@@ -112,9 +112,6 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [project.entry-points.'nomad.plugin']
-
-
-
 batch_schema = "nomad_perolab_umr.schema_packages:batch_schema"
 solar_cell_schema = "nomad_perolab_umr.schema_packages:solar_cell_schema"
 substrate_schema = "nomad_perolab_umr.schema_packages:substrate_schema"

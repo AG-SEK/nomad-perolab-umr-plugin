@@ -34,17 +34,17 @@ from baseclasses import BaseProcess
 from baseclasses.helper.utilities import get_entry_id_from_file_name
 
 # Imports UMR
-from UMR_schemas.suggestions_lists import *
-from UMR_schemas.helper_functions import *
-from UMR_schemas.categories import *
+from ..suggestions_lists import *
+from ..helper_functions import *
+from ..categories import *
 
-from UMR_schemas.umr_baseclasses import UMR_Layer
-from UMR_schemas.batch import UMR_Batch
-from UMR_schemas.solar_cell import UMR_InternalSolarCell
-from UMR_schemas.umr_reference_classes import UMR_EntityReference
-from UMR_schemas.umr_synthesis_classes import UMR_ChemicalLot
+from ..umr_baseclasses import UMR_Layer
+from ..batch import UMR_Batch
+from ..solar_cell import UMR_InternalSolarCell
+from ..umr_reference_classes import UMR_EntityReference
+from ..umr_synthesis_classes import UMR_ChemicalLot
 
-from UMR_schemas.processes.process_baseclasses import UMR_BaseProcess, UMR_ELNProcess, UMR_PrecursorSolution, UMR_SolarCellSettings
+from ..processes.process_baseclasses import UMR_BaseProcess, UMR_ELNProcess, UMR_PrecursorSolution, UMR_SolarCellSettings
 
 
 m_package = SchemaPackage() 

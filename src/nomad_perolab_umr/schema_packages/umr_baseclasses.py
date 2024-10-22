@@ -25,7 +25,7 @@ from nomad.datamodel.data import EntryData, ArchiveSection
 from nomad.datamodel.metainfo.basesections import SectionReference, Entity, EntityReference, Measurement, Instrument, InstrumentReference
 from nomad.metainfo import MEnum, Reference, Quantity, SubSection, Section, SchemaPackage, Datetime
 from nomad.datamodel.metainfo.plot import PlotSection
-from nomad.datamodel.data import user_reference
+#from nomad.datamodel.data import user_reference --> Error when importing
 
 
 

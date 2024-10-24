@@ -161,7 +161,7 @@ class UMR_ParameterVariation(ParametersVaried):
         description="Use this button to create processes with the chosen Parameter variation. The processes are displayed in the parent section 'VaryProcess'. In there you can also make additional changes.",
         type=bool,
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
 
 
     def normalize(self, archive, logger):
@@ -261,7 +261,7 @@ class UMR_VaryProcess(ArchiveSection):
         type=bool,
         description="Use this button to manually vary a process. Enter the number of variations above and click this button. Afterwards the given number of processes is created in the 'varied_processes' SubSection. Navigate through the process in there and adapt them to your needs. Make sure to adapt the process names first.",
         default=False,
-        a_eln=dict(component='ButtonEditQuantity')
+        a_eln=dict(component='ActionEditQuantity')
     )
 
     process_is_varied = Quantity(
@@ -335,7 +335,7 @@ class UMR_SelectProcessVariation(ArchiveSection):
         description="Click this Button to choose the displayed process as process for the group. It automatically is transferred to the parent Sections.",
         type=bool,
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
 
 
     def normalize(self, archive, logger):
@@ -697,7 +697,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
         description="This moves all the processes from the'standard_processes' Subsection into the 'standard_processes_for_variation' Subsection. During this step a standalone Process entry is created and referenced in the variation section. They are saved in the folder 'Processes'.",
         type=bool,
         default=False,
-        a_eln=dict(component='ButtonEditQuantity')
+        a_eln=dict(component='ActionEditQuantity')
     )
     
     create_groups_for_selection_of_processes = Quantity(
@@ -705,7 +705,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
         label="7. Create Groups For Selection of Processes",
         description="With this button you create groups. Enter the 'number_of_groups' first and then press the Button. The groups are created in the 'groups_for_selection_of_processes' Subsection. During this step also the standalone varied process entries are created. Navigate throught the groups and change the substrate parameters if neccesary. Then select the processes applied for this group.",
         default=False,
-        a_eln=dict(component='ButtonEditQuantity')
+        a_eln=dict(component='ActionEditQuantity')
     )
     
     create_pdf_plan = Quantity(
@@ -713,7 +713,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
         label="9. Create PDF plan",
         description="COMING SOON: with this Button you can create a standardized PDF overview of your batch plan.",
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
     
     batch_plan_pdf = Quantity(
         type=str,
@@ -725,7 +725,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
         label="11. Create Batch",
         description="With this button you crete your batch including all substrates and samples as well as the batch entry with its groups. They are saved in the corresponding folders. Check the FILES tab to find them.",
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
 
     batch_was_created = Quantity(
         type=bool,

@@ -183,7 +183,7 @@ class UMR_ELNProcess(EntryData, ArchiveSection):
         type=bool,
         description="Click on the Pencil to choose a Standard Process. Afterwards click 'Load Standard Process'. The ELN fields will be filled with the values from the chosen Standard Process.",
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
     
     use_current_datetime = Quantity(
         type=bool,
@@ -198,7 +198,7 @@ class UMR_ELNProcess(EntryData, ArchiveSection):
     execute_process_and_deposit_layer = Quantity(
         type=bool,
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
 
     selected_samples = SubSection(section_def=UMR_EntityReference, repeats=True)
     solar_cell_settings = SubSection(section_def=UMR_SolarCellSettings)

@@ -225,7 +225,7 @@ class UMR_AddStandardSubstrateLot(Entity):
     add_lot = Quantity(
         type=bool,
         default=False,
-        a_eln=dict(component='ButtonEditQuantity')
+        a_eln=dict(component='ActionEditQuantity')
     )
 
     def normalize(self, archive, logger):
@@ -465,7 +465,7 @@ class UMR_InternalSubstrate(UMR_Substrate, EntryData):
         label='Load data from Standard Substrate',
         description="Click on the Pencil to choose a 'UMR_StandardSubstrateLot'. Afterwards click 'Load Data From Standard Substrate'. The ELN fields will be filled with the values from the corresponding Standard Substrate",
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
     
     group_number = Quantity(
         type=int,

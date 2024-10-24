@@ -120,7 +120,7 @@ class UMR_CreateExternalBatch(Entity, EntryData):
     create_batch_from_csv_file = Quantity(
         type=bool,
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
 
 
     number_of_substrates = Quantity(  # our numbering
@@ -196,7 +196,7 @@ class UMR_CreateExternalBatch(Entity, EntryData):
     create_batch = Quantity(
         type=bool,
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
     
 
     batch_was_created = Quantity(

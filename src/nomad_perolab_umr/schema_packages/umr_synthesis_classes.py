@@ -120,7 +120,7 @@ class UMR_AddChemicalLot(Entity):
     add_lot = Quantity(
         type=bool,
         default=False,
-        a_eln=dict(component='ButtonEditQuantity')
+        a_eln=dict(component='ActionEditQuantity')
     )
 
     def normalize(self, archive, logger):
@@ -543,7 +543,7 @@ class UMR_Solution(Solution, EntryData):
     load_standard_solution = Quantity(
         type=bool,
         default=False,
-        a_eln=dict(component='ButtonEditQuantity'))
+        a_eln=dict(component='ActionEditQuantity'))
     
     solute = SubSection(section_def=UMR_SolutionChemical, repeats=True)
     solvent = SubSection(section_def=UMR_SolutionChemical, repeats=True)

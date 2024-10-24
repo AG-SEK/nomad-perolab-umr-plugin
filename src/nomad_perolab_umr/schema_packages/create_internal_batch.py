@@ -48,7 +48,7 @@ from .umr_reference_classes import UMR_EntityReference
 from .substrate import UMR_InternalSubstrate, UMR_SubstrateForBatchPlan
 from .solar_cell import UMR_InternalSolarCell, UMR_BasicSample
 from .batch import UMR_InternalBatch, UMR_Group
-from .processes import UMR_ELNProcess, UMR_BaseProcess
+from .processes.process_baseclasses import UMR_ELNProcess, UMR_BaseProcess
 
 m_package = SchemaPackage() 
 

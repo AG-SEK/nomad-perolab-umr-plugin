@@ -47,7 +47,7 @@ from ..umr_synthesis_classes import UMR_ChemicalLot
 from ..processes.process_baseclasses import UMR_BaseProcess, UMR_ELNProcess, UMR_PrecursorSolution, UMR_SolarCellSettings
 
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.processes.cleaning']) 
 
 ################################ Cleaning ################################
 

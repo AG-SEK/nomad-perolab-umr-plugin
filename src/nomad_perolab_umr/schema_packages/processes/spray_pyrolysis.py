@@ -45,8 +45,7 @@ from ..umr_reference_classes import UMR_EntityReference
 
 from ..processes.process_baseclasses import UMR_BaseProcess, UMR_ELNProcess, UMR_PrecursorSolution, UMR_SolarCellSettings
 
-
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.processes.spray_pyrolysis']) 
 
 
 ################################ Spray Pyrolysis ################################

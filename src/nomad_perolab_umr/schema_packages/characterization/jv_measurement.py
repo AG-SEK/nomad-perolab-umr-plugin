@@ -43,7 +43,7 @@ from ..helper_functions import *
 
 from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.characterization.jv_measurement']) 
 
 ################################ JV ################################
 

@@ -43,7 +43,7 @@ from ..helper_functions import *
 
 #from Solar.plotfunctions import plot_stability_parameter
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.characterization.stability_test']) 
 
 ################################ Stability Test (Ageing) ################################
 

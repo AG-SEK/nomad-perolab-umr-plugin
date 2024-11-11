@@ -41,7 +41,7 @@ from .helper_functions import *
 from .categories import *
 from .umr_reference_classes import UMR_ChemicalReference, UMR_InstrumentReference
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.umr_baseclasses']) 
 
 
 ################################ HELPER SUBSECTIONS ################################

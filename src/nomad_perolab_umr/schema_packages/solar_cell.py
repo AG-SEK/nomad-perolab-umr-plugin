@@ -40,7 +40,7 @@ from .substrate import UMR_Substrate
 from .batch import UMR_Batch
 
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.solar_cell']) 
 
 
 ################################ BASIC SAMPLE ################################

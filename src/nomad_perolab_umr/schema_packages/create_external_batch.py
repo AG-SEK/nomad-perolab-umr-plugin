@@ -44,7 +44,7 @@ from .umr_reference_classes import UMR_EntityReference
 
 
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.create_external_batch '])
 
 ################################ Create External Batch ################################
 

@@ -44,7 +44,7 @@ from .umr_baseclasses import UMR_FileWithDescription
 from .batch import UMR_Batch
 from .umr_reference_classes import UMR_EntityReference
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.substrate']) 
 
 
 ################################ SUBSTRATE ################################

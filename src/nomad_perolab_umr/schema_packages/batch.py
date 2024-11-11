@@ -32,11 +32,7 @@ from .categories import *
 from .umr_reference_classes import UMR_EntityReference
 
 
-m_package = SchemaPackage(
-#    aliases=[
-#        'UMR_schemas',
-#    ],
-)
+m_package = SchemaPackage(aliases=['UMR_schemas.batch'])
 
 # Create Package instance, which organize metainfo definitions alongside Python modules.
 # Definitions (categories, sections) in Python modules are automatically added to the module's :class:`Package`.

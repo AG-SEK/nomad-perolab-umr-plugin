@@ -50,7 +50,7 @@ from .solar_cell import UMR_InternalSolarCell, UMR_BasicSample
 from .batch import UMR_InternalBatch, UMR_Group
 from .processes.process_baseclasses import UMR_ELNProcess, UMR_BaseProcess
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.create_internal_batch']) 
 
 
 ################################ Standard Sample ################################

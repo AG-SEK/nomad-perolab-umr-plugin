@@ -44,7 +44,7 @@ from .categories import *
 
 from .umr_baseclasses import UMR_Room, UMR_Instrument
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.umr_synthesis_classes']) 
 
 ################################ Chemical ################################
 

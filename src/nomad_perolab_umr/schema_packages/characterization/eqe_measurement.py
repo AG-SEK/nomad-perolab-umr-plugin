@@ -43,7 +43,7 @@ from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass
 from ..categories import *
 from ..helper_functions import *
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.characterization.eqe_measurement']) 
 
 ################################ EQE ################################
 

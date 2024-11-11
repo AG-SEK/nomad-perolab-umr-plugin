@@ -46,7 +46,7 @@ from ..characterization.stability_test import UMR_JVParameters
 #from Solar.plotfunctions import plot_mppt
 
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.characterization.mpp_tracking']) 
 
 ################################ MPP Tracking ################################
 

@@ -41,7 +41,7 @@ from .measurement_baseclasses import UMR_MeasurementBaseclass, UMR_TrackingData
 from ..categories import *
 from ..helper_functions import *
 
-m_package = SchemaPackage() 
+m_package = SchemaPackage(aliases=['UMR_schemas.characterization.connection_test']) 
 
 ################################ CONNECTION TEST - FOR STABILIZED VOC AND JSC ################################
 

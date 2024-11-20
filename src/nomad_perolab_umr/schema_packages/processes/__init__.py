@@ -70,12 +70,23 @@ class SprayPyrolysisSchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
 spray_pyrolysis_schema = SprayPyrolysisSchemaPackageEntryPoint(
     name='Spray Pyrolysis Schema',
-    description='Schema package containing sections for Sray Pyrolysis.',
+    description='Schema package containing sections for Spray Pyrolysis.',
 )
 
 
-# Process baseclasses ???
+class ProcessBaseclassesSchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
+    def load(self):
+        from nomad_perolab_umr.schema_packages.processes.process_baseclasses import m_package
+
+        return m_package
+
+spray_pyrolysis_schema = ProcessBaseclassesSchemaPackageEntryPoint(
+    name='Process Baseclasses Schema',
+    description='Schema package containing sections for process baseclassses.',
+)
+
+# Process baseclasses ???
 
 
 

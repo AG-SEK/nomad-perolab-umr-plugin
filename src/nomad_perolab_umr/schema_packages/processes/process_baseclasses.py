@@ -21,7 +21,7 @@ import numpy as np
 import json
 
 # Imports Nomad
-from nomad.metainfo import Quantity, SubSection, Section, Package
+from nomad.metainfo import Quantity, SubSection, SchemaPackage, Section, Package
 from nomad.datamodel.data import EntryData, ArchiveSection
 from nomad.datamodel.metainfo.basesections import SectionReference
 

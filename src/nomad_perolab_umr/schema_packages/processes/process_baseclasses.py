@@ -47,7 +47,7 @@ from ..umr_synthesis_classes import UMR_Solution, UMR_ChemicalLot
 
 
 #m_package = Package() 
-
+m_package = SchemaPackage(aliases=['UMR_schemas.processes.process_baseclasses']) 
 
 
 class UMR_SolarCellSettings(ArchiveSection):
@@ -258,7 +258,7 @@ class UMR_SpinCoatingAntiSolventQuenching(AntiSolventQuenching):
             self.lab_id = self.anti_solvent.lab_id
 
 
-#m_package.__init_metainfo__()
+m_package.__init_metainfo__()
 
 
 

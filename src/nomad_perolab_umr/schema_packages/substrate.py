@@ -83,7 +83,7 @@ class LabelMEnumTestWithoutLabel(EntryData):
 
 class ELNAnnotationTestDisplay(EntryData):
     m_def = Section(
-        a_display=SectionDisplayAnnotation(
+        a_display=dict(  #SectionDisplayAnnotation
             visible=Filter(
                 exclude=['quantity_2'])))
             

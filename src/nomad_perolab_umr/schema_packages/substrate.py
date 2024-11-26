@@ -70,6 +70,16 @@ class LabelMEnumTestAELN(EntryData):
             label="Test",
             component='EnumEditQuantity',
             props=dict(suggestions=suggestions_list)))
+
+class LabelMEnumTestWithoutLabel(EntryData):
+    m_def=Section()
+    
+    suggestions_list = ["A", "B", "C"]
+    enumeration = Quantity(
+        type=MEnum(suggestions_list),
+        a_eln=dict(
+            component='EnumEditQuantity',
+            props=dict(suggestions=suggestions_list)))
     
 #########################################################
 

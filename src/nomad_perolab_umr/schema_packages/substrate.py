@@ -93,7 +93,7 @@ class ELNAnnotationTestDisplay(EntryData):
     quantity_4 = Quantity(type=str)
 
               
-  class ELNAnnotationTestELN(EntryData):
+class ELNAnnotationTestELN(EntryData):
     m_def = Section(
         a_eln=dict(
             properties=dict(
@@ -105,7 +105,8 @@ class ELNAnnotationTestDisplay(EntryData):
     quantity_3 = Quantity(type=str)
     quantity_4 = Quantity(type=str)
                      
- class ELNAnnotationTestHide(EntryData):
+
+class ELNAnnotationTestHide(EntryData):
     m_def = Section(
         a_eln=dict(
             hide=['quantity_4']))
@@ -114,7 +115,6 @@ class ELNAnnotationTestDisplay(EntryData):
     quantity_2 = Quantity(type=str)
     quantity_3 = Quantity(type=str)
     quantity_4 = Quantity(type=str)
-
 
 
 class SliderTest(EntryData):

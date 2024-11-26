@@ -80,6 +80,56 @@ class LabelMEnumTestWithoutLabel(EntryData):
         a_eln=dict(
             component='EnumEditQuantity',
             props=dict(suggestions=suggestions_list)))
+
+class ELNAnnotationTestDisplay(EntryData):
+    m_def = Section(
+        a_display=SectionDisplayAnnotation(
+            visible=Filter(
+                exclude=['quantity_2'])))
+            
+    quantity_1 = Quantity(type=str)
+    quantity_2 = Quantity(type=str)
+    quantity_3 = Quantity(type=str)
+    quantity_4 = Quantity(type=str)
+
+              
+  class ELNAnnotationTestELN(EntryData):
+    m_def = Section(
+        a_eln=dict(
+            properties=dict(
+                visible=dict(
+                    exclude=['quantity_3']))))
+
+    quantity_1 = Quantity(type=str)
+    quantity_2 = Quantity(type=str)
+    quantity_3 = Quantity(type=str)
+    quantity_4 = Quantity(type=str)
+                     
+ class ELNAnnotationTestHide(EntryData):
+    m_def = Section(
+        a_eln=dict(
+            hide=['quantity_4']))
+
+    quantity_1 = Quantity(type=str)
+    quantity_2 = Quantity(type=str)
+    quantity_3 = Quantity(type=str)
+    quantity_4 = Quantity(type=str)
+
+
+
+class SliderTest(EntryData):
+     m_def=Section()
+     slider_test = Quantity(
+        type=int,
+        a_eln=dict(component='SliderEditQuantity', minValue=1, maxValue=20, default=1))
+
+
+#class UserTest(EntryData):
+#     m_def=Section()
+#     user = Quantity(
+#        type=user,
+#        a_eln=dict(component='AuthorEditQuantity'),
+#)
     
 #########################################################
 

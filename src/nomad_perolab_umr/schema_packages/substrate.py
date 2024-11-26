@@ -48,6 +48,7 @@ m_package = SchemaPackage(aliases=['UMR_schemas.substrate'])
 
 
 ################################ SUBSTRATE ################################
+#from nomad.datamodel.metainfo.annotations import Filter, SectionDisplayAnnotation
 
 class LabelMEnumTest(EntryData):
     m_def=Section()
@@ -84,7 +85,7 @@ class LabelMEnumTestWithoutLabel(EntryData):
 class ELNAnnotationTestDisplay(EntryData):
     m_def = Section(
         a_display=dict(  #SectionDisplayAnnotation
-            visible=Filter(
+            visible=dict(
                 exclude=['quantity_2'])))
             
     quantity_1 = Quantity(type=str)
@@ -96,7 +97,7 @@ class ELNAnnotationTestDisplay(EntryData):
 class ELNAnnotationTestELN(EntryData):
     m_def = Section(
         a_eln=dict(
-            properties=dict(
+            properties=dict( #Filter
                 visible=dict(
                     exclude=['quantity_3']))))
 

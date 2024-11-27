@@ -1,5 +1,5 @@
 from nomad.config.models.plugins import AppEntryPoint
-from nomad.config.models.ui import App, Column, Columns, FilterMenu, FilterMenus, Filters, FilterMenuActions, FilterMenuActionCheckbox, Menu, MenuItemHistogram, MenuItemTerms,
+from nomad.config.models.ui import App, Column, Columns, FilterMenu, FilterMenus, Filters, FilterMenuActions, FilterMenuActionCheckbox, Menu, MenuItemHistogram, MenuItemTerms
 
 schema = 'nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical'
 

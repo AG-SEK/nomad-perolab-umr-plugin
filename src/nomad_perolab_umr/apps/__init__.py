@@ -45,7 +45,7 @@ chemicals_app_entry_point  = MyAppEntryPoint(
             "section_defs.definition_qualified_name:all": [schema]
         }
     )
-
+)
     
 app_entry_point = AppEntryPoint(
     name='NewApp',

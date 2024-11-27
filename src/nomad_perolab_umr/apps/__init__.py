@@ -1,5 +1,5 @@
 from nomad.config.models.plugins import AppEntryPoint
-from nomad.config.models.ui import App, Column, Columns, FilterMenu, FilterMenus, Filters, FilterMenuActions, FilterMenuActionCheckbox
+from nomad.config.models.ui import App, Column, Columns, FilterMenu, FilterMenus, Filters, FilterMenuActions, FilterMenuActionCheckbox, Menu, MenuItemHistogram, MenuItemTerms,
 
 schema = 'nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical'
 
@@ -29,25 +29,21 @@ chemicals_app_entry_point  = MyAppEntryPoint(
             title="Link",
             align="left",
         )],
+        menu=Menu(
+            title='Chemicals Database',
+                items=[
+                    MenuItemTerms(
+                        quantity=f'data.suplier#{schema}',
+                        show_input=True,
+                        title='Supplier Abbreviation'),
+                    MenuItemTerms(
+                        quantity=f'data.state_of_matter#{schema}',
+                        show_input=True,
+                        title='State of Matter')])
         # Dictionary of search filters that are always enabled for queries made
         filters_locked={
             "section_defs.definition_qualified_name:all": [schema]
-        },
-         # Controls the filter menus shown on the left
-        filter_menus=FilterMenus(
-            options={
-                'material': FilterMenu(label="Material"),
-                'state':FilterMenu(
-                    label="State of Matter",
-                    level=1,
-                    actions=FilterMenuActions(
-                        options={
-                            'liquid': FilterMenuActionCheckbox(type="checkbox", label="LIQ", quantity=f"data.state_of_matter#{schema}"),
-                            'solid': FilterMenuActionCheckbox(type="checkbox", quantity=f"data.state_of_matter#{schema}")}
-                        )
-                )
-            }
-        )
+        }
     )
 
     

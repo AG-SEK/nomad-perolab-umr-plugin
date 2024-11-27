@@ -39,7 +39,7 @@ chemicals_app_entry_point  = MyAppEntryPoint(
                     MenuItemTerms(
                         quantity=f'data.state_of_matter#{schema}',
                         show_input=True,
-                        title='State of Matter')])
+                        title='State of Matter')]),
         # Dictionary of search filters that are always enabled for queries made
         filters_locked={
             "section_defs.definition_qualified_name:all": [schema]

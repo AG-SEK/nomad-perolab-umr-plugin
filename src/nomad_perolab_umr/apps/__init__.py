@@ -3,7 +3,7 @@ from nomad.config.models.ui import App, Column, Columns, FilterMenu, FilterMenus
 
 schema = 'nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical'
 
-chemicals_app_entry_point  = MyAppEntryPoint(
+chemicals_app_entry_point  = AppEntryPoint(
     name = 'MyApp',
     description = 'My custom app.',
     app = App(

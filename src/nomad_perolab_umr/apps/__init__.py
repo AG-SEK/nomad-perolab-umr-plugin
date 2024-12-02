@@ -47,23 +47,3 @@ chemicals_app_entry_point  = AppEntryPoint(
     )
 )
     
-app_entry_point = AppEntryPoint(
-    name='NewApp',
-    description='New app entry point configuration.',
-    app=App(
-        label='NewApp',
-        path='app',
-        category='simulation',
-        columns=Column(
-            selected=['entry_id'],
-            options={
-                'entry_id': Column(),
-            },
-        ),
-        filter_menus=FilterMenus(
-            options={
-                'material': FilterMenu(label='Material'),
-            }
-        ),
-    ),
-)

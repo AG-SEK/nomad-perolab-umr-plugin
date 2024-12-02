@@ -1,5 +1,5 @@
 from nomad.config.models.plugins import AppEntryPoint
-from nomad.config.models.ui import App, Column, Columns, FilterMenu, FilterMenus, Filters, FilterMenuActions, FilterMenuActionCheckbox, Menu, MenuItemHistogram, MenuItemTerms
+from nomad.config.models.ui import App, Column, FilterMenu, FilterMenus, Filters, FilterMenuActions, FilterMenuActionCheckbox, Menu, MenuItemHistogram, MenuItemTerms
 
 schema = 'nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical'
 
@@ -15,7 +15,7 @@ chemicals_app_entry_point  = AppEntryPoint(
         readme = "longer description",
         # Include filtering custoized quantities from own schema
         filters=Filters(include=[f'*#{schema}']),
-        columns=[Columns(
+        columns=[Column(
             quantity="name",
             selected=True,
             title="Chemical Name",
@@ -23,7 +23,7 @@ chemicals_app_entry_point  = AppEntryPoint(
             # unit
             # format = Format(...)
         )
-        , Columns(
+        , Column(
             quantity=f"data.link_to_product#{schema}",
             selected=True,
             title="Link",
@@ -54,7 +54,7 @@ app_entry_point = AppEntryPoint(
         label='NewApp',
         path='app',
         category='simulation',
-        columns=Columns(
+        columns=Column(
             selected=['entry_id'],
             options={
                 'entry_id': Column(),

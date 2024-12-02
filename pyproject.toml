@@ -137,7 +137,7 @@ cicci_txt_parser_entry_point = "nomad_perolab_umr.parsers:cicci_txt_parser_entry
 
 chemicals_app_entry_point =  "nomad_perolab_umr.apps:chemicals_app_entry_point"
 
-app_entry_point = "nomad_perolab_umr.apps:app_entry_point"
+#app_entry_point = "nomad_perolab_umr.apps:app_entry_point"
 example_upload_entry_point = "nomad_perolab_umr.example_uploads:example_upload_entry_point"
 
 # Die Module stability_test.py und connection_test.py dürfen nicht von pytest als Test Dateien erkannt werden.

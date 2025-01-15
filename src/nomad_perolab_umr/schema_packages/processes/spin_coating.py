@@ -51,28 +51,29 @@ m_package = SchemaPackage(aliases=['UMR_schemas.processes.spin_coating'])
 
 ################################ SpinCoating ################################
 
-class UMR_SpinCoating_Recipe(SpinCoatingRecipe, EntryData):
-    m_def = Section(
-        a_eln=dict(hide=['lab_id', 'users']),
-        categories=[UMRCreateCategory])
+# OUTDATED - nicht mehr benötigt 
+#class UMR_SpinCoating_Recipe(SpinCoatingRecipe, EntryData):
+#    m_def = Section(
+#        a_eln=dict(hide=['lab_id', 'users']),
+#        categories=[UMRCreateCategory])
 
 
 class UMR_SpinCoating(UMR_BaseProcess, SpinCoating, EntryData):
     m_def = Section(
         label_quantity = 'method',
         a_eln=dict(
-            hide=['present', 'lab_id', 'positon_in_experimental_plan',],
+            hide=['present', 'lab_id', 'positon_in_experimental_plan', 'recipe'],
             properties=dict(
                 order=[
-                    'name', 'datetime', 'end_time', 'location', 
-                    'batch', 'position_in_experimental_plan',
-                    'recipe',
+                    'name', 'datetime', 'end_time', 'location', 'spin_coating_method',
+                    'batch',
                     'description',
+                    'position_in_experimental_plan',
+                    'layer',
                     'solution',
                     'recipe_steps',
-                    'layer',
-                    'annealing',
                     'quenching',
+                    'annealing',
                     'sintering',
                     'samples',])))
     
@@ -85,10 +86,8 @@ class UMR_SpinCoating(UMR_BaseProcess, SpinCoating, EntryData):
         description = 'The Spin Coating method used.',
         a_eln=dict(
             label="spin coating method",
-            component='EnumEditQuantity',
+            component='RadioEnumEditQuantity', # früher nur EnumEditQuantity
             props=dict(suggestions=["Static", "Dynamic"])))
-
-    # TODO Check if it works
     
 
 class UMR_SpinCoatingELN(UMR_ELNProcess, UMR_SpinCoating):
@@ -98,20 +97,20 @@ class UMR_SpinCoatingELN(UMR_ELNProcess, UMR_SpinCoating):
         label_quantity = 'method',
         a_eln=dict(
             hide=['present', 'lab_id', 'positon_in_experimental_plan',
-                  'create_solar_cells', 'solar_cell_settings'],
+                  'create_solar_cells', 'solar_cell_settings', 'recipe'],
             properties=dict(
                 order=[
                     'standard_process', 'load_standard_process',
                     'name', 'datetime', 'end_time', 'location', 
-                    'recipe',
+                    'spin_coating_method',
                     'description',
                     'batch', 'position_in_experimental_plan',
                     'use_current_datetime', 'execute_process_and_deposit_layer',
+                    'layer',
                     'solution',
                     'recipe_steps',
-                    'layer',
-                    'annealing',
                     'quenching',
+                    'annealing',
                     'sintering',
                     'samples'])))
     

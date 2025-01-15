@@ -52,12 +52,12 @@ class UMR_EntityReference(EntityReference):
         a_eln=dict(component='RichTextEditQuantity'))
 
     def normalize(self, archive, logger):
-        if not self.name:
+        if self.reference:
             self.name = self.reference.name
         super(UMR_EntityReference, self).normalize(archive, logger)
 
         
-# Reference class for Solar Cells, Samples, Substrates, Batches
+# Reference class for Instruments
 class UMR_InstrumentReference(InstrumentReference):
     m_def = Section(
         label_quantity='name',
@@ -72,7 +72,7 @@ class UMR_InstrumentReference(InstrumentReference):
     def normalize(self, archive, logger):
         super(UMR_InstrumentReference, self).normalize(archive, logger)
         if self.reference:
-            self.name = self.referece.name
+            self.name = self.reference.name
         # Run super at end of normalizer otherwise name is already set to lab_id!
 
 

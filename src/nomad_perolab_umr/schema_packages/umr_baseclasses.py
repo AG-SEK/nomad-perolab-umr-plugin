@@ -189,6 +189,7 @@ class UMR_Layer(LayerProperties):
 class UMR_FileWithDescription(ArchiveSection):
     m_def = Section(
         label_quantity='name',
+        overview=True,
         a_eln=dict(order=['name', 'document', 'description']))
     
     name = Quantity(
@@ -422,7 +423,7 @@ class UMR_Instrument(Instrument, EntryData):
     supplier =  Quantity(
         type=MEnum(suggestions_supplier_instruments),
         description='Choose the name of the supplier from the dropdown list or type in a new one.',
-         a_eln=dict(
+        a_eln=dict(
             component='EnumEditQuantity',
             props=dict(suggestions=suggestions_supplier_instruments)))
     

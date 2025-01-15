@@ -62,11 +62,11 @@ class UMR_SprayPyrolysis(UMR_BaseProcess, SprayPyrolysis, EntryData):
                     'name', 'datetime', 'end_time', 'location', 
                     'batch', 'position_in_experimental_plan',
                     'description',
+                    'layer',
                     'solution',
                     'properties',
-                    'layer',
-                    'annealing',
                     'quenching',
+                    'annealing',
                     'sintering'])))
     
     # Wet chemical Deposition
@@ -89,11 +89,11 @@ class UMR_SprayPyrolysisELN(UMR_ELNProcess, UMR_SprayPyrolysis):
                     'description',
                     'batch', 'position_in_experimental_plan',
                     'use_current_datetime', 'execute_process_and_deposit_layer',
+                    'layer',
                     'solution',
                     'properties',
-                    'layer',
-                    'annealing',
                     'quenching',
+                    'annealing',
                     'sintering'])))
     
     standard_process = UMR_ELNProcess.standard_process.m_copy()

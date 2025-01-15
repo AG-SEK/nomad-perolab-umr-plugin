@@ -417,6 +417,8 @@ def add_process_and_layer_to_sample(ELN_entry, archive, logger, sample_ref, proc
     # Add sample to sample list (in ELN process entry)
     ELN_entry.samples.append(sample_ref.m_resolved().m_copy(deep=True)) # without m_copy it would be a CompositeSystem Reference not a UMR_EntityReference!
 
+    #ELN_entry.selected_samples.remove(sample_ref)
+
     # Update Sample
     create_archive(sample_entry, archive, mainfile, overwrite=True)
 

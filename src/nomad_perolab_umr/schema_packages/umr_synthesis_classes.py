@@ -198,7 +198,7 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
                 order=[
                     'name', 'substance_name', 'short_name', 'supplier',
                     'product_number', 'link_to_product',
-                    'state_of_matter', 'chemical_formula',
+                    'state_of_matter', 'category', 'chemical_formula',
                     'lab_id',
                     'description',
                     'pure_substance', 'cas_pure_substance',
@@ -292,7 +292,7 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
 
     pure_substance = SubSection(
         section_def=PubChemPureSubstanceSection,
-        description="""Section with properties describing the substance.""",
+        description="""A Section for the data of a PubChem Compound with properties describing the chemical.""",
         )
 
     cas_pure_substance = SubSection(
@@ -316,7 +316,7 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
         else: log_error(self, logger, "Please enter a short_name and a supplier and save the entry to generate the lab_id")
 
         # Create PubChemPureSubstanceSection and get Information from PubChem
-        if not self.pure_substance.pub_chem_cid and self.substance_name:
+        if not hasattr(self.pure_substance, "pub_chem_cid") and self.substance_name: # geändert, BITTE TESTEN!
             pubchem_section = PubChemPureSubstanceSection(name=self.substance_name)
             pubchem_section.normalize(archive, logger)
             self.pure_substance = pubchem_section   
@@ -327,9 +327,9 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
                 cas_section.normalize(archive, logger)
                 self.cas_pure_substance = cas_section   
             
-            # Fill molecular formula (based on Pub chem Section)
-            if self.pure_substance.molecular_formula and not self.chemical_formula:
-                self.chemical_formula = self.pure_substance.molecular_formula
+        # Fill molecular formula (based on Pub chem Section)
+        if self.pure_substance.molecular_formula and not self.chemical_formula:
+            self.chemical_formula = self.pure_substance.molecular_formula
 
             # Info: elemental composition is filled from formula of pure_substance subsection
             # This happens only if elemental composition is empty, so delete it first if it is wrong and then normalize again 

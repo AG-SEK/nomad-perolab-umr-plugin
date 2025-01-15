@@ -172,6 +172,22 @@ class UMR_InternalBatch(UMR_Batch, EntryData):
             props=dict(suggestions=suggestions_persons)))
    
 
+    project = Quantity(
+        type=MEnum(suggestions_projects),
+        description='Choose the project for this batch from the dropdown list. If your desired project does not appear, please inform the Oasis administrator.',
+        a_eln=dict(
+            component='EnumEditQuantity',
+            props=dict(suggestions=suggestions_projects)))
+    
+    picture_stack = Quantity(
+        type=str,
+        a_eln=dict(component='FileEditQuantity'),
+        a_browser=dict(adaptor='RawFileAdaptor'),
+        description = "Picture of the stack in png format.",
+        label = "Picture of stack",
+    )
+   
+
 
 
 

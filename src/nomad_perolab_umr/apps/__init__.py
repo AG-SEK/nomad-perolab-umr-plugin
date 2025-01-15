@@ -1,8 +1,11 @@
 from nomad.config.models.plugins import AppEntryPoint
-from nomad.config.models.ui import App, Column, FilterMenu, FilterMenus, Filters, FilterMenuActions, FilterMenuActionCheckbox, Menu, MenuItemHistogram, MenuItemTerms
+from nomad.config.models.ui import SearchQuantities, App, Column, FilterMenu, FilterMenus, Filters, FilterMenuActions, FilterMenuActionCheckbox, Menu, MenuItemHistogram, MenuItemTerms
 
-schema = 'nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical'
-
+schemas = [
+    '*#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical',
+    '*#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_ChemicalLot',
+]
+    
 chemicals_app_entry_point  = AppEntryPoint(
     name = 'MyApp',
     description = 'My custom app.',
@@ -13,37 +16,54 @@ chemicals_app_entry_point  = AppEntryPoint(
         category = "UMR Apps",
         description = "Use this app to search chemicals",
         readme = "longer description",
-        # Include filtering custoized quantities from own schema
-        filters=Filters(include=[f'*#{schema}']),
-        columns=[Column(
-            quantity="name",
-            selected=True,
-            title="Chemical Name",
-            align="center",
-            # unit
-            # format = Format(...)
-        )
-        , Column(
-            quantity=f"data.link_to_product#{schema}",
-            selected=True,
-            title="Link",
-            align="left",
-        )],
+        #search_quantities=SearchQuantities(include=schemas),
+        # Include filtering customized quantities from own schema
+        filters=Filters(include=schemas),
+        columns=[
+            Column(
+                quantity="name",
+                selected=True,
+                title="Chemical Name",
+                align="center",
+                # unit
+                # format = Format(...)
+            ),
+            Column(
+                quantity="data.link_to_product#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical",
+                selected=True,
+                title="Link",
+                align="left",
+            )
+        ],
+          
         menu=Menu(
             title='Chemicals Database',
-                items=[
-                    MenuItemTerms(
-                        quantity=f'data.suplier#{schema}',
-                        show_input=True,
-                        title='Supplier Abbreviation'),
-                    MenuItemTerms(
-                        quantity=f'data.state_of_matter#{schema}',
-                        show_input=True,
-                        title='State of Matter')]),
+            items=[
+                MenuItemTerms(
+                    quantity="entry_type",
+                    show_input=False,
+                    title='Search Chemical or Chemical Lot'),
+                MenuItemTerms(
+                    quantity="data.category#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical",
+                    show_input=False,
+                    title='Category'),          
+                MenuItemTerms(
+                    quantity=f'data.state_of_matter#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical',
+                    show_input=False,
+                    title='State of Matter'),
+                MenuItemTerms(
+                    quantity=f'data.supplier#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical',
+                    show_input=True,
+                    title='Supplier Abbreviation'),                  
+                ]
+            ),
+
         # Dictionary of search filters that are always enabled for queries made
         filters_locked={
-            "section_defs.definition_qualified_name:all": [schema]
+            "entry_type": ['UMR_Chemical', 'UMR_ChemicalLot']
         }
+
     )
 )
+
     

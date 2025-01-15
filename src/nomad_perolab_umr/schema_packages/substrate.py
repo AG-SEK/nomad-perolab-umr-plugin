@@ -50,6 +50,8 @@ m_package = SchemaPackage(aliases=['UMR_schemas.substrate'])
 ################################ SUBSTRATE ################################
 #from nomad.datamodel.metainfo.annotations import Filter, SectionDisplayAnnotation
 
+# MEnum Label Problem ist gefixt. In der neuen Version werden die Labels wieder angezeigt
+
 class LabelMEnumTest(EntryData):
     m_def=Section()
     
@@ -143,7 +145,7 @@ class UMR_Substrate(Substrate):
         a_eln=dict(component='ReferenceEditQuantity', showSectionLabel=True))
     
     supplier = Quantity(
-        type=MEnum(suggestions_supplier),
+        type=MEnum(suggestions_supplier_chemicals), # früher nur suggestions_supplier
         description='Choose the name of the supplier from the dropdown list or type in a new one.',
         a_eln=dict(
             label="supplier",
@@ -282,6 +284,10 @@ class UMR_AddStandardSubstrateLot(Entity):
         a_eln=dict(
             component='NumberEditQuantity'))
  
+    costs = Quantity(
+        type=np.float64,
+        description='Costs in Euros (€)',
+        a_eln=dict(component='NumberEditQuantity'))
 
     add_lot = Quantity(
         type=bool,

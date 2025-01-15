@@ -116,6 +116,10 @@ supplier_chemicals_abbreviations = {
     'Luminescence Technology Corp.': 'Lumtec',
     'Strem Chemicals Inc.': 'Strem',
     'Ossila B.V.': 'Ossila',
+    "Solaveni GmbH": "Solaveni",
+    "Avantama AG": "Avantama",
+    "Liaoning Yike Precision New Energy Technology Co. Ltd.": "LNYK",
+    "LinXole AB": "LinXole",
 }
 
 # Suppliers of Chemicals
@@ -134,6 +138,11 @@ supplier_instruments_abbreviations = {
     'Thermo Fisher Scientific Inc.': 'ThermoFisher',
     'Laurell Technologies Corporation': 'Laurell',
     'IKA-Werke GmbH & CO. KG': 'IKA',
+    'VWR International GmbH': 'VWR',
+    'PerkinElmer LAS GmbH': 'PerkinElmer',
+    'LINSEIS Messgeräte GmbH': 'Linseis',
+    "QYB Quantum Yield Berlin GmbH": "QYB",
+    "Harry Gestigkeit GmbH": "Gestigkeit",
 }
 
 # Suppliers of Instruments
@@ -164,6 +173,12 @@ batch_abbreviations = {
 # Batch descriptions/ topics
 suggestions_batch_descriptions = [name for name in batch_abbreviations.keys()]
 
+# Projects
+suggestions_projects = [
+    "Diamond",
+    "PeroGAIN",
+    "KPFM",
+]
 
 # List with paths to variation parameters
 list_path_variation_parameters = [

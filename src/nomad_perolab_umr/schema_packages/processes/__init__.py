@@ -74,6 +74,19 @@ spray_pyrolysis_schema = SprayPyrolysisSchemaPackageEntryPoint(
 )
 
 
+class EvaporationSchemaPackageEntryPoint(SchemaPackageEntryPoint):
+
+    def load(self):
+        from nomad_perolab_umr.schema_packages.processes.evaporation import m_package
+
+        return m_package
+
+evaporation_schema = EvaporationSchemaPackageEntryPoint(
+    name='Spray Pyrolysis Schema',
+    description='Schema package containing sections for Spray Pyrolysis.',
+)
+
+
 #class ProcessBaseclassesSchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
 #    def load(self):

@@ -545,7 +545,8 @@ class UMR_BatchPlan(BaseSection, EntryData):
                     # Simple ELN fields
                     'datetime', 'end_time',
                     'responsible_person',
-                    'batch_description', 'batch_number', 'architecture',
+                    'batch_description', 'batch_number', 'architecture', 'project',
+                    'picture_stack',
 
                     # Subsections
                     'substrate',
@@ -632,6 +633,23 @@ class UMR_BatchPlan(BaseSection, EntryData):
             component='EnumEditQuantity',
             props=dict(suggestions=suggestions_batch_descriptions)))
     
+
+    project = Quantity(
+        type=MEnum(suggestions_projects),
+        description='Choose the project for this batch from the dropdown list. If your desired project does not appear, please inform the Oasis administrator.',
+        a_eln=dict(
+            component='EnumEditQuantity',
+            props=dict(suggestions=suggestions_projects)))
+    
+    picture_stack = Quantity(
+        type=str,
+        a_eln=dict(component='FileEditQuantity'),
+        a_browser=dict(adaptor='RawFileAdaptor'),
+        description = "Picture of the stack in png format.",
+        label = "Picture of stack",
+    )
+   
+
     batch_number = Quantity(
         type = int,
         description = "Number of the batch couting upwards from 1 to 999 for each batch description separately.",
@@ -1030,6 +1048,8 @@ class UMR_BatchPlan(BaseSection, EntryData):
                 batch_description = self.batch_description,
                 responsible_person=self.responsible_person,
                 description = self.description,
+                project = self.project,
+                picture_stack = self.picture_stack,
                 samples = [],
                 substrates = [],
             )

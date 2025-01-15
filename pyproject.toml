@@ -124,6 +124,8 @@ blade_coating_schema = "nomad_perolab_umr.schema_packages.processes:blade_coatin
 cleaning_coating_schema = "nomad_perolab_umr.schema_packages.processes:cleaning_coating_schema"
 spin_coating_schema = "nomad_perolab_umr.schema_packages.processes:spin_coating_schema"
 spray_pyrolysis_schema = "nomad_perolab_umr.schema_packages.processes:spray_pyrolysis_schema"
+evaporation_schema = "nomad_perolab_umr.schema_packages.processes:evaporation_schema"
+
 
 connection_test_schema = "nomad_perolab_umr.schema_packages.characterization:connection_test_schema"
 eqe_schema = "nomad_perolab_umr.schema_packages.characterization:eqe_schema"

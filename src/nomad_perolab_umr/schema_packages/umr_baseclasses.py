@@ -125,7 +125,7 @@ class UMR_Layer(LayerProperties):
                        'thickness',
                        'structuring',
                        'position_in_layer_stack',
-                       'deposition_process',]))
+                       'deposition_process',])) #???
     )
     
 
@@ -177,7 +177,7 @@ class UMR_Layer(LayerProperties):
 
         # Set position_in_layer_stack
         if hasattr(self.m_parent, 'processes'):
-            log_warning(self, logger, f"Layer normalizer: SET POSITION IN LAYER STACK - parent section: {self.m_parent} - index: {self.m_parent_index}")
+            log_info(self, logger, f"Layer normalizer: SET POSITION IN LAYER STACK - parent section: {self.m_parent} - index: {self.m_parent_index}")
             self.position_in_layer_stack = self.m_parent_index + 1
 
         super(UMR_Layer, self).normalize(archive, logger)

@@ -31,7 +31,7 @@ from baseclasses.wet_chemical_deposition import PrecursorSolution, SpinCoating, 
 from baseclasses.material_processes_misc.quenching import AntiSolventQuenching
 from baseclasses.helper.utilities import create_archive
 from baseclasses import BaseProcess
-from baseclasses.helper.utilities import get_entry_id_from_file_name
+from baseclasses.helper.utilities import rewrite_json
 
 # Imports UMR
 from ..suggestions_lists import *
@@ -137,6 +137,8 @@ class UMR_BladeCoatingELN(UMR_ELNProcess, UMR_BladeCoating):
         # BUTTON: Execute Process
         if self.execute_process_and_deposit_layer:
             self.execute_process_and_deposit_layer = False
+            rewrite_json(['data', 'execute_process_and_deposit_layer'], archive, False)
+
             
             # Log error if no solar cell settings are given
             if self.create_solar_cells and not self.solar_cell_settings:
@@ -153,7 +155,8 @@ class UMR_BladeCoatingELN(UMR_ELNProcess, UMR_BladeCoating):
                 process_entry = UMR_BladeCoating()
                 sample_entry = add_process_and_layer_to_sample(self, archive, logger, sample_ref, process_entry)
                 # return new sample entry with new process (because this is not yet saved in the referenced sample (sample_ref))
-                    
+
+                list_solar_cell_references=[]
                 # Create Solar Cells
                 if self.create_solar_cells:    
                     for solar_cell_name in self.solar_cell_settings.solar_cell_names:
@@ -164,7 +167,10 @@ class UMR_BladeCoatingELN(UMR_ELNProcess, UMR_BladeCoating):
                             name = solar_cell_entry.name,
                             reference=get_reference(archive.metadata.upload_id, solar_cell_entry_id),
                             lab_id = solar_cell_entry.lab_id)
-                        create_solar_cell_references(self, archive, logger, sample_ref, solar_cell_reference)
+                        list_solar_cell_references.append(solar_cell_reference)
+                    
+                    # Append List of references to batch and substrate entries
+                    create_solar_cell_references(self, archive, logger, sample_ref, list_solar_cell_references)
 
             # Empty selected_samples Section
             self.selected_samples = []

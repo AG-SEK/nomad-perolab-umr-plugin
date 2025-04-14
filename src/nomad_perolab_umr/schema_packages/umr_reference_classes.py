@@ -44,6 +44,7 @@ class UMR_EntityReference(EntityReference):
     m_def = Section(
         label_quantity='name',
         a_eln=dict(
+            #overview=True, # Jede Referenz wird dann als ein Reiter angezeigt, ncht so optimal
             properties=dict(
                 order=['name', 'reference', 'lab_id','description'])))
 
@@ -52,9 +53,9 @@ class UMR_EntityReference(EntityReference):
         a_eln=dict(component='RichTextEditQuantity'))
 
     def normalize(self, archive, logger):
-        if self.reference:
-            self.name = self.reference.name
         super(UMR_EntityReference, self).normalize(archive, logger)
+        if self.reference.name:
+            self.name = self.reference.name
 
         
 # Reference class for Instruments

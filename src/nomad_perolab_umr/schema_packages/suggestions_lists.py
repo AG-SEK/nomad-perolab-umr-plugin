@@ -120,6 +120,8 @@ supplier_chemicals_abbreviations = {
     "Avantama AG": "Avantama",
     "Liaoning Yike Precision New Energy Technology Co. Ltd.": "LNYK",
     "LinXole AB": "LinXole",
+    "Xiamen Funano Material Technology Co., Ltd": "Funano",
+    "Dockweiler Chemicals GmbH": "Dock",
 }
 
 # Suppliers of Chemicals
@@ -161,13 +163,16 @@ suggestions_persons = [
     "Ali Reza Nazari Pour",
     "Annika Schneider",
     "Malwine Lühder",
-    "Gülüsüm Babayeva",				
+    "Gülüsüm Babayeva",	
+    "Max Gorenflo",
+    "Immo Petersen",			
 ]
 
 # Dictionary with batch abbreviations
 batch_abbreviations = {
     "Single Junction NIP Carbon": "SNC",
     "Single Junction PIN Top Cell": "SPT",
+    "Test Batch": "Test",
 }
 
 # Batch descriptions/ topics

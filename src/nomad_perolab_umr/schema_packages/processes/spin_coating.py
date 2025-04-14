@@ -31,7 +31,7 @@ from baseclasses.wet_chemical_deposition import PrecursorSolution, SpinCoating, 
 from baseclasses.material_processes_misc.quenching import AntiSolventQuenching
 from baseclasses.helper.utilities import create_archive
 from baseclasses import BaseProcess
-from baseclasses.helper.utilities import get_entry_id_from_file_name
+from baseclasses.helper.utilities import rewrite_json
 
 # Imports UMR
 from ..suggestions_lists import *
@@ -127,7 +127,8 @@ class UMR_SpinCoatingELN(UMR_ELNProcess, UMR_SpinCoating):
         # BUTTON: execute Process
         if self.execute_process_and_deposit_layer:
             self.execute_process_and_deposit_layer = False
-            
+            rewrite_json(['data', 'execute_process_and_deposit_layer'], archive, False)
+
              # Create Process and add it to sample entry
             if self.selected_samples:
                 for sample_ref in self.selected_samples:

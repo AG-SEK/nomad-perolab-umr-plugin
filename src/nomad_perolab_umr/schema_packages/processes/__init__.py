@@ -87,6 +87,20 @@ evaporation_schema = EvaporationSchemaPackageEntryPoint(
 )
 
 
+class EtchingSchemaPackageEntryPoint(SchemaPackageEntryPoint):
+
+    def load(self):
+        from nomad_perolab_umr.schema_packages.processes.etching import m_package
+
+        return m_package
+
+etching_schema = EtchingSchemaPackageEntryPoint(
+    name='Etching Schema',
+    description='Schema package containing sections for Etching.',
+)
+
+
+
 #class ProcessBaseclassesSchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
 #    def load(self):

@@ -32,7 +32,7 @@ from baseclasses.material_processes_misc.quenching import AntiSolventQuenching
 from baseclasses.helper.utilities import create_archive
 from baseclasses import BaseProcess
 from baseclasses.solution import Solution
-from baseclasses.helper.utilities import get_entry_id_from_file_name
+from baseclasses.helper.utilities import rewrite_json
 
 # Imports UMR
 from ..suggestions_lists import *
@@ -118,11 +118,17 @@ class UMR_PrecursorSolution(PrecursorSolution):
     m_def = Section(
         links=['https://purl.archive.org/tfsco/TFSCO_00001081'],       # Link to ontology class 'precursor solution'
         label_quantity='name')  
-       
+
     solution = Quantity(
         type=UMR_Solution,
         a_eln=dict(component='ReferenceEditQuantity'))
     
+
+    #solution_details = SubSection(section_def=UMR_Solution)
+    # GGF. DIE SUBSECTION VON DER SOLUTION DETAILS ANZUPASSEN
+    ##################################################
+    
+
     def normalize(self, archive, logger):
         super(UMR_PrecursorSolution, self).normalize(archive, logger) 
         #if self.solution:
@@ -204,11 +210,21 @@ class UMR_ELNProcess(EntryData, ArchiveSection):
     solar_cell_settings = SubSection(section_def=UMR_SolarCellSettings)
 
     def normalize(self, archive, logger):
-        super(UMR_ELNProcess, self).normalize(archive, logger)   
+        super(UMR_ELNProcess, self).normalize(archive, logger)  
+
+        # Sort Samples and Selected Samples List
+        if self.samples:
+            self.samples = sort_and_deduplicate_subsection(self.samples)
+        if self.selected_samples:
+            self.selected_samples = sort_and_deduplicate_subsection(self.selected_samples)
+
+      
 
         # BUTTON: load standard process
         if self.load_standard_process and self.standard_process:
             self.load_standard_process = False
+            rewrite_json(['data', 'load_standard_process'], archive, False)
+
             
             # Update entry with data from standard process
             self.m_update_from_dict(self.standard_process.m_to_dict())
@@ -217,6 +233,9 @@ class UMR_ELNProcess(EntryData, ArchiveSection):
                 #self.position_in_experimental_plan = self.m_parent_index
             else:
                 self.datetime = None
+
+
+            
             
 
 

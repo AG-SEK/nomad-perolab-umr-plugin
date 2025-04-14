@@ -31,7 +31,7 @@ from baseclasses.wet_chemical_deposition import PrecursorSolution, SpinCoating, 
 from baseclasses.material_processes_misc.quenching import AntiSolventQuenching
 from baseclasses.helper.utilities import create_archive
 from baseclasses import BaseProcess
-from baseclasses.helper.utilities import get_entry_id_from_file_name
+from baseclasses.helper.utilities import get_entry_id_from_file_name, rewrite_json
 
 # Imports UMR
 from ..suggestions_lists import *
@@ -57,6 +57,8 @@ class UMR_SolutionCleaning(SolutionCleaning):
     m_def = Section(
         label_quantity = 'name',       
         a_eln=dict(
+            overview=True,
+            label = "Solution Cleaning",
             properties=dict(
                 order=['solvent', 'time', 'temperature'])
             ))
@@ -72,6 +74,15 @@ class UMR_SolutionCleaning(SolutionCleaning):
         type=bool,
         default=True,
         a_eln=dict(component='BoolEditQuantity'))
+    
+    description = Quantity(
+        type=str,
+        description='Any information that cannot be captured in the other fields.',
+        a_eln=dict(component='RichTextEditQuantity'),
+    )
+
+
+
 
     def normalize(self, archive, logger):
         super(UMR_SolutionCleaning, self).normalize(archive, logger)
@@ -80,10 +91,17 @@ class UMR_SolutionCleaning(SolutionCleaning):
             if self.solvent.chemical.pure_substance:
                 self.solvent_2 = self.solvent.chemical.pure_substance.m_copy(deep=True)
             else:
-                log_warning(f"The Pure Substance Section for the chemical {self.solvent.chemical.short_name} could not be added, becasue the section does not exist for this chemical")
+                log_warning(self, logger, f"The Pure Substance Section for the chemical {self.solvent.chemical.short_name} could not be added, becasue the section does not exist for this chemical")
 
 
 
+class UMR_UVCleaning(UVCleaning):
+    m_def = Section(
+        a_eln=dict(
+            overview=True,
+            label = "UVO Cleaning",
+            #properties=dict(order=['time', 'pressure'])
+            ))
 
 class UMR_Cleaning(UMR_BaseProcess, Cleaning, EntryData):
     m_def = Section(
@@ -93,13 +111,14 @@ class UMR_Cleaning(UMR_BaseProcess, Cleaning, EntryData):
             properties=dict(
                 order=[
                     'name', 'datetime', 'end_time', 'location', 
-                    'batch', 'position_in_experimental_plan',
-                    'description',   
+                    'batch', '',
+                    'description',  
+                    'position_in_experimental_plan', 
                     'cleaning', 'cleaning_uv', 'cleaning_plasma',
                     'samples'])))
 
     cleaning = SubSection(section_def=UMR_SolutionCleaning, repeats=True)
-    cleaning_uv = SubSection(section_def=UVCleaning, repeats=True)
+    cleaning_uv = SubSection(section_def=UMR_UVCleaning, repeats=True)
     cleaning_plasma = SubSection(section_def=PlasmaCleaning, repeats=True)
     
 
@@ -120,6 +139,7 @@ class UMR_CleaningELN(UMR_ELNProcess, UMR_Cleaning):
                     'use_current_datetime', 'execute_process_and_deposit_layer',
                     'cleaning', 'cleaning_uv', 'cleaning_plasma',
                     'samples'])))
+    
     standard_process = UMR_ELNProcess.standard_process.m_copy()
     standard_process.type = Reference(UMR_Cleaning.m_def)
 
@@ -134,6 +154,7 @@ class UMR_CleaningELN(UMR_ELNProcess, UMR_Cleaning):
         # BUTTON: execute Process
         if self.execute_process_and_deposit_layer:
             self.execute_process_and_deposit_layer = False
+            rewrite_json(['data', 'execute_process_and_deposit_layer'], archive, False)
             
             # Create Process and add it to sample entry
             if self.selected_samples:

@@ -132,18 +132,18 @@ class UMR_BasicSample(SolcarCellSample):  # inherit from SolcarCellSample, becau
         if not self.measurements:
             self.measurements = UMR_MeasurementsSubsection()
         # COLLECT MEASUREMENTS
-        self.measurements.jv_measurements = collect_referencing_entries(self, archive, logger, "UMR_JVMeasurement")
-        self.measurements.eqe_measurements = collect_referencing_entries(self, archive, logger, "UMR_EQEMeasurement")
-        self.measurements.stability_measurements = collect_referencing_entries(self, archive, logger, "UMR_StabilityTest")
-        self.measurements.mppt_measurements = collect_referencing_entries(self, archive, logger, "UMR_MPPTracking")
-        self.measurements.other_measurements = collect_referencing_entries(self, archive, logger, ['UMR_StabilizedOpenCircuitVoltage','UMR_StabilizedShortCircuitCurrent', 'UMR_ConnectionTest'])
+        # self.measurements.jv_measurements = collect_referencing_entries(self, archive, logger, "UMR_JVMeasurement")
+        # self.measurements.eqe_measurements = collect_referencing_entries(self, archive, logger, "UMR_EQEMeasurement")
+        # self.measurements.stability_measurements = collect_referencing_entries(self, archive, logger, "UMR_StabilityTest")
+        # self.measurements.mppt_measurements = collect_referencing_entries(self, archive, logger, "UMR_MPPTracking")
+        # self.measurements.other_measurements = collect_referencing_entries(self, archive, logger, ['UMR_StabilizedOpenCircuitVoltage','UMR_StabilizedShortCircuitCurrent', 'UMR_ConnectionTest'])
 
         # SORT MEASUREMENTS
-        self.measurements.jv_measurements = sorted(self.measurements.jv_measurements, key=lambda x: x.datetime)
-        self.measurements.eqe_measurements = sorted(self.measurements.eqe_measurements, key=lambda x: x.datetime)
-        self.measurements.stability_measurements = sorted(self.measurements.stability_measurements, key=lambda x: x.datetime)
-        self.measurements.mppt_measurements = sorted(self.measurements.mppt_measurements, key=lambda x: x.datetime)
-        self.measurements.other_measurements = sorted(self.measurements.other_measurements, key=lambda x: x.datetime)
+        # self.measurements.jv_measurements = sorted(self.measurements.jv_measurements, key=lambda x: x.datetime)
+        # self.measurements.eqe_measurements = sorted(self.measurements.eqe_measurements, key=lambda x: x.datetime)
+        # self.measurements.stability_measurements = sorted(self.measurements.stability_measurements, key=lambda x: x.datetime)
+        # self.measurements.mppt_measurements = sorted(self.measurements.mppt_measurements, key=lambda x: x.datetime)
+        # self.measurements.other_measurements = sorted(self.measurements.other_measurements, key=lambda x: x.datetime)
         
         # NOTE: Sorting the list directly does not work
         # self.measurements.jv_measurements.sort(key=lambda x: x.datetime) # does not work

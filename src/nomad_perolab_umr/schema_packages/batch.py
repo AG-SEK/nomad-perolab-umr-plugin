@@ -91,6 +91,12 @@ class UMR_Group(Entity, EntryData):
     def normalize(self, archive, logger):
         # Automatically generate display_name
         self.display_name = f"{self.group_number} - {self.group_description}"
+
+        # Sort and Deduplicate Samples and Substrates List
+        if self.samples:
+            self.samples = sort_and_deduplicate_subsection(self.samples)
+        if self.substrates:
+            self.selected_samples = sort_and_deduplicate_subsection(self.substrates)
         
         super(UMR_Group, self).normalize(archive, logger)
 
@@ -114,6 +120,19 @@ class UMR_Batch(Entity):
     
     groups = SubSection(
         section_def = UMR_Group, repeats=True)
+    
+    def normalize(self, archive, logger):
+    
+        # Sort and Deduplicate Samples and Substrates List
+        if self.samples:
+            self.samples = sort_and_deduplicate_subsection(self.samples)
+        if self.substrates:
+            self.selected_samples = sort_and_deduplicate_subsection(self.substrates)
+      
+        super(UMR_Batch, self).normalize(archive, logger)
+
+
+
     
 
 class UMR_ExternalBatch(UMR_Batch, EntryData):

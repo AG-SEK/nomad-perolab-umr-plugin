@@ -799,7 +799,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
             self.batch_id=batch_id
 
         # TODO KLAPPT NOCH NICHT: FEHLER BEI QUERY
-            # Search for InternalBatch and batchPlan with the same ID -> log error if alreadyexisting entry is found
+            # Search for InternalBatch and batchPlan with the same ID -> log error if already existing entry is found
             query = {
                 'or': {
                     'and': {
@@ -1088,8 +1088,9 @@ class UMR_BatchPlan(BaseSection, EntryData):
                         process_entry.position_in_experimental_plan = i+1
                         # Reference Batch
                         process_entry.batch = get_reference(archive.metadata.upload_id, batch_entry_id)
-                        log_warning(self, logger, f"INTERNAL BATCH - UPDATED PROCESS:{process_entry}")    
                         create_archive(process_entry, archive, mainfile, overwrite=True)
+                        log_info(self, logger, f"During Creation of Batch - UPDATED PROCESS:{process_entry}")    
+
 
 
             # CREATE GROUPS
@@ -1374,12 +1375,6 @@ class HySprint_ExperimentalPlan(ExperimentalPlan, EntryData):
         archive.results.eln.sections = ["UMR_ExperimentalPlan"]
 
 '''
-
-
-
-
-
-
 
 
 

@@ -248,7 +248,7 @@ class UMR_AddStandardSubstrateLot(Entity):
             properties=dict(
                 order=[
                     'lot', 'order_date', 'order_number',
-                    'amount', 'opened_on', 
+                    'amount', 'opened_on', 'costs',
                     'add_lot',
                     'description',
                 ])))
@@ -308,7 +308,7 @@ class UMR_AddStandardSubstrateLot(Entity):
                 log_error(self, logger, f"Please always put the Chemical in a separate folder. After doing so, you can create lots, which are automatically stored in the same folder.")
                 return
         
-            if not self.m_parent.lab_id:
+            elif not self.m_parent.lab_id:
                 log_error(self, logger, f"The lab_id of the Standard Substrate must be defined. Please give the name and supplier and save the archive again. The ID is then generated automatically.")
                 return
             
@@ -340,6 +340,7 @@ class UMR_AddStandardSubstrateLot(Entity):
                         description = self.description
                     )
                     create_archive(entry, archive, file_name)
+                    log_warning(self, logger, f"The archive '{directory}/{lab_id}.archive.json' was created")
                   
                     self.m_parent.normalize(archive, logger)
                     self.m_parent.add_substrate_lot = None
@@ -456,7 +457,8 @@ class UMR_StandardSubstrateLot(UMR_AddStandardSubstrateLot, EntryData):
                     'lab_id', 'standard_substrate', 'lot',
                     'order_date', 'order_number',
                     'amount', 'opened_on', 
-                    'current_storage', 'description',
+                    'current_storage', 'costs',
+                    'description',
                 ])))
 
     standard_substrate = Quantity(

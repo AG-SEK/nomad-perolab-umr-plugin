@@ -55,14 +55,7 @@ class CicciTXTParser(MatchingParser):
 
     ########################## ACTUAL PARSING FUNCTION ##########################
 
-    def parse(
-        self,
-        mainfile: str,
-        archive: 'EntryArchive',
-        logger: 'BoundLogger',
-        child_archives: dict[str, 'EntryArchive'] = None,
-    ) -> None:
-        logger.info('CicciTXTParser called')
+    def parse(self, mainfile: str, archive: 'EntryArchive', logger):
 
         """
         The parse function to parse .txt files and create the corresponding measurement entries.

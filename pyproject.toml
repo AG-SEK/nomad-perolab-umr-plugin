@@ -134,7 +134,7 @@ mpp_tracking_schema = "nomad_perolab_umr.schema_packages.characterization:mpp_tr
 stability_test_schema = "nomad_perolab_umr.schema_packages.characterization:stability_test_schema"
 
 
-
+myparser = "nomad_perolab_umr.parsers:myparser"
 cicci_txt_parser_entry_point = "nomad_perolab_umr.parsers:cicci_txt_parser_entry_point"
 
 chemicals_app_entry_point =  "nomad_perolab_umr.apps:chemicals_app_entry_point"

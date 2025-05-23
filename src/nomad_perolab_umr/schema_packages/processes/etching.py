@@ -153,13 +153,6 @@ class Etching(BaseProcess):
    # )
 
 
-    
-    Quantity(
-        type=str,
-        a_eln=dict(component='StringEditQuantity'),
-        description="Layer that is being etched away.",
-    )
-
     etchant = SubSection(
         section_def=PrecursorSolution,
         repeats=True,
@@ -171,8 +164,7 @@ class Etching(BaseProcess):
     )
 
     shape = SubSection(section_def = BaseEtchingShape)
-    properties = SubSection(
-          section_def=EtchingProperties)
+    properties = SubSection(section_def=EtchingProperties)
     
 
     def normalize(self, archive, logger):

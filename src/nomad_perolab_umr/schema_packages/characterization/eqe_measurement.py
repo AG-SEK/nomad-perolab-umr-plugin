@@ -38,7 +38,7 @@ from baseclasses.helper.utilities import get_encoding
 from baseclasses import BaseMeasurement # TODO
 
 # Imports UMR
-#from Solar.plotfunctions import plot_eqe
+from nomad_perolab_umr.Solar.plotfunctions import plot_eqe
 from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass
 from ..categories import *
 from ..helper_functions import *
@@ -198,13 +198,13 @@ class UMR_EQEMeasurement(BaseMeasurement, PlotSection, EntryData, UMR_Measuremen
 
 
         ### PLOT EQE CURVES ###
-     #   fig = plot_eqe([self.eqe_data], toggle_grid_button=True)
-     #   plotly_updateLayout_NOMAD(fig)
+        fig = plot_eqe(full_eqe_data=[self.m_to_dict()], toggle_grid_button=True)
+        plotly_updateLayout_NOMAD(fig)
 
         # Append figure to list if plots (Clear list beforehand)   
-     #   self.figures = []
-      #  fig_json=fig.to_plotly_json()
-      #  fig_json["config"] = plot_config
+        self.figures = []
+        fig_json=fig.to_plotly_json()
+        fig_json["config"] = plot_config
 
      #   self.figures.append(PlotlyFigure(label='EQE Plot', figure=fig_json))
 

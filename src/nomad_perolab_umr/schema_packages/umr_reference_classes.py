@@ -23,7 +23,7 @@ import numpy as np
 # Imports Nomad
 from nomad.datamodel.data import EntryData, ArchiveSection
 from nomad.datamodel.metainfo.basesections import SectionReference, EntityReference, InstrumentReference
-from nomad.metainfo import Quantity, SubSection, Section, Package
+from nomad.metainfo import Quantity, SubSection, Section, Package, SchemaPackage
 from nomad.datamodel.metainfo.plot import PlotSection
 
 
@@ -36,6 +36,7 @@ from .suggestions_lists import *
 from .helper_functions import *
 from .categories import *
 
+m_package = SchemaPackage(aliases=['UMR_schemas.umr_reference_classes']) 
 
 ###################### Reference Classes #####################
 
@@ -107,3 +108,4 @@ class UMR_MeasurementReference(SectionReference, PlotSection):
 
     # TODO Normalizer der Plot aus Referenz darstellt
 
+m_package.__init_metainfo__()

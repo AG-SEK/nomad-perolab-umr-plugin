@@ -39,7 +39,7 @@ from baseclasses.helper.utilities import get_encoding
 from ..categories import *
 from ..helper_functions import *
 
-#from Solar.plotfunctions import plot_jv
+from nomad_perolab_umr.Solar.plotfunctions import plot_jv
 
 from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass
 
@@ -266,21 +266,26 @@ class UMR_JVMeasurement(JVMeasurement, UMR_MeasurementBaseclass, PlotSection, En
 
 
         ### PLOT JV CURVES ###
-    #    fig = plot_jv(self.m_to_dict()['jv_curve'], toggle_grid_button=True, toggle_table_button=True)
+        fig = plot_jv(full_jv_data=[self.m_to_dict()], toggle_grid_button=True, toggle_table_button=True)
+                   
+                     
+                       
+        #fig = plot_jv(self.m_to_dict()['jv_curve'], toggle_grid_button=True, toggle_table_button=True)
+       
         # We need m_to_dict() because otherwise error: 
             # File "/app/plugins/Solar/plotfunctions/jv.py", line 120, in plot_jv
             # curve['fill_factor'] = round(curve['fill_factor'], 1)
             # TypeError: 'UMR_SolarCellJVCurve' object does not support item assignment
 
         # Set Settings again (overwrite NOMAD defaults)
-    #    plotly_updateLayout_NOMAD(fig)
+        plotly_updateLayout_NOMAD(fig)
         
         # Append figure to list of plots (Clear list beforehand)   
-   #     self.figures = []
-    #    fig_json=fig.to_plotly_json()
-    #    fig_json["config"] = plot_config
+        self.figures = []
+        fig_json=fig.to_plotly_json()
+        fig_json["config"] = plot_config
 
-   #     self.figures.append(PlotlyFigure(label='JV Curve Plot', figure=fig_json))
+        self.figures.append(PlotlyFigure(label='JV Curve Plot', figure=fig_json))
         
         super(UMR_JVMeasurement, self).normalize(archive, logger)
 

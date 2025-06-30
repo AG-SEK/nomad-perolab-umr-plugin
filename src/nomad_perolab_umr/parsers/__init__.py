@@ -29,6 +29,7 @@ class CicciTXTParserEntryPoint(ParserEntryPoint):
 cicci_txt_parser_entry_point = CicciTXTParserEntryPoint(
     name='TXT Parser',
     description='Parser which parses txt measurement files. It creates the corrsponding entry and references the  parser entry point configuration.',
-    mainfile_name_re='.*\*.txt',
-    mainfile_contents_re = r'^\s*##\s+Header\s+##\s*$',  # Match the first line with "## Header ##" --> Cicci
+    mainfile_name_re=r'.*\.txt$', # match ".txt" am Dateinamensende
+    mainfile_contents_re = r'^\s*##\s+Header\s+##\s*',  # Match with "## Header ##" --> Cicci
+    aliases=['parser/UMR'],
 )

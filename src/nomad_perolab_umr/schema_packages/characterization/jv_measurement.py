@@ -266,7 +266,7 @@ class UMR_JVMeasurement(JVMeasurement, UMR_MeasurementBaseclass, PlotSection, En
 
 
         ### PLOT JV CURVES ###
-        fig = plot_jv(full_jv_data=[self.m_to_dict()], toggle_grid_button=True, toggle_table_button=True)
+        fig = plot_jv(full_jv_data=[self.m_to_dict()], toggle_grid_button=True, toggle_table_button=True, showplot=False)
                    
                      
                        

@@ -117,6 +117,19 @@ synthesis_schema = SynthesisSchemaPackageEntryPoint(
 )
 
 
+class VoilaSchemaPackageEntryPoint(SchemaPackageEntryPoint):
+
+    def load(self):
+        from nomad_perolab_umr.schema_packages.voila import m_package
+
+        return m_package
+
+voila_schema = VoilaSchemaPackageEntryPoint(
+    name='UMR Voila Schema',
+    description='Schema package containing secctions for Voila Notebooks'
+)
+
+
 
 
 

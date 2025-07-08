@@ -119,6 +119,8 @@ external_batch_plan_schema = "nomad_perolab_umr.schema_packages:external_batch_p
 internal_batch_plan_schema = "nomad_perolab_umr.schema_packages:internal_batch_plan_schema"
 baseclasses_schema = "nomad_perolab_umr.schema_packages:baseclasses_schema"
 synthesis_schema = "nomad_perolab_umr.schema_packages:synthesis_schema"
+voila_schema = "nomad_perolab_umr.schema_packages:voila_schema"
+
 
 blade_coating_schema = "nomad_perolab_umr.schema_packages.processes:blade_coating_schema"
 cleaning_coating_schema = "nomad_perolab_umr.schema_packages.processes:cleaning_coating_schema"
@@ -134,13 +136,18 @@ mpp_tracking_schema = "nomad_perolab_umr.schema_packages.characterization:mpp_tr
 stability_test_schema = "nomad_perolab_umr.schema_packages.characterization:stability_test_schema"
 
 
+
 myparser = "nomad_perolab_umr.parsers:myparser"
 cicci_txt_parser_entry_point = "nomad_perolab_umr.parsers:cicci_txt_parser_entry_point"
 
+# Apps
 chemicals_app_entry_point =  "nomad_perolab_umr.apps:chemicals_app_entry_point"
+voila_app_entry_point =  "nomad_perolab_umr.apps:voila_app_entry_point"
 
 #app_entry_point = "nomad_perolab_umr.apps:app_entry_point"
 example_upload_entry_point = "nomad_perolab_umr.example_uploads:example_upload_entry_point"
+voila_scripts_entry_point = "nomad_perolab_umr.example_uploads:voila_scripts_entry_point"
+
 
 # Die Module stability_test.py und connection_test.py dürfen nicht von pytest als Test Dateien erkannt werden.
 [tool.pytest.ini_options]

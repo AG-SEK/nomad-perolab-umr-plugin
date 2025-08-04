@@ -847,8 +847,11 @@ class UMR_BatchPlan(BaseSection, EntryData):
                     
                     # Maybe here one could use no ELN sections first and then automatically create the ELN Archive
                     # Create process archive
-                    file_name = f"Processes/{process.position_in_experimental_plan}_{process.name.replace(' ','_').replace('/', '_')}.archive.json"
+                    log_info(self, logger, f"DEBUG: Original process name before filename generation: '{process.name}'")
+                    file_name = f"Processes/{process.position_in_experimental_plan}_{sanitize_filename(process.name)}.archive.json"
+                    log_info(self, logger, f"DEBUG: Generated filename: '{file_name}'")
                     create_archive(process, archive, file_name)
+                    log_info(self, logger, f"Created process archive: {file_name} for process '{process.name}'")
                     entry_id = get_entry_id_from_file_name(file_name, archive)
                     process_ref = get_reference(archive.metadata.upload_id, entry_id)
 
@@ -904,8 +907,11 @@ class UMR_BatchPlan(BaseSection, EntryData):
                     # Iterate through variated processes
                     for batch_process in standard_process.varied_processes:
                         # Create process archive
-                        file_name = f"Processes/{batch_process.position_in_experimental_plan}_{batch_process.name.replace(' ','_').replace('/', '_')}.archive.json"
+                        log_info(self, logger, f"DEBUG: Original batch process name before filename generation: '{batch_process.name}'")
+                        file_name = f"Processes/{batch_process.position_in_experimental_plan}_{sanitize_filename(batch_process.name)}.archive.json"
+                        log_info(self, logger, f"DEBUG: Generated filename for varied process: '{file_name}'")
                         create_archive(batch_process, archive, file_name)
+                        log_info(self, logger, f"Created varied process archive: {file_name} for process '{batch_process.name}'")
 
                         # Create SelectProcessVariation Entry with reference
                         entry_id = get_entry_id_from_file_name(file_name, archive)
@@ -1055,6 +1061,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
             )
             try:
                 create_archive(batch, archive, batch_file_name) #, overwrite=True)
+                log_info(self, logger, f"Created batch archive: {batch_file_name} with lab_id '{batch_lab_id}'")
             except Exception as e:
                 # Catch Errors, because Batch folder does not exist
                 log_error(self, logger, f"An error occured when creating an Internal Batch. --- Exception {e}")
@@ -1067,6 +1074,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
                 reference=get_reference(archive.metadata.upload_id, batch_entry_id),
                 lab_id = batch.lab_id)
             self.created_entities.append(batch_reference)
+            log_info(self, logger, f"Added batch reference to created_entities: {batch.name} ({batch.lab_id})")
 
 
             # UPDATE PROCESSES
@@ -1089,9 +1097,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
                         # Reference Batch
                         process_entry.batch = get_reference(archive.metadata.upload_id, batch_entry_id)
                         create_archive(process_entry, archive, mainfile, overwrite=True)
-                        log_info(self, logger, f"During Creation of Batch - UPDATED PROCESS:{process_entry}")    
-
-
+                        log_info(self, logger, f"Updated process archive: {mainfile} for process '{process_entry.name}' with batch reference")
 
             # CREATE GROUPS
             for group_settings in self.groups_for_selection_of_processes:
@@ -1123,6 +1129,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
                     substrate.samples = []
                     # Create Substrate Archive
                     create_archive(substrate, archive, substrate_file_name)
+                    log_info(self, logger, f"Created substrate archive: {substrate_file_name} with lab_id '{substrate_lab_id}' for group {group_settings.group_number}")
                     
                     # Create substrate reference in created_entities
                     substrate_entry_id = get_entry_id_from_file_name(substrate_file_name, archive)
@@ -1134,68 +1141,6 @@ class UMR_BatchPlan(BaseSection, EntryData):
                     batch.substrates.append(substrate_reference)
                     group.substrates.append(substrate_reference)
                     self.created_entities.append(substrate_reference)
-
-                    # # CREATE SOLAR CELLS
-                    # for solar_cell_name in group_settings.advanced_solar_cell_settings.solar_cell_names:
-                    #     if group_settings.advanced_solar_cell_settings.sample_type == "Solar Cell":
-                    #         sample_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}_{str(engraved_number).zfill(5)}_{solar_cell_name}"
-                    #         sample_name=f"solar_cell_{sample_lab_id}"
-                    #         sample_file_name = f'Batch/{sample_name}.archive.json'
-                    #         sample = UMR_InternalSolarCell(
-                    #             name = f"Solar Cell {sample_lab_id}",
-                    #             datetime = self.datetime,
-                    #             lab_id = sample_lab_id,
-                    #             batch = get_reference(archive.metadata.upload_id, batch_entry_id), #Reference batch in solar_cell
-                    #             substrate = get_reference(archive.metadata.upload_id, substrate_entry_id),  #Reference substrate in solar cell
-                    #             group_number = group_settings.group_number,
-                    #             architecture = group_settings.advanced_solar_cell_settings.architecture,
-                    #             encapsulation = group_settings.advanced_solar_cell_settings.encapsulation,
-                    #             area = group_settings.advanced_solar_cell_settings.area,
-                    #             width = group_settings.advanced_solar_cell_settings.width,
-                    #             length = group_settings.advanced_solar_cell_settings.length,
-                    #             description = group_settings.advanced_solar_cell_settings.description,
-                    #             processes_2 = [],
-                    #         )
-                    #         # Create Solar Cell Archive
-                    #         log_warning(self, logger, f"SOLAR CELL 1")
-                    #         create_archive(sample, archive, sample_file_name)
-                    #         log_warning(self, logger, f"SOLAR CELL 2")
-                    #         # Create Solar cell reference
-                    #         sample_entry_id = get_entry_id_from_file_name(sample_file_name, archive)
-                    #         sample_reference = UMR_EntityReference(
-                    #             name='Solar Cell',
-                    #             reference=get_reference(archive.metadata.upload_id, sample_entry_id),
-                    #             lab_id=sample_lab_id)
-
-
-                    #     # CREATE BASIC SAMPLES
-                    #     elif group_settings.advanced_solar_cell_settings.sample_type == "Basic Sample":
-                    #         sample_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}_{str(engraved_number).zfill(5)}_{solar_cell_name}"
-                    #         sample_name=f"sample_{sample_lab_id}"
-                    #         sample_file_name = f'Batch/{sample_name}.archive.json'
-                    #         sample = UMR_BasicSample(
-                    #                 name = f"Sample {sample_lab_id}",
-                    #                 datetime = self.datetime,
-                    #                 lab_id = sample_lab_id,
-                    #                 batch = get_reference(archive.metadata.upload_id, batch_entry_id), #Reference batch
-                    #                 substrate = get_reference(archive.metadata.upload_id, substrate_entry_id),  #Reference substrate
-                    #                 group_number = group_settings.group_number,
-                    #                 area = group_settings.advanced_solar_cell_settings.area,
-                    #                 width = group_settings.advanced_solar_cell_settings.width,
-                    #                 length = group_settings.advanced_solar_cell_settings.length,
-                    #                 description = group_settings.advanced_solar_cell_settings.description,
-                    #                 processes = [],
-                    #             )     
-                    #         # Create Basic Sample Archive
-                    #         log_warning(self, logger, f"BASIC SAMPLE 1")
-                    #         create_archive(sample, archive, sample_file_name)
-                    #         log_warning(self, logger, f"BASIC SAMPLE 2")
-                    #         # Create Solar cell reference
-                    #         sample_entry_id = get_entry_id_from_file_name(sample_file_name, archive)
-                    #         sample_reference = UMR_EntityReference(
-                    #             name='Sample',
-                    #             reference=get_reference(archive.metadata.upload_id, sample_entry_id),
-                    #             lab_id=sample_lab_id)
 
                  
                     # CREATE BASIC SAMPLES
@@ -1271,16 +1216,15 @@ class UMR_BatchPlan(BaseSection, EntryData):
         # Entweder Proxy not found oder fehlende oder defekte Referenz
 
 
-
-
         ### Automatically sort and check positions_in_experimental_plan in Subsections ###
 
         # Enter position in experimental plan automatically in STANDARD_PROCESSES
         for i, process in enumerate(self.standard_processes):
-            if not process.position_in_experimental_plan:
-                process.position_in_experimental_plan=(i+1)
+            if hasattr(process, 'position_in_experimental_plan'):
+                if not getattr(process, 'position_in_experimental_plan', None):
+                    process.position_in_experimental_plan = (i+1)
         # Check for duplicates in position_in_experimental_plan
-        processes_list = [process for process in self.standard_processes]
+        processes_list = [process for process in self.standard_processes if hasattr(process, 'position_in_experimental_plan')]
         positions = [process.position_in_experimental_plan for process in processes_list]
         if len(positions) != len(set(positions)):
             log_error(self, logger, f"Duplicate position_in_experimental_plan values found in 'standard_processes' Subsection (Batch Plan {self.batch_id}).")
@@ -1291,10 +1235,11 @@ class UMR_BatchPlan(BaseSection, EntryData):
 
         # Enter position in experimental plan automatically in STANDARD_PROCESSES_FOR_VARIATION
         for i, process in enumerate(self.standard_processes_for_variation):
-            if not process.position_in_experimental_plan:
-                process.position_in_experimental_plan=(i+1)
+            if hasattr(process, 'position_in_experimental_plan'):
+                if not getattr(process, 'position_in_experimental_plan', None):
+                    process.position_in_experimental_plan = (i+1)
         # Check for duplicates in position_in_experimental_plan
-        processes_list = [process for process in self.standard_processes_for_variation]
+        processes_list = [process for process in self.standard_processes_for_variation if hasattr(process, 'position_in_experimental_plan')]
         positions = [process.position_in_experimental_plan for process in processes_list]
         if len(positions) != len(set(positions)):
             log_error(self, logger, f"Duplicate position_in_experimental_plan values found in 'standard_processes_for_variation' Subsection (Batch Plan {self.batch_id}).")
@@ -1335,47 +1280,6 @@ class UMR_BatchPlan(BaseSection, EntryData):
                                 #    solar_cell.layers.append(process.selected_process.m_resolved().layer)
 
                         #log_info(self, logger, f"SOLAR CELL: {solar_cell}")
-
-
-
-################################ Experimental Plan OLD ################################
-'''
-class HySprint_ExperimentalPlan(ExperimentalPlan, EntryData):
-    m_def = Section(
-        categories=[UMRCreateCategory],
-        a_eln=dict(
-            #hide=['users'],
-            properties=dict(
-                order=[
-                    "name",
-                    "standard_plan",
-                    "load_standard_processes_for_variation",
-                    "create_batch",
-                    "number_of_substrates",
-                    "substrates_per_subbatch",
-                    "lab_id"]
-            )),
-        #a_template=dict(institute="UMR")
-        )
-
-    solar_cell_properties = SubSection(
-        section_def=SolarCellProperties)
-
-    def normalize(self, archive, logger):
-        super(UMR_ExperimentalPlan, self).normalize(archive, logger)
-
-        from baseclasses.helper.execute_solar_sample_plan import execute_solar_sample_plan
-        execute_solar_sample_plan(self, archive, UMR_InternalSolarCell, UMR_Batch, logger)
-
-        # actual normalization!!
-        archive.results = Results()
-        archive.results.properties = Properties()
-        archive.results.material = Material()
-        archive.results.eln = ELN()
-        archive.results.eln.sections = ["UMR_ExperimentalPlan"]
-
-'''
-
 
 
 

@@ -22,6 +22,8 @@
 import datetime as dt
 import json
 from natsort import natsorted
+import re
+
 
 from baseclasses.helper.utilities import get_reference, create_archive, get_entry_id_from_file_name
 
@@ -640,3 +642,19 @@ def text_to_bool(text):
     # Manage true, True, TRUE
     else:
         return text.upper() == 'TRUE'
+    
+
+def sanitize_filename(name: str, replacement: str = "_") -> str:
+    """
+    Entfernt alle Zeichen aus einem Dateinamen, die problematisch sein könnten.
+    
+    Erlaubt sind:
+    - Groß- und Kleinbuchstaben (A–Z, a–z)
+    - Ziffern (0–9)
+    - Unterstrich (_), Punkt (.) und Bindestrich (-)
+
+    Andere Zeichen werden durch den `replacement`-Wert ersetzt (Standard: "_").
+    """
+    pattern = r'[^a-zA-Z0-9_.-]'  # Zeichenklasse: alles außer den erlaubten Zeichen
+    cleaned = re.sub(pattern, replacement, name)
+    return cleaned

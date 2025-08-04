@@ -213,12 +213,10 @@ class UMR_ELNProcess(EntryData, ArchiveSection):
         super(UMR_ELNProcess, self).normalize(archive, logger)  
 
         # Sort Samples and Selected Samples List
-        if self.samples:
+        if hasattr(self, 'samples') and self.samples:
             self.samples = sort_and_deduplicate_subsection(self.samples)
-        if self.selected_samples:
+        if hasattr(self, 'selected_samples') and self.selected_samples:
             self.selected_samples = sort_and_deduplicate_subsection(self.selected_samples)
-
-      
 
         # BUTTON: load standard process
         if self.load_standard_process and self.standard_process:

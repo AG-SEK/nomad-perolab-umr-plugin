@@ -16,6 +16,7 @@ import numpy as np
 import openpyxl
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as pio
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 from plotly.subplots import make_subplots
@@ -30,8 +31,6 @@ def is_running_in_jupyter():
         return get_ipython() is not None
     except ImportError:
         return False
-
-import plotly.io as pio
 
 pio.renderers.default = 'notebook' if is_running_in_jupyter() else 'browser'
 
@@ -1582,7 +1581,7 @@ def ask_to_input_initial_folder():
 def find_unique_values(jvc_df):
     try:
         unique_values = jvc_df["identifier"].unique()
-    except:
+    except Exception:
         unique_values = jvc_df["sample"].unique()
     print(f"\nThe following samples were found in the dataset: {', '.join(map(str, unique_values))}")
 

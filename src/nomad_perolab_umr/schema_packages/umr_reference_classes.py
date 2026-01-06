@@ -53,7 +53,7 @@ class UMR_EntityReference(EntityReference):
         a_eln=dict(component='RichTextEditQuantity'))
 
     def normalize(self, archive, logger):
-        super(UMR_EntityReference, self).normalize(archive, logger)
+        super().normalize(archive, logger)
         if self.reference.name:
             self.name = self.reference.name
 
@@ -71,7 +71,7 @@ class UMR_InstrumentReference(InstrumentReference):
         a_eln=dict(component='RichTextEditQuantity'))
 
     def normalize(self, archive, logger):
-        super(UMR_InstrumentReference, self).normalize(archive, logger)
+        super().normalize(archive, logger)
         if self.reference:
             self.name = self.reference.name
         # Run super at end of normalizer otherwise name is already set to lab_id!
@@ -89,7 +89,7 @@ class UMR_ChemicalReference(EntityReference):
             self.lab_id = self.reference.lab_id
         #self.name = self.reference.name
         self.label = f"{self.lab_id}"
-        super(UMR_ChemicalReference, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 # WIRD CHEMICAL REFERENCE NOCH BENÖTIGT ?????????
 
@@ -103,7 +103,7 @@ class UMR_MeasurementReference(SectionReference, PlotSection):
         self.name = self.reference.method
         self.display_name = f"{self.name} {self.reference.datetime}"
         self.figures=self.reference.figures
-        super(UMR_MeasurementReference, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
     # TODO Normalizer der Plot aus Referenz darstellt
 

@@ -105,8 +105,8 @@ def getJSON(entry_id, auth_header, base_url=local_base_url, ):
 
     # Parse API Response JSON
     response_json = response.json()
-    response_data = response_json['data']
-    response_archive = response_data['archive']
-    response_archive_data = response_archive['data']
+    #response_data = response_json['data']
+    #response_archive = response_data['archive']
+    #response_archive_data = response_archive['data']
 
     return response_json

@@ -205,7 +205,7 @@ class UMR_EQEMeasurement(BaseMeasurement, PlotSection, EntryData, UMR_Measuremen
 
         self.figures.append(PlotlyFigure(label='EQE Plot', figure=fig_json))
 
-        super(UMR_EQEMeasurement, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 

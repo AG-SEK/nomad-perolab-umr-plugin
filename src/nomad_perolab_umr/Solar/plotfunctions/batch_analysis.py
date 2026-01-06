@@ -369,7 +369,7 @@ def get_groups(batch, only_solar_cells=True):
     for group in batch['groups']:
 
         # Create smample list
-        if only_solar_cells==True:
+        if only_solar_cells:
             # Put only real solar cells in samples list
             samples = [item['lab_id'] for item in group['samples'] if item['lab_id'].split('_')[-1] != 'X']
         else:

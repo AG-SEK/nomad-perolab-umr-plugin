@@ -76,7 +76,7 @@ class UMR_StabilityJVMeasurement(UMR_JVMeasurement):
                     "description"])))
    
     def normalize(self, archive, logger):
-        super(UMR_StabilityJVMeasurement, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 class UMR_StabilityParameters(UMR_JVParameters):
@@ -98,7 +98,7 @@ class UMR_StabilityParameters(UMR_JVParameters):
                     ])))
     
     def normalize(self, archive, logger):
-        super(UMR_StabilityParameters, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 # Tracking SubSection for StabilityTest
@@ -134,7 +134,7 @@ class UMR_StabilityTracking(UMR_TrackingData, PlotSection):
         self.figures.append(PlotlyFigure(label='Power Density Plot - MPP Tracking',figure=fig_power_json))
         self.figures.append(PlotlyFigure(label='Voltage and Current Density Plot - MPP Tracking', figure=fig_voltage_current_json))
     
-        super(UMR_StabilityTracking, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 class UMR_StabilityTest(UMR_MeasurementBaseclass, BaseMeasurement, PlotSection, EntryData):
@@ -280,5 +280,5 @@ class UMR_StabilityTest(UMR_MeasurementBaseclass, BaseMeasurement, PlotSection, 
 
       #      self.figures.append(PlotlyFigure(label=JVparameters_name_dict[parameter],figure=fig_json))
 
-        super(UMR_StabilityTest, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 

@@ -17,10 +17,14 @@
 # limitations under the License.
 #
 
-from nomad_luqy_plugin.schema_packages.schema_package import AbsPLMeasurement, AbsPLResult, AbsPLSettings
-from nomad.metainfo import Quantity, SchemaPackage, Section, SubSection
-from nomad.datamodel.data import EntryData 
-from nomad.datamodel.metainfo.basesections import ArchiveSection
+import numpy as np
+from nomad.datamodel.data import EntryData
+from nomad.metainfo import Quantity, SchemaPackage, Section
+from nomad_luqy_plugin.schema_packages.schema_package import (
+    AbsPLMeasurement,
+    AbsPLResult,
+    AbsPLSettings,
+)
 
 m_package = SchemaPackage() 
 
@@ -47,7 +51,9 @@ class UMR_AbsPLMeasurement(AbsPLMeasurement, EntryData):
 
         if self.data_file:
             try:
-                from nomad_perolab_umr.schema_packages.read_and_parse.luqy_parser import parse_abspl_data
+                from nomad_perolab_umr.schema_packages.read_and_parse.luqy_parser import (
+                    parse_abspl_data,
+                )
 
                 # Call the new parser function
                 (

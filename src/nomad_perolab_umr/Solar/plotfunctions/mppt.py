@@ -73,8 +73,8 @@ def plot_mppt(mppt_archive, grid=False, toggle_grid_button=False, fig_power=None
         fig_voltage_current = go.Figure()
 
     # Create trace
-    trace_voltage = fig_voltage_current.add_scatter(x=mppt_archive['time'], y=mppt_archive['voltage'], name='Voltage')
-    trace_current_density = fig_voltage_current.add_scatter(x=mppt_archive['time'], y=mppt_archive['current_density'], name='Current Density', yaxis='y2')
+    fig_voltage_current.add_scatter(x=mppt_archive['time'], y=mppt_archive['voltage'], name='Voltage')
+    fig_voltage_current.add_scatter(x=mppt_archive['time'], y=mppt_archive['current_density'], name='Current Density', yaxis='y2')
 
     # Definition of standard axis layout
     colors = pio.templates['UMR'].layout.colorway  # use colors from umr-Ttemplate

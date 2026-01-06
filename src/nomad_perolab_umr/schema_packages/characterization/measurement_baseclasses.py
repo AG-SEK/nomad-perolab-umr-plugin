@@ -237,7 +237,7 @@ class UMR_JVParameters(UMR_MeasurementBaseclass, BaseMeasurement, EntryData, Plo
             from ..read_and_parse.general_parser import reference_sample
             reference_sample(self, logger, archive)
  
-        super(UMR_JVParameters, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 
@@ -249,6 +249,6 @@ class UMR_CollectedJVMeasurements(ArchiveSection):
         shape=['*'])
     
     def normalize(self, archive, logger):
-        super(UMR_CollectedJVMeasurements, self).normalize(archive,logger)
+        super().normalize(archive,logger)
         if self.jv_measurements:
             self.jv_measurements.sort(key=lambda x: x.datetime)

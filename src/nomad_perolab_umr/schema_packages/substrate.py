@@ -223,7 +223,7 @@ class UMR_Substrate(Substrate):
 
     
     def normalize(self, archive, logger):
-        super(UMR_Substrate,self).normalize(archive,logger)
+        super().normalize(archive,logger)
 
         # Calculate substrate area
         if self.width and self.length:
@@ -352,7 +352,7 @@ class UMR_AddStandardSubstrateLot(Entity):
                     self.m_parent.normalize(archive, logger)
                     self.m_parent.add_substrate_lot = None
 
-        super(UMR_AddStandardSubstrateLot, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 class UMR_StandardSubstrate(UMR_Substrate, EntryData):
     m_def = Section(
@@ -420,7 +420,8 @@ class UMR_StandardSubstrate(UMR_Substrate, EntryData):
             supplier_abbreviation = supplier_chemicals_abbreviations[self.supplier]  
             short_name = self.short_name.replace(' ', '_')
             self.lab_id = f"{short_name}_{supplier_abbreviation}"
-        else: log_error(self, logger, "Please enter a short_name and a supplier and save the entry to generate the lab_id")
+        else:
+            log_error(self, logger, "Please enter a short_name and a supplier and save the entry to generate the lab_id")
 
 
         #search for all Standard SUbstrate Lots referencing this Standard Substrate
@@ -450,7 +451,7 @@ class UMR_StandardSubstrate(UMR_Substrate, EntryData):
             log_warning(self, logger, f'No Substrate Lots were found for this Chemical: {self.lab_id}')
         
 
-        super(UMR_StandardSubstrate, self).normalize(archive,logger)
+        super().normalize(archive,logger)
 
 
 class UMR_StandardSubstrateLot(UMR_AddStandardSubstrateLot, EntryData): 
@@ -480,7 +481,7 @@ class UMR_StandardSubstrateLot(UMR_AddStandardSubstrateLot, EntryData):
 
 
     def normalize(self, archive, logger):        
-        super(UMR_StandardSubstrateLot, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 ##### External and Internal Substrate #####
@@ -505,7 +506,7 @@ class UMR_ExternalSubstrate(UMR_Substrate, EntryData):
                     'structuring','surface_resistivity','transmission'])))
    
     def normalize(self, archive, logger):
-        super(UMR_ExternalSubstrate,self).normalize(archive,logger)
+        super().normalize(archive,logger)
 
      
 
@@ -581,7 +582,7 @@ class UMR_InternalSubstrate(UMR_Substrate, EntryData):
                 self.description = standard_substrate_entry.description
                 self.standard_substrate_lot_id = standard_substrate_entry.lab_id
 
-        super(UMR_InternalSubstrate,self).normalize(archive,logger)
+        super().normalize(archive,logger)
 
 
         # If no solar cells are referenced find solar cells which reference this substrate and add them to samples subsection
@@ -649,7 +650,7 @@ class UMR_SubstrateForBatchPlan(UMR_InternalSubstrate, EntryData):
         #         self.transmission = self.standard_substrate.transmission
         #         self.description = self.standard_substrate.descriptio
 
-        super(UMR_SubstrateForBatchPlan,self).normalize(archive,logger)
+        super().normalize(archive,logger)
 
 
     

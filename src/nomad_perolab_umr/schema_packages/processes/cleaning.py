@@ -77,7 +77,7 @@ class UMR_SolutionCleaning(SolutionCleaning):
 
 
     def normalize(self, archive, logger):
-        super(UMR_SolutionCleaning, self).normalize(archive, logger)
+        super().normalize(archive, logger)
         if self.solvent:
             self.lab_id = self.solvent.lab_id
             if self.solvent.chemical.pure_substance:
@@ -158,7 +158,7 @@ class UMR_CleaningELN(UMR_ELNProcess, UMR_Cleaning):
             else:
                 log_error(self, logger, 'No Samples Selected. Please add the samples on which this process should be applied to the selected_samples section')
 
-        super(UMR_CleaningELN, self).normalize(archive, logger)   
+        super().normalize(archive, logger)   
 
 
 

@@ -90,7 +90,7 @@ class UMR_MeasurementsSubsection(ArchiveSection):
         shape=['*'])
 
     def normalize(self, archive, logger):
-        super(UMR_MeasurementsSubsection, self).normalize(archive,logger)
+        super().normalize(archive,logger)
         
         # Check how many best_measurement entries exist and if applicable set one
 
@@ -189,7 +189,7 @@ class UMR_Layer(LayerProperties):
             log_info(self, logger, f"Layer normalizer: SET POSITION IN LAYER STACK - parent section: {self.m_parent} - index: {self.m_parent_index}")
             self.position_in_layer_stack = self.m_parent_index + 1
 
-        super(UMR_Layer, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 
@@ -321,7 +321,7 @@ class UMR_Room(Entity, EntryData):
     chemicals = SubSection(section_def=EntityReference, repeats = True)
 
     def normalize(self, archive, logger):
-        super(UMR_Room, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         # Create lab_id
         if self.building and self.room_number and self.short_name:
@@ -329,7 +329,8 @@ class UMR_Room(Entity, EntryData):
             room_number = self.room_number.replace(' ','')
             short_name = self.short_name.replace(' ', '_')
             self.lab_id = f"{building_number}_{room_number}_{short_name}"
-        else: log_error(self, logger, "Please enter a short_name, a building and a room_number and save the entry to generate the lab_id")
+        else:
+            log_error(self, logger, "Please enter a short_name, a building and a room_number and save the entry to generate the lab_id")
 
         # Sort List of instructed persons (by date)
         #if all(person.datetime for person in self.instructed_persons):
@@ -461,14 +462,15 @@ class UMR_Instrument(Instrument, EntryData):
 
 
     def normalize(self, archive, logger):
-        super(UMR_Instrument, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         # Generate lab_id
         if self.short_name and self.supplier:
             supplier_abbreviation = supplier_instruments_abbreviations[self.supplier]  
             short_name = self.short_name.replace(' ', '_')
             self.lab_id = f"{short_name}_{supplier_abbreviation}"
-        else: log_error(self, logger, "Please enter a short_name and a supplier and save the entry to generate the lab_id")
+        else:
+            log_error(self, logger, "Please enter a short_name and a supplier and save the entry to generate the lab_id")
 
 
 m_package.__init_metainfo__()

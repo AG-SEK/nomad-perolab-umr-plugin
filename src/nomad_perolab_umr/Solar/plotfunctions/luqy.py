@@ -4,6 +4,12 @@
 from datetime import datetime
 
 import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+import plotly.io as pio
+from scipy.optimize import curve_fit
+
+from . import get_samples_from_group, update_layout_umr
 
 
 def read_luqy_data(mainfile, encoding='ISO-8859-1', device_name=None):
@@ -34,8 +40,8 @@ def read_luqy_data(mainfile, encoding='ISO-8859-1', device_name=None):
 
     
     with open(mainfile, encoding=encoding) as file:
-        for line in file:
-            line = line.strip()
+        for raw_line in file:
+            line = raw_line.strip()
             parts = line.split('\t')
             # Skip empty lines
             if not line:
@@ -101,12 +107,6 @@ def read_luqy_data(mainfile, encoding='ISO-8859-1', device_name=None):
 
 ##############################################################################################
 ##############################################################################################
-
-import plotly.graph_objects as go
-import plotly.io as pio
-from scipy.optimize import curve_fit
-
-from . import get_samples_from_group, update_layout_umr
 
 colors = pio.templates["UMR"].layout.colorway
 colors = colors + colors + colors # Liste Colors zu klein!!!
@@ -186,7 +186,8 @@ def fit_gaussian(wavelengths, luminescence, double=False):
             popt, _ = curve_fit(double_gaussian, wavelengths, luminescence, p0=p0)
             
             # Define the fitted double Gaussian function using the optimized parameters
-            fit_func = lambda x: double_gaussian(x, *popt)
+            def fit_func(x):
+                return double_gaussian(x, *popt)
             
             # Return the fitted function, the positions of the two peaks, and the parameters
             return fit_func, (popt[1], popt[4]), popt
@@ -195,7 +196,8 @@ def fit_gaussian(wavelengths, luminescence, double=False):
             print("Double Gaussian fit failed, falling back to single Gaussian.")
             try:
                 popt, _ = curve_fit(gaussian, wavelengths, luminescence, p0=[peak_value, peak_wavelength, 10])
-                fit_func = lambda x: gaussian(x, *popt)
+                def fit_func(x):
+                    return gaussian(x, *popt)
                 return fit_func, (popt[1],), popt
             except (RuntimeError, TypeError):
                 print("Single Gaussian fit also failed.")
@@ -213,7 +215,8 @@ def fit_gaussian(wavelengths, luminescence, double=False):
             popt, _ = curve_fit(gaussian, wavelengths, luminescence, p0=p0)
             
             # Define the fitted single Gaussian function using the optimized parameters
-            fit_func = lambda x: gaussian(x, *popt)
+            def fit_func(x):
+                return gaussian(x, *popt)
             
             # Return the fitted function, the position of the peak, and the parameters
             return fit_func, (popt[1],), popt
@@ -393,7 +396,7 @@ def plot_and_fit_luqy(luqy_list, showplot=True, names=None, perform_gaussian_fit
         fig.add_trace(go.Scatter(x=wavelengths_plot, y=luminescence, mode='lines', name=list_names[i], line_color=trace_color))
         
     
-    	# Determine fit range based on user input
+        # Determine fit range based on user input
         if isinstance(fit_range, list) and len(fit_range) == 2:
             fit_min, fit_max = fit_range
         elif fit_range == "full":
@@ -504,7 +507,6 @@ def plot_and_fit_luqy(luqy_list, showplot=True, names=None, perform_gaussian_fit
 
 
 ################################
-import pandas as pd
 
 
 def create_boxplot_data_luqy(luqy_data, batch, excel_filename=None, double_gauss=True, show_fit=True, show_ivoc_and_luqy=True, showfit=True):
@@ -607,8 +609,8 @@ def plot_boxplot_luqy(boxplot_df, parameter="internal_open_circuit_voltage (V)",
     yaxis_title, title = parameter_map[parameter]
 
     # Get batch ID:
-    first_device_id = boxplot_df['lab_id'][0]
-    batch_id = f"{first_device_id.split('_')[0]}_{first_device_id.split('_')[1]}"
+    #first_device_id = boxplot_df['lab_id'][0]
+    # batch_id = f"{first_device_id.split('_')[0]}_{first_device_id.split('_')[1]}"  # Unused variable
 
     # Extract unique group numbers from the DataFrame
     if group_order is None:

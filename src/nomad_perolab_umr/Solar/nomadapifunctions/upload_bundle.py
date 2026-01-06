@@ -1,10 +1,11 @@
+import os
+
 import requests
 
 from . import AUTH_HEADER
 
 OASIS_BASE_URL_NEW = 'https://solar-oasis.physik.uni-marburg.de/nomad-oasis/api/v1'
 OASIS_BASE_URL_OLD = 'https://vhrz1634.hrz.uni-marburg.de/nomad-oasis/api/v1'
-import os
 
 
 def get_upload_bundle(

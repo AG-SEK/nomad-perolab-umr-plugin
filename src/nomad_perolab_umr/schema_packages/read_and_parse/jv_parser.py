@@ -41,12 +41,11 @@ def read_JVparameter_line(line, jv_dict, measurement, header_params):
 
     for i, value in enumerate(parts[1:]):
         # Check if value is NaN -> set value to 0.0 (for some very bad JV curves e.g. Efficiency is NaN)
-        if value.lower() == 'nan':
-            value = 0.0
+        processed_value = 0.0 if value.lower() == 'nan' else value
     
         # Add value to jv_dict
         jv_dict[measurement].update({
-            header_params[i+1]: float(value)
+            header_params[i+1]: float(processed_value)
             })
 
     #jv_dict[measurement].update({              # Add key-value pairs to nested dictionaries (Forward and Reverse)
@@ -108,8 +107,8 @@ def read_jv_data(mainfile, encoding):
     # Open File and read it line by line
     with open(mainfile, encoding=encoding) as file:
   
-        for line in file:
-            line = line.rstrip()         # Remove trailing whitespaces from the line
+        for raw_line in file:
+            line = raw_line.rstrip()         # Remove trailing whitespaces from the line
             
             # Skip empty lines and title lines ([General info],[Scan Seetings], ...)
             if not line or line.startswith("["):

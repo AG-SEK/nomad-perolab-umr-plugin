@@ -91,12 +91,22 @@ ignore = [
     "PLR2004", # Magic numbers - often acceptable for HTTP status codes
     "PLR0913", # Too many arguments - sometimes necessary
     "PLR0911", # Too many returns - sometimes necessary
+    "PLR0912", # Too many branches - sometimes necessary for complex parsing logic
+    "PLR0915", # Too many statements - sometimes necessary for complex setup logic
+    "PLC0415", # Import outside top-level - necessary for plugin entry points to avoid circular imports
+    "PLW0603", # Global statement - necessary for interactive notebooks with widgets
+    "PLW0602", # Global without assignment - common in notebook cells
+    "PLR1704", # Redefining argument - sometimes necessary in exception handling
 ]
 
 fixable = ["ALL"]
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Per-file ignores for specific file patterns
+[tool.ruff.lint.per-file-ignores]
+"**/*.ipynb" = ["E402", "F821", "F841", "E722"]  # Jupyter notebooks have different import/variable patterns
 
 # this is entirely optional, you can remove this if you wish to
 [tool.ruff.format]

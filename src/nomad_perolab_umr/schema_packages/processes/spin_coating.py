@@ -138,7 +138,7 @@ class UMR_SpinCoatingELN(UMR_ELNProcess, UMR_SpinCoating):
             else:
                 log_error(self, logger, 'No Samples Selected. Please add the samples on which this process should be applied to the selected_samples section')
 
-        super(UMR_SpinCoatingELN, self).normalize(archive, logger)   
+        super().normalize(archive, logger)   
 
 
 

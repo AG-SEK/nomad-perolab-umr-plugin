@@ -205,7 +205,7 @@ class UMR_AddChemicalLot(Entity):
                     # Delete Add Chemical lot section
                     self.m_parent.add_chemical_lot = UMR_AddChemicalLot()
 
-        super(UMR_AddChemicalLot, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 
@@ -333,7 +333,8 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
             supplier_abbreviation = supplier_chemicals_abbreviations[self.supplier]  
             short_name = self.short_name.replace(' ', '_')
             self.lab_id = f"{short_name}_{supplier_abbreviation}"
-        else: log_error(self, logger, "Please enter a short_name and a supplier and save the entry to generate the lab_id")
+        else:
+            log_error(self, logger, "Please enter a short_name and a supplier and save the entry to generate the lab_id")
 
         # Create PubChemPureSubstanceSection and get Information from PubChem
         if not hasattr(self.pure_substance, "pub_chem_cid") and self.substance_name: # geändert, BITTE TESTEN!
@@ -361,7 +362,7 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
                 log_warning(self, logger, f"ITEM.LOT {item.lot}")
                 try:
                     item.m_resolved()
-                except:
+                except Exception:
                     log_warning(self, logger, f"EXCEPTION {item.lot}")
                     list.remove(item)
 
@@ -401,7 +402,7 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
         #else: 
         #    log_warning(self, logger, f'No Chemical Lots were found for this Chemical: {self.lab_id}')
 
-        super(UMR_Chemical, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 class UMR_ChemicalLot(UMR_AddChemicalLot, EntryData):   ## ggf. hier noch von Chemical o.ä. erben
@@ -430,7 +431,7 @@ class UMR_ChemicalLot(UMR_AddChemicalLot, EntryData):   ## ggf. hier noch von Ch
 
 
     def normalize(self, archive, logger):        
-        super(UMR_ChemicalLot, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         #if self.current_storage and self.opened_on:
             # Set Name
@@ -490,7 +491,7 @@ class UMR_SolutionChemical(SolutionChemical):
     
 
     def normalize(self, archive, logger):
-        super(UMR_SolutionChemical, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         if self.chemical:
             self.chemical_2 = self.chemical.chemical.pure_substance.m_copy(deep=True)
@@ -530,7 +531,7 @@ class UMR_StandardSolution(Solution, EntryData):
     preparation = SubSection(section_def=SolutionPreparationStandard)
 
     def normalize(self, archive, logger):        
-        super(UMR_StandardSolution, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 
@@ -585,7 +586,7 @@ class UMR_Solution(Solution, EntryData):
             self.storage = self.standard_solution.storage
             self.properties = self.standard_solution.properties
 
-        super(UMR_Solution,self).normalize(archive,logger)
+        super().normalize(archive,logger)
 
 
 

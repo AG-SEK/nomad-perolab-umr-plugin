@@ -200,8 +200,8 @@ def plot_stability(tracking_data, step=100, grid=False, toggle_grid_button=False
         fig_voltage_current = go.Figure()
 
     # Create trace
-    trace_voltage = fig_voltage_current.add_scatter(x=reduced_data['time'], y=reduced_data['voltage'], name='Voltage')
-    trace_current_density = fig_voltage_current.add_scatter(x=reduced_data['time'], y=reduced_data['current_density'], name='Current Densityt', yaxis='y2')
+    fig_voltage_current.add_scatter(x=reduced_data['time'], y=reduced_data['voltage'], name='Voltage')
+    fig_voltage_current.add_scatter(x=reduced_data['time'], y=reduced_data['current_density'], name='Current Densityt', yaxis='y2')
 
     # Definition of standard axis layout
     colors = pio.templates['UMR'].layout.colorway  # use colors from umr-Ttemplate

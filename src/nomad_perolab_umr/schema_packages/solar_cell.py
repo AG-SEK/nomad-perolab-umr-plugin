@@ -124,7 +124,7 @@ class UMR_BasicSample(SolcarCellSample):  # inherit from SolcarCellSample, becau
 
 
     def normalize(self, archive, logger):
-        super(UMR_BasicSample, self).normalize(archive,logger)
+        super().normalize(archive,logger)
 
         #self.processes_ref = UMR_ProcessesSubsection()
 
@@ -185,7 +185,7 @@ class UMR_ExternalSolarCell(UMR_BasicSample, EntryData):
             props=dict(suggestions=suggestions_supplier)))
     
     def normalize(self, archive, logger):
-        super(UMR_ExternalSolarCell, self).normalize(archive,logger)
+        super().normalize(archive,logger)
         
 
 
@@ -209,7 +209,7 @@ class UMR_InternalSolarCell(UMR_BasicSample, EntryData):
     
     def normalize(self, archive, logger):
         #collectMeasurements(self, archive)
-        super(UMR_InternalSolarCell, self).normalize(archive, logger)
+        super().normalize(archive, logger)
         
         # Sort Processes
         #process_list = [process for process in self.processes]

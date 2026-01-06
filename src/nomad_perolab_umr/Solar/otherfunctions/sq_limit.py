@@ -2,8 +2,10 @@
 
 import numpy as np
 import plotly.graph_objects as go
+from scipy.interpolate import interp1d
 
 from ..constants import c, e, h, k_B
+from ..otherfunctions import get_am15g_array
 
 
 def add_rainbow_to_figure(figure, xaxis="eV", y_height=100, opacity=0.3, deep_copy=True):
@@ -39,8 +41,8 @@ def add_rainbow_to_figure(figure, xaxis="eV", y_height=100, opacity=0.3, deep_co
         fig = figure
 
     # Sichtbares Spektrum: 380 - 750 nm (ungefähr)
-    wavelengths_nm = np.linspace(380, 750, 1000)
-    photon_energy_eV = (h * c) / (wavelengths_nm * 1e-9) / e  # Umrechnung
+    #wavelengths_nm = np.linspace(380, 750, 1000)
+    #photon_energy_eV = (h * c) / (wavelengths_nm * 1e-9) / e  # Umrechnung
 
     # Farbwerte für typisches sichtbares Licht (vereinfachte, aber realistische Zuordnung)
     # Liste: [(nm, hex_color)]
@@ -89,8 +91,6 @@ def add_rainbow_to_figure(figure, xaxis="eV", y_height=100, opacity=0.3, deep_co
 
     return fig
 
-
-from ..otherfunctions import get_am15g_array
 
 am15g_wavelengths_nm = get_am15g_array('wavelength')
 am15g_irradiance_mW_per_cm2_per_nm = get_am15g_array('spectral_irradiance_per_nm')
@@ -452,7 +452,7 @@ def calculate_j0(T, bandgap_eV=None, bandgap_nm=None, wavelengths_nm = None, sho
     if showplots:
         # Identify the peak in the photon flux spectrum
         peak_index = np.argmax(photon_flux_per_cm2_per_nm)
-        peak_x = wavelengths_nm[peak_index]
+        #peak_x = wavelengths_nm[peak_index]
         peak_y = photon_flux_per_cm2_per_nm[peak_index]
 
         # Plot the black-body photon flux spectrum
@@ -753,8 +753,6 @@ def calculate_fom_from_jv_curve(J, V, n=1, T=300, incident_irradiance=100):
     V_mpp = V[mpp_index]
     J_mpp = J[mpp_index]
     P_mpp = P[mpp_index]
-
-    from scipy.interpolate import interp1d
 
     # Interpolate Voc if not provided (J → V at J=0)
     try:

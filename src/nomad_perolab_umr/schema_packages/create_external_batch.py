@@ -239,7 +239,7 @@ class UMR_CreateExternalBatch(Entity, EntryData):
             with archive.m_context.raw_file(self.csv_file) as f:
                 # Determine delimiter of csv file (, or ;)
                 delimiter = get_delimiter(f.name)
-                if delimiter == None:
+                if delimiter is None:
                     log_error(self, logger, "Teh delimiter of the csv file is neither ',' nor ';' . Please check that.")
                     return
                 df = pd.read_csv(f.name, sep=delimiter, encoding = 'utf-8', na_values=[''])
@@ -487,8 +487,8 @@ class UMR_CreateExternalBatch(Entity, EntryData):
                 # CREATE SOLAR CELLS
                 for j, solar_cell_name in enumerate(self.solar_cell_names):
                     solar_cell_lab_id = f"{supplier_abbreviation}_{str(self.our_batch_number).zfill(3)}_{substrate_id}_{solar_cell_name}"
-                    solar_cell_name=f"solar_cell_{solar_cell_lab_id}"
-                    solar_cell_file_name = f'Batch/{solar_cell_name}.archive.json'
+                    solar_cell_archive_name=f"solar_cell_{solar_cell_lab_id}"
+                    solar_cell_file_name = f'Batch/{solar_cell_archive_name}.archive.json'
                     solar_cell = UMR_ExternalSolarCell(
                         name = f"Solar Cell {solar_cell_lab_id}",
                         datetime = self.datetime,
@@ -530,7 +530,7 @@ class UMR_CreateExternalBatch(Entity, EntryData):
             # Check box batch_was_created
             self.batch_was_created = True
 
-        super(UMR_CreateExternalBatch, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         ########################################################################
 

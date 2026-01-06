@@ -84,7 +84,7 @@ def add_experiment_sheet(workbook, process_sequence, is_testing=False):
                 make_label('Notes', 'Test excel'),
             ]
 
-        if process_name == 'Cleaning O2-Plasma' or process_name == 'Cleaning UV-Ozone':
+        if process_name in {'Cleaning O2-Plasma', 'Cleaning UV-Ozone'}:
             steps = []
             for i in range(1, config.get('solvents', 0) + 1):
                 steps.extend(
@@ -267,7 +267,7 @@ def add_experiment_sheet(workbook, process_sequence, is_testing=False):
             return steps
 
         # PVD Processes
-        if process_name == 'Evaporation' or process_name == 'Sublimation':
+        if process_name in {'Evaporation', 'Sublimation'}:
             steps = [
                 make_label('Material name', 'PCBM'),
                 make_label('Layer type', 'Electron Transport Layer'),

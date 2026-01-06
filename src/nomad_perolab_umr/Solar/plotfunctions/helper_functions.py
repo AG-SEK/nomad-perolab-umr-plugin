@@ -2,6 +2,11 @@
 In this script we collect small helper functions, which are used in other functions
 """
 
+import plotly.io as pio
+
+from ..plottemplate.umr_plot_template import linepattern
+
+
 def get_jsc_list_from_jv_data(jv_data, show_information=True):
     """
     Extracts the short-circuit current density (Jsc) values from JV measurement data.
@@ -215,8 +220,6 @@ def get_samples_from_group(group=None, batch=None, group_number=None, solar_cell
 
 ######### Function to map colors to a list of items e.g. groups, substrates #########
 
-import plotly.io as pio
-
 colors = pio.templates["UMR"].layout.colorway * 3 # Set UMR standard colors 3x after each other for many substrates
 
 def map_colors_to_items(items_list, colors_list=colors):
@@ -239,10 +242,6 @@ def map_colors_to_items(items_list, colors_list=colors):
  
 
 ######### Function to map linepatterns to a list of items e.g. cells #########
-
-from ..plottemplate.umr_plot_template import (
-    linepattern,  # Import line patterns from umr_plot_template
-)
 
 
 def map_linepattern_to_items(items_list, linepatterns_list=linepattern):

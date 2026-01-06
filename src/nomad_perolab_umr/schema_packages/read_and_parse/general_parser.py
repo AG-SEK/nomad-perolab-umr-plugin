@@ -22,6 +22,8 @@
 import os
 from datetime import datetime
 
+import pytz
+
 # HZB methods
 from baseclasses.helper.utilities import (
     get_reference,
@@ -44,9 +46,9 @@ def read_general_info(mainfile, encoding):
 
     # Open File and read it line by line
     with open(mainfile, encoding=encoding) as file:
-        for line in file:
+        for raw_line in file:
             # Remove whitespaces from the line
-            line = line.strip() 
+            line = raw_line.strip() 
             # Check if header ended -> stop loop
             if line == '## Data ##':
                 break
@@ -77,7 +79,6 @@ def parse_general_info(entry, mainfile, encoding):
     # Datetime
     datetime_str = header_dict['Date'] + " " + header_dict['Time']
     initial_datetime = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')     # Parse the date and time without timezone information
-    import pytz  # Import pytz-Modul für time zones
     berlin_tz = pytz.timezone('Europe/Berlin')                                  # Define the Berlin timezone
     localized_datetime = berlin_tz.localize(initial_datetime)                   # Localize the initial datetime to the Berlin timezone
     entry.datetime = localized_datetime                                         # Enter localized datetime in entry -> But Datetime is saved in UTC (+00:00) in NOMAD

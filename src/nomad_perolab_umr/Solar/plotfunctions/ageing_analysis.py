@@ -3,21 +3,10 @@
 # In[3]:
 
 
-import sys
-
-#module_path = 'K:\solar\9_Topics\Python Analysis Scripts' 
-module_path = '/Volumes/Solar/9_Topics/Python Analysis Scripts' # macOS
-
-if module_path not in sys.path:
-    sys.path.append(module_path)
-
-
-# In[4]:
-
-
 import io
 import os
 import re
+import sys
 from collections import Counter
 from pprint import pprint
 
@@ -28,6 +17,16 @@ import plotly.graph_objects as go
 #from .. import *
 from ..otherfunctions import generate_gradient
 from ..plottemplate.umr_plot_template import color_gradients, colors, markers
+
+#module_path = 'K:\solar\9_Topics\Python Analysis Scripts' 
+module_path = '/Volumes/Solar/9_Topics/Python Analysis Scripts' # macOS
+
+if module_path not in sys.path:
+    sys.path.append(module_path)
+
+
+# In[4]:
+
 
 # In[23]:
 
@@ -72,7 +71,8 @@ class DataPlotter:
             correction_factor = 0.25/0.3087
 
             
-        for c in filtered_columns: data_df[c] = data_df[c]*correction_factor    
+        for c in filtered_columns:
+            data_df[c] = data_df[c]*correction_factor    
 
          
         self.devices[device_name]['data'].append(data_df) # each entry will have two data sets, as we have two files for each device 
@@ -216,7 +216,9 @@ class DataPlotter:
                     if variable in data_df.columns:
                         # Efficient downsampling
                         if i > 0:
-                            data_df = data_df[::i]
+                            downsampled_df = data_df[::i]
+                        else:
+                            downsampled_df = data_df
 
                         # Get the color and update the index
                         color = gradients[device_info['type']]["gradient"][gradients[device_info['type']]["index"]]
@@ -230,8 +232,8 @@ class DataPlotter:
 
                         # Add trace to the figure
                         fig.add_trace(go.Scatter(
-                            x=data_df['Time (Hours)'],
-                            y=data_df[variable],
+                            x=downsampled_df['Time (Hours)'],
+                            y=downsampled_df[variable],
                             mode = 'lines',
                             line=dict(color=color),
                             name=device_info['type'] if show_legend else "",  # Show the group name only once

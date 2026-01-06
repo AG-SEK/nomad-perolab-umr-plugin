@@ -40,9 +40,8 @@ from scipy.stats import linregress
 
 ################## LOAD STANDARD PLOT FUNCTIONS ##################
 #import Solar.plottemplate # UMR Template is automatically set as default
-from ..plottemplate.umr_plot_template import colors as colors
+from ..plottemplate.umr_plot_template import colors, markers
 from ..plottemplate.umr_plot_template import linepattern as pattern
-from ..plottemplate.umr_plot_template import markers
 from . import update_layout_umr
 
 
@@ -134,9 +133,7 @@ def tauc_plot(file_path_T, file_path_R, names, bandgap, grid=False, toggle_grid_
     
     "------------ Plot Absorptance, Reflectance and Transmittance ----------------"
     
-    for dev in data:
-        
-        d = data[dev]
+    for dev, d in data.items():
         
         # plot absorptance 
         fig_A.add_scatter(x=d["Wavelength"][::10], y=d["Absorptance"][::10]*100, name = f"{dev} A")

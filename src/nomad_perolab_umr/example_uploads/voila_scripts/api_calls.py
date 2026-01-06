@@ -256,10 +256,10 @@ def get_all_JV(url, token, sample_ids, jv_type="perolab_JVmeasurement"):
         for sample_id, measurements in jv_data_with_metadata.items():
             for data, metadata in measurements:
                 # Extract status from metadata
-                status = extract_status_from_metadata(data, metadata)
+                # status = extract_status_from_metadata(data, metadata)  # Function not defined
                 
                 # Add status to the data
-                data['status'] = status
+                # data['status'] = status
                 
                 processed_data.append(data)
         

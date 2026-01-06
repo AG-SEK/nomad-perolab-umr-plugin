@@ -443,7 +443,7 @@ def get_QFLSy_value(I_PL, E, A=1):
 
 def get_QFLS(intensity, energy, A_data = 1, A_type='fix', fit_range=(4,16), fig=None):
     # for A either take just fix A=1 or IPCE (if complete cell) or UV-Vis (if transmission accessible)
-    if A_type == 'fix' or A_type =='HypPL':
+    if A_type in {'fix', 'HypPL'}:
         absorptance = A_data
     if A_type == 'eqe':
         # Interpolate EQE to match the energy axis of the 3D dataset

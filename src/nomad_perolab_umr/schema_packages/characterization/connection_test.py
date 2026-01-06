@@ -99,7 +99,7 @@ class UMR_ConnectionTestExtraData(UMR_MeasurementBaseclass, BaseMeasurement, Bas
             from ..read_and_parse.general_parser import reference_sample
             reference_sample(self, logger, archive)
         
-        super(UMR_ConnectionTestExtraData, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 
@@ -189,7 +189,7 @@ class UMR_ConnectionTest(UMR_MeasurementBaseclass, BaseMeasurement, PlotSection,
         #fig_json=fig.to_plotly_json()
         #self.figures.append(PlotlyFigure(label=f'Connection Test - {self.datetime}', figure=fig_json))
 
-        super(UMR_ConnectionTest, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 class UMR_StabilizedShortCircuitCurrent(UMR_ConnectionTest):
@@ -215,7 +215,7 @@ class UMR_StabilizedShortCircuitCurrent(UMR_ConnectionTest):
     def normalize(self, archive, logger):
         self.method = "Stabilized Short-Circuit Current Measurement"
         #archive.metadata.entry_type = self.m_def.name
-        super(UMR_StabilizedShortCircuitCurrent, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 class UMR_StabilizedOpenCircuitVoltage(UMR_ConnectionTest):
@@ -241,7 +241,7 @@ class UMR_StabilizedOpenCircuitVoltage(UMR_ConnectionTest):
     def normalize(self, archive, logger):
         self.method = "Stabilized Open-Circuit Voltage Measurement"
         #archive.metadata.entry_type = self.m_def.name
-        super(UMR_StabilizedOpenCircuitVoltage, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 

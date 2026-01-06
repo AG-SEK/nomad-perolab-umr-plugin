@@ -20,9 +20,16 @@ import numpy as np
 from baseclasses import BaseProcess
 from baseclasses.helper.utilities import rewrite_json
 from baseclasses.wet_chemical_deposition import PrecursorSolution
-from nomad.datamodel.data import ArchiveSection
+from nomad.datamodel.data import ArchiveSection, EntryData
 from nomad.metainfo import Quantity, Reference, SchemaPackage, Section, SubSection
 
+from ..categories import *
+from ..helper_functions import *
+from ..processes.process_baseclasses import (
+    UMR_BaseProcess,
+    UMR_ELNProcess,
+    UMR_PrecursorSolution,
+)
 from ..umr_baseclasses import UMR_Layer
 
 m_package = SchemaPackage() 
@@ -170,16 +177,6 @@ class Etching(BaseProcess):
 
 
 
-from nomad.datamodel.data import EntryData
-
-from ..categories import *
-from ..helper_functions import *
-from ..processes.process_baseclasses import (
-    UMR_BaseProcess,
-    UMR_ELNProcess,
-    UMR_PrecursorSolution,
-)
-
 
 class UMR_Etching(UMR_BaseProcess, Etching, EntryData):
      #m_def = Section(
@@ -249,7 +246,7 @@ class UMR_EtchingELN(UMR_ELNProcess, UMR_Etching):
             else:
                 log_error(self, logger, 'No Samples Selected. Please add the samples on which this process should be applied to the selected_samples section')
 
-        super(UMR_EtchingELN, self).normalize(archive, logger)   
+        super().normalize(archive, logger)   
 
 
 

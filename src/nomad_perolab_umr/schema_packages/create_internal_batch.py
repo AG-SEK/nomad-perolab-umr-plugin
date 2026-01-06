@@ -128,7 +128,7 @@ class UMR_StandardSampleSolarCell(StandardSampleSolarCell, EntryData):
         a_eln=dict(component='ReferenceEditQuantity'))
 
     def normalize(self, archive, logger):
-        super(UMR_StandardSampleSolarCell, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         # Calculate the solar cell area
         if self.width and self.length:
@@ -172,7 +172,7 @@ class UMR_ParameterVariation(ParametersVaried):
 
 
     def normalize(self, archive, logger):
-        super(UMR_ParameterVariation, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         # Determine unit automatically or log error
         if self.parameter_path and not self.parameter_unit:
@@ -284,7 +284,7 @@ class UMR_VaryProcess(ArchiveSection):
         section_def=UMR_BaseProcess, repeats=True, label="List with varied processes")
 
     def normalize(self, archive, logger):
-        super(UMR_VaryProcess, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         # Set name
         self.name=self.process_reference.name
@@ -307,7 +307,8 @@ class UMR_VaryProcess(ArchiveSection):
         # Check process_is_varied checkbox if neccesary
         if not self.varied_processes:
             self.process_is_varied = False
-        else: self.process_is_varied = True
+        else:
+            self.process_is_varied = True
                     
 
 
@@ -361,7 +362,7 @@ class UMR_SelectProcessVariation(ArchiveSection):
         
             self.m_parent.normalize(archive, logger)
 
-        super(UMR_SelectProcessVariation, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 class UMR_SelectProcess(ArchiveSection):
@@ -415,7 +416,7 @@ class UMR_SelectProcess(ArchiveSection):
         else:
             self.display_name = f"{self.selected_process.name}"
         
-        super(UMR_SelectProcess, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 
@@ -496,7 +497,7 @@ class UMR_GroupSettings(UMR_Group):
     #    section_def = UMR_StandardSampleSettings, repeats=False)
 
     def normalize(self, archive, logger):
-        super(UMR_GroupSettings, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         # Warning if number of substrates does not match given engraved_numbers
         if self.substrate_engraved_numbers:
@@ -807,21 +808,21 @@ class UMR_BatchPlan(BaseSection, EntryData):
 
         # TODO KLAPPT NOCH NICHT: FEHLER BEI QUERY
             # Search for InternalBatch and batchPlan with the same ID -> log error if already existing entry is found
-            query = {
-                'or': {
-                    'and': {
-                        'entry_type:any': ['UMR_InternalBatch', 'UMR_ExternalBatch'],
-                        'or': {
-                            'data.lab_id#UMR_schemas.batch.UMR_InternalBatch': batch_id,
-                            'data.lab_id#UMR_schemas.batch.UMR_ExternalBatch': batch_id
-                        }
-                    },
-                    'and':{
-                        'entry_type': 'UMR_BatchPlan',
-                        'data.batch_id#UMR_schemas.create_internal_batch.UMR_BatchPlan': batch_id
-                    }
-                }
-            }
+            # query = {
+            #     'or': [
+            #         {
+            #             'entry_type:any': ['UMR_InternalBatch', 'UMR_ExternalBatch'],
+            #             'or': {
+            #                 'data.lab_id#UMR_schemas.batch.UMR_InternalBatch': batch_id,
+            #                 'data.lab_id#UMR_schemas.batch.UMR_ExternalBatch': batch_id
+            #             }
+            #         },
+            #         {
+            #             'entry_type': 'UMR_BatchPlan',
+            #             'data.batch_id#UMR_schemas.create_internal_batch.UMR_BatchPlan': batch_id
+            #         }
+            #     ]
+            # }
 
             #search_result = UMR_search(archive, query)
             #log_info(self, logger, f"SEARCH RESULT: {search_result['data']}")
@@ -1042,7 +1043,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
             # Clear the list with created entities
             self.created_entities = []
 
-    	    # Create Batch folder and Substrate and Sample and SolarCell Folder
+            # Create Batch folder and Substrate and Sample and SolarCell Folder
             create_directory(self, archive, logger, "Batch")
             create_directory(self, archive, logger, "Batch/Substrates")
             create_directory(self, archive, logger, "Batch/Samples")
@@ -1123,7 +1124,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
 
                 # Sammle alle zu erstellenden Substrate und Samples in Listen, um sie später in einem Rutsch zu verarbeiten.
                 substrates_to_create = []
-                samples_to_create = []
+                # samples_to_create = []  # Unused variable, commented out
                 processes_to_update = []
 
                 for engraved_number in group_settings.substrate_engraved_numbers:
@@ -1270,7 +1271,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
 
 
 
-        super(UMR_BatchPlan, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 

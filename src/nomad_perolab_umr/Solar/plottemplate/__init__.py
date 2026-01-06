@@ -3,4 +3,3 @@
 
 # Import module to set UMR template as default
 #import umr_plot_template
-import plotly.graph_objects as go

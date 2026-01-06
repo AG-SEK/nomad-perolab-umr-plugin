@@ -105,7 +105,7 @@ class UMR_SolarCellSettings(ArchiveSection):
     
 
     def normalize(self, archive, logger):
-        super(UMR_SolarCellSettings, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
         # Calculate the solar cell area
         if self.width and self.length:
@@ -129,7 +129,7 @@ class UMR_PrecursorSolution(PrecursorSolution):
     
 
     def normalize(self, archive, logger):
-        super(UMR_PrecursorSolution, self).normalize(archive, logger) 
+        super().normalize(archive, logger) 
         #if self.solution:
         #    self.solution_details = self.solution.m_copy(deep=True)
 
@@ -165,7 +165,7 @@ class UMR_BaseProcess(BaseProcess):
         # Delete batch temporarily so that normalize function in BaseProcess does not set the samples new
         batch_temp = self.batch
         self.batch = None
-        super(UMR_BaseProcess, self).normalize(archive, logger) 
+        super().normalize(archive, logger) 
         self.batch = batch_temp
     
 # TODO: Ask Micha to add (if self.batch.entities condition in baseclasses init.py line 275)
@@ -209,7 +209,7 @@ class UMR_ELNProcess(EntryData, ArchiveSection):
     solar_cell_settings = SubSection(section_def=UMR_SolarCellSettings)
 
     def normalize(self, archive, logger):
-        super(UMR_ELNProcess, self).normalize(archive, logger)  
+        super().normalize(archive, logger)  
 
         # Sort Samples and Selected Samples List
         if hasattr(self, 'samples') and self.samples:
@@ -268,7 +268,7 @@ class UMR_SpinCoatingAntiSolventQuenching(AntiSolventQuenching):
     lab_id = Quantity(type =str)
 
     def normalize(self, archive, logger):
-        super(UMR_SpinCoatingAntiSolventQuenching, self).normalize(archive, logger) 
+        super().normalize(archive, logger) 
         if self.anti_solvent:
             self.anti_solvent_2 = self.anti_solvent.chemical.pure_substance.m_copy(deep=True)
             self.lab_id = self.anti_solvent.lab_id

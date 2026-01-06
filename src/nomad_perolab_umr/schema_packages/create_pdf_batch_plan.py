@@ -20,7 +20,7 @@ def get_varying_process(data):
 
     for process in data['standard_processes_for_variation']:
         if "process_is_varied" in process:
-            if process['process_is_varied'] == True:
+            if process['process_is_varied']:
                 varied_processes.append(process)
         
     return varied_processes

@@ -79,7 +79,7 @@ class UMR_MPPTrackingJVMeasurement(UMR_JVMeasurement):
                     'jv_curve'])))
     
     def normalize(self, archive, logger):
-        super(UMR_MPPTrackingJVMeasurement, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 class UMR_MPPTrackingParameters(UMR_JVParameters):
@@ -102,7 +102,7 @@ class UMR_MPPTrackingParameters(UMR_JVParameters):
                     ])))
     
     def normalize(self, archive, logger):
-        super(UMR_MPPTrackingParameters, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
     
 class UMR_MPPTrackingData(UMR_TrackingData):
@@ -218,7 +218,7 @@ class UMR_MPPTracking(BaseMeasurement, PlotSection, EntryData, UMR_MeasurementBa
    #     fig_voltage_current_json["config"] = plot_config
     #    self.figures.append(PlotlyFigure(label='Voltage and Current Density Plot - MPP Tracking', figure=fig_voltage_current_json))
     
-        super(UMR_MPPTracking, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 m_package.__init_metainfo__()

@@ -131,7 +131,7 @@ class UMR_SolarCellJVCurve(SolarCellJV, EntryData):
         # fill "typo" quantity with the same value as new quantity
         self.current_density_at_maximun_power_point = self.current_density_at_maximum_power_point
 
-        super(UMR_SolarCellJVCurve, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 
@@ -284,7 +284,7 @@ class UMR_JVMeasurement(JVMeasurement, UMR_MeasurementBaseclass, PlotSection, En
 
         self.figures.append(PlotlyFigure(label='JV Curve Plot', figure=fig_json))
         
-        super(UMR_JVMeasurement, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 

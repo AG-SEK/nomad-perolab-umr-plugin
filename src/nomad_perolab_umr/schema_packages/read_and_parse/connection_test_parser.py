@@ -69,8 +69,8 @@ def read_connectionTest_data(mainfile, encoding):
     # Open File and read it line by line
     with open(mainfile, encoding=encoding) as file:
   
-        for line in file:
-            line = line.strip()         # Remove whitespaces from the line
+        for raw_line in file:
+            line = raw_line.strip()         # Remove whitespaces from the line
             
             # Skip empty lines and title lines ([General info],[Scan Seetings], ...)
             if not line or line.startswith("["):

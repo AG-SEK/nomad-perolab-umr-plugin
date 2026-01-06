@@ -21,6 +21,7 @@
 
 import datetime as dt
 import json
+import re
 
 from baseclasses.helper.utilities import (
     create_archive,
@@ -184,8 +185,8 @@ def get_method(upload_id, entry_id):
 
 def get_archive(upload_id, entry_id):
     from nomad import files
-    with files.UploadFiles.get(upload_id).read_archive(entry_id) as archive:
-        archive = archive[entry_id] #method = archive[entry_id]['data']['method']
+    with files.UploadFiles.get(upload_id).read_archive(entry_id) as archive_data:
+        archive = archive_data[entry_id] #method = archive[entry_id]['data']['method']
     return archive                               
 
 def get_entry(entry, archive, logger, mainfile):

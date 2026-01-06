@@ -110,7 +110,7 @@ class UMR_SprayPyrolysisELN(UMR_ELNProcess, UMR_SprayPyrolysis):
             else:
                 log_error(self, logger, 'No Samples Selected. Please add the samples on which this process should be applied to the selected_samples section')
                 
-        super(UMR_SprayPyrolysisELN, self).normalize(archive, logger)   
+        super().normalize(archive, logger)   
 
 
 

@@ -173,7 +173,7 @@ class UMR_BladeCoatingELN(UMR_ELNProcess, UMR_BladeCoating):
             # Empty selected_samples Section
             self.selected_samples = []
          
-        super(UMR_BladeCoatingELN, self).normalize(archive, logger)   
+        super().normalize(archive, logger)   
 
 
 m_package.__init_metainfo__()

@@ -93,9 +93,9 @@ class CicciTXTParser(MatchingParser):
 
         # Open File and read it line by line
         with open(mainfile, encoding=encoding) as file:
-            for line in file:
+            for raw_line in file:
                 # Remove whitespaces from the line
-                line = line.strip()
+                line = raw_line.strip()
                 # Check if header ended -> stop loop
                 if line == '## Data ##':
                     break

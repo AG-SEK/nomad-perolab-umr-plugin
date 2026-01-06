@@ -32,7 +32,7 @@ def interpolate_eqe_data(eqe_data, wavelength_data=wavelength_am15g, showplot=Fa
     eqe_interpolated = np.interp(wavelength_data, wavelength, eqe)
 
     # Plotting the original and interpolated data using Plotly
-    if showplot==True:
+    if showplot:
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=wavelength, y=eqe*100,
                                 mode='markers', name='Original EQE Data'))

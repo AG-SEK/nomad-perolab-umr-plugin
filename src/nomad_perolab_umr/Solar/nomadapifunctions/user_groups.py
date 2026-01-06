@@ -2,11 +2,12 @@
 
 import requests
 
+# Import authentication header
+from . import AUTH_HEADER
+
 # NOMAD Base URL
 OASIS_BASE_URL = 'https://solar-oasis.physik.uni-marburg.de/nomad-oasis/api/v1'
 
-# Import authentication header
-from . import AUTH_HEADER
 
 
 def list_user_groups(base_url=OASIS_BASE_URL, auth_header=AUTH_HEADER, return_value='data'):

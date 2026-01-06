@@ -96,7 +96,7 @@ class UMR_Group(Entity, EntryData):
         if self.substrates:
             self.selected_samples = sort_and_deduplicate_subsection(self.substrates)
         
-        super(UMR_Group, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 
@@ -127,7 +127,7 @@ class UMR_Batch(Entity):
         if self.substrates:
             self.selected_samples = sort_and_deduplicate_subsection(self.substrates)
       
-        super(UMR_Batch, self).normalize(archive, logger)
+        super().normalize(archive, logger)
 
 
 

@@ -28,8 +28,8 @@ def plot_connection_test(connectionTest_data, grid=False, toggle_grid_button=Fal
         fig = go.Figure()
 
     # Create trace
-    trace_voltage = fig.add_scatter(x=connectionTest_data['time'], y=connectionTest_data['voltage'], name='Voltage')
-    trace_current_density = fig.add_scatter(x=connectionTest_data['time'], y=connectionTest_data['current_density'], name='Current Density', yaxis='y2')
+    fig.add_scatter(x=connectionTest_data['time'], y=connectionTest_data['voltage'], name='Voltage')
+    fig.add_scatter(x=connectionTest_data['time'], y=connectionTest_data['current_density'], name='Current Density', yaxis='y2')
 
     # Definition of standard axis layout
     colors = pio.templates['UMR'].layout.colorway  # use colors from umr-Ttemplate

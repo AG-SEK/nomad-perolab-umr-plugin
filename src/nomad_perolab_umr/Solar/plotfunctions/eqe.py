@@ -143,9 +143,10 @@ def plot_eqe(
 
         # Add marker traces at specific wavelengths if requested
         if show_marker:
-            for marker_wavelength in marker_wavelengths:
+            for original_marker_wavelength in marker_wavelengths:
+                marker_wavelength = original_marker_wavelength
                 if delta_marker_wavelengths:
-                    marker_wavelength =marker_wavelength + i*delta_marker_wavelengths # Shift marker for each trace
+                    marker_wavelength = marker_wavelength + i*delta_marker_wavelengths # Shift marker for each trace
                 # Find the index of the nearest wavelength to the marker wavelength
                 closest_idx = np.argmin(np.abs(wavelengths - marker_wavelength))
                 closest_wavelength = wavelengths[closest_idx]

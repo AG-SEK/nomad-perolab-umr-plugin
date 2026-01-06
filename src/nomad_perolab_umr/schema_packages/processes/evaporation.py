@@ -116,7 +116,7 @@ class UMR_EvaporationELN(UMR_ELNProcess, UMR_Evaporation):
             # Empty selected_samples Section
             self.selected_samples = []
          
-        super(UMR_EvaporationELN, self).normalize(archive, logger) 
+        super().normalize(archive, logger) 
 
 
     m_package.__init_metainfo__()

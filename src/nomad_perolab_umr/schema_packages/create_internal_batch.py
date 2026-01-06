@@ -1077,13 +1077,14 @@ class UMR_BatchPlan(BaseSection, EntryData):
             log_info(self, logger, f"Added batch reference to created_entities: {batch.name} ({batch.lab_id})")
 
 
-            # UPDATE PROCESSES
+            # UPDATE PROCESSES (Effizienter: Jeder Prozess wird nur einmal geupdatet)
+            updated_processes = set()
             for group_settings in self.groups_for_selection_of_processes:
                 for i, process in enumerate(group_settings.select_processes):
                     if process.present:
-                
-                        # "Open" process                        
                         mainfile = process.selected_process.m_root().metadata.mainfile
+                        if mainfile in updated_processes:
+                            continue  # Prozess wurde schon geupdatet
                         with archive.m_context.raw_file(mainfile, 'r') as file:
                             data = json.load(file)
                         process_entry = self.from_dict(data['data'])
@@ -1091,13 +1092,14 @@ class UMR_BatchPlan(BaseSection, EntryData):
                         process_entry.selected_samples = []
                         process_entry.samples = []
                         # Take time from Batch Plan for Process
-                        process_entry.datetime =self.datetime
+                        process_entry.datetime = self.datetime
                         # Add position in experimental plan
                         process_entry.position_in_experimental_plan = i+1
                         # Reference Batch
                         process_entry.batch = get_reference(archive.metadata.upload_id, batch_entry_id)
                         create_archive(process_entry, archive, mainfile, overwrite=True)
                         log_info(self, logger, f"Updated process archive: {mainfile} for process '{process_entry.name}' with batch reference")
+                        updated_processes.add(mainfile)
 
             # CREATE GROUPS
             for group_settings in self.groups_for_selection_of_processes:
@@ -1110,98 +1112,104 @@ class UMR_BatchPlan(BaseSection, EntryData):
                     substrates = [],
                 )
 
-                # CREATE SUBSTRATES
-                #supplier_abbreviation = supplier_abbreviations[group_settings.substrate.supplier]  
+                # CREATE SUBSTRATES UND SAMPLES EFFIZIENTER
+
+                # Sammle alle zu erstellenden Substrate und Samples in Listen, um sie später in einem Rutsch zu verarbeiten.
+                substrates_to_create = []
+                samples_to_create = []
+                processes_to_update = []
+
                 for engraved_number in group_settings.substrate_engraved_numbers:
                     substrate_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}_{str(engraved_number)}"
-                    #substrate_lab_id = f"{supplier_abbreviation}_{str(engraved_number).zfill(5)}"
-                    substrate_name=f"substrate_{substrate_lab_id}"
+                    substrate_name = f"substrate_{substrate_lab_id}"
                     substrate_file_name = f"Batch/Substrates/{substrate_name}.archive.json"
-                    # Create Substaret entry and copy inforamtion from referenced substrate
+
+                    # Substrate-Objekt erzeugen und Informationen kopieren
                     substrate = UMR_InternalSubstrate()
                     substrate.m_update_from_dict(group_settings.substrate.m_to_dict())
-                    # Add other information
                     substrate.name = f"Substrate {substrate_lab_id}"
                     substrate.datetime = self.datetime
                     substrate.lab_id = substrate_lab_id
-                    substrate.batch = get_reference(archive.metadata.upload_id, batch_entry_id) #Reference batch in substrate
-                    substrate.group_number=group_settings.group_number
+                    substrate.batch = get_reference(archive.metadata.upload_id, batch_entry_id)
+                    substrate.group_number = group_settings.group_number
                     substrate.samples = []
-                    # Create Substrate Archive
+
+                    # Referenz für später
+                    substrates_to_create.append((substrate, substrate_file_name, engraved_number))
+
+                # Jetzt alle Substrate anlegen und Referenzen sammeln
+                substrate_references = {}
+                for substrate, substrate_file_name, engraved_number in substrates_to_create:
                     create_archive(substrate, archive, substrate_file_name)
-                    log_info(self, logger, f"Created substrate archive: {substrate_file_name} with lab_id '{substrate_lab_id}' for group {group_settings.group_number}")
-                    
-                    # Create substrate reference in created_entities
+                    log_info(self, logger, f"Created substrate archive: {substrate_file_name} with lab_id '{substrate.lab_id}' for group {group_settings.group_number}")
+
                     substrate_entry_id = get_entry_id_from_file_name(substrate_file_name, archive)
                     substrate_reference = UMR_EntityReference(
-                        name = substrate.name,
+                        name=substrate.name,
                         reference=get_reference(archive.metadata.upload_id, substrate_entry_id),
                         lab_id=substrate.lab_id)
-                    # Add substrate reference to batch, group and in created_entities
                     batch.substrates.append(substrate_reference)
                     group.substrates.append(substrate_reference)
                     self.created_entities.append(substrate_reference)
+                    substrate_references[substrate.lab_id] = (substrate, substrate_reference, substrate_file_name, substrate_entry_id)
 
-                 
-                    # CREATE BASIC SAMPLES
-
+                # Jetzt alle Samples anlegen und Referenzen sammeln
+                for substrate_lab_id, (substrate, substrate_reference, substrate_file_name, substrate_entry_id) in substrate_references.items():
+                    engraved_number = substrate_lab_id.split('_')[-1]
                     sample_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}_{str(engraved_number)}_X"
-                    sample_name=f"sample_{sample_lab_id}"
+                    sample_name = f"sample_{sample_lab_id}"
                     sample_file_name = f'Batch/Samples/{sample_name}.archive.json'
                     sample = UMR_BasicSample(
-                            name = f"Sample {sample_lab_id}",
-                            datetime = self.datetime,
-                            lab_id = sample_lab_id,
-                            batch = get_reference(archive.metadata.upload_id, batch_entry_id), #Reference batch
-                            substrate = get_reference(archive.metadata.upload_id, substrate_entry_id),  #Reference substrate
-                            group_number = group_settings.group_number,
-                            width = group_settings.substrate.width,
-                            length = group_settings.substrate.length,
-                            processes = [],
-                        )     
-                    # Create Basic Sample Archive
+                        name=f"Sample {sample_lab_id}",
+                        datetime=self.datetime,
+                        lab_id=sample_lab_id,
+                        batch=get_reference(archive.metadata.upload_id, batch_entry_id),
+                        substrate=get_reference(archive.metadata.upload_id, substrate_entry_id),
+                        group_number=group_settings.group_number,
+                        width=group_settings.substrate.width,
+                        length=group_settings.substrate.length,
+                        processes=[],
+                    )
                     create_archive(sample, archive, sample_file_name)
-                    # Create Solar cell reference
                     sample_entry_id = get_entry_id_from_file_name(sample_file_name, archive)
                     sample_reference = UMR_EntityReference(
-                        name = sample.name,
+                        name=sample.name,
                         reference=get_reference(archive.metadata.upload_id, sample_entry_id),
                         lab_id=sample.lab_id)
-
-                    # Append sample reference
-                    substrate.samples.append(sample_reference) 
+                    substrate.samples.append(sample_reference)
                     batch.samples.append(sample_reference)
                     group.samples.append(sample_reference)
                     self.created_entities.append(sample_reference)
 
-                    # ADD SAMPLE TO PROCESSES
+                    # Prozesse für spätere Updates sammeln
                     for i, process in enumerate(group_settings.select_processes):
-                        if process.present:     
-                            # "Open" process                        
+                        if process.present:
                             mainfile = process.selected_process.m_root().metadata.mainfile
-                            with archive.m_context.raw_file(mainfile, 'r') as file:
-                                data = json.load(file)
-                            process_entry = self.from_dict(data['data'])
-                            log_info(self, logger, f"PROCESS ENTRY {process_entry}")
-                            # Add samples to processes
-                            process_entry.selected_samples.append(sample_reference)
-                            log_info(self, logger, f"PROCESS ENTRY 2 {process_entry}")
-                            create_archive(process_entry, archive, mainfile, overwrite=True)
+                            processes_to_update.append((mainfile, sample_reference))
 
-                            # This works but currently not needed
-                            #sample.processes.append(process_entry)
-
-                        # Currently not needed
-                        #sample.normalize(archive, logger)
-                        #create_archive(sample, archive, sample_file_name, overwrite=True)
-
-                        # Update Substrate Archive (because of appended solar cell references)
+                    # Substrate nach Sample-Referenz aktualisieren
                     substrate.normalize(archive, logger)
                     create_archive(substrate, archive, substrate_file_name, overwrite=True)
+                    log_info(self, logger, f"Updated substrate archive: {substrate_file_name} with lab_id '{substrate.lab_id}' for group {group_settings.group_number}")
+
+                # Prozesse effizient updaten: pro Prozess nur einmal öffnen/speichern
+                process_sample_map = {}
+                for mainfile, sample_reference in processes_to_update:
+                    process_sample_map.setdefault(mainfile, []).append(sample_reference)
+
+                for mainfile, sample_refs in process_sample_map.items():
+                    with archive.m_context.raw_file(mainfile, 'r') as file:
+                        data = json.load(file)
+                    process_entry = self.from_dict(data['data'])
+                    process_entry.selected_samples.extend(sample_refs)
+                    create_archive(process_entry, archive, mainfile, overwrite=True)
+                    log_info(self, logger, f"Samples {[s.lab_id for s in sample_refs]} added to process entry {process_entry.name}")
+
                 # Append groups to batch
                 batch.groups.append(group)
             # Update Batch Archive (because of appended solar cell and substrate references)
             create_archive(batch, archive, batch_file_name, overwrite=True)
+            log_info(self, logger, f"Updated batch archive: {batch_file_name} with lab_id '{batch.lab_id}' for group {group_settings.group_number}")
 
             # Check box batch_was_created
             self.batch_was_created = True 

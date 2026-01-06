@@ -20,28 +20,34 @@
 
 
 # Imports Python
+
 import numpy as np
-import os
-import plotly.graph_objects as go
-
-
-# Imports Nomad
-from nomad.datamodel.metainfo.plot import PlotSection, PlotlyFigure
-from nomad.metainfo import MEnum, Quantity, SubSection, Section, SchemaPackage , Reference
-from nomad.datamodel.data import EntryData, ArchiveSection
+from baseclasses import BaseMeasurement
 
 # Imports HZB
-from baseclasses.helper.utilities import get_encoding, get_reference
+from baseclasses.helper.utilities import get_encoding
+from nomad.datamodel.data import EntryData
 
-from baseclasses import BaseMeasurement
+# Imports Nomad
+from nomad.datamodel.metainfo.plot import PlotSection
+from nomad.metainfo import (
+    Quantity,
+    Reference,
+    SchemaPackage,
+    Section,
+    SubSection,
+)
 
 # Imports UMR
 from ..categories import *
-from ..helper_functions import *
-
-from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass, UMR_TrackingData, UMR_CollectedJVMeasurements
 from ..characterization.jv_measurement import UMR_JVMeasurement
+from ..characterization.measurement_baseclasses import (
+    UMR_CollectedJVMeasurements,
+    UMR_MeasurementBaseclass,
+    UMR_TrackingData,
+)
 from ..characterization.stability_test import UMR_JVParameters
+from ..helper_functions import *
 
 #from Solar.plotfunctions import plot_mppt
 
@@ -163,14 +169,14 @@ class UMR_MPPTracking(BaseMeasurement, PlotSection, EntryData, UMR_MeasurementBa
 
             with archive.m_context.raw_file(self.data_file, encoding=encoding) as f:
                 log_info(self, logger, f"Normalize MPPT Tracking Measurement: Parse data from file: {f.name} | Encoding: {encoding}")
-                from ..read_and_parse.general_parser import parse_general_info          
+                from ..read_and_parse.general_parser import parse_general_info
                 parse_general_info(self, f.name, encoding)
                 from ..read_and_parse.mppt_parser import parse_mppt_data_to_archive
                 parse_mppt_data_to_archive(self, f.name, encoding)
            
         # REFERENCE SAMPLE
         if self.data_file and not self.solar_cell_was_referenced:
-            from ..read_and_parse.general_parser import reference_sample          
+            from ..read_and_parse.general_parser import reference_sample
             reference_sample(self, logger, archive)
      
 

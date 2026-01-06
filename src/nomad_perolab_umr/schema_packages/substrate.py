@@ -18,30 +18,37 @@
 
 
 # Imports Python
-import numpy as np
 import os
 
-
-# Imports Nomad
-from nomad.datamodel.data import EntryData, ArchiveSection
-from nomad.metainfo import Quantity, SubSection, Section, Package, Reference, Datetime, MEnum, SchemaPackage
-from nomad.metainfo.metainfo import SectionProxy
-from nomad.datamodel.metainfo.basesections import Entity
-
+import numpy as np
+from baseclasses.helper.utilities import (
+    create_archive,
+    get_reference,
+)
 
 # Imports HZB/Michael Götte
 from baseclasses.solar_energy import Substrate
-from baseclasses.helper.utilities import get_reference
-from baseclasses.helper.utilities import get_reference, create_archive, get_entry_id_from_file_name
 
+# Imports Nomad
+from nomad.datamodel.data import ArchiveSection, EntryData
+from nomad.datamodel.metainfo.basesections import Entity
+from nomad.metainfo import (
+    Datetime,
+    MEnum,
+    Quantity,
+    Reference,
+    SchemaPackage,
+    Section,
+    SubSection,
+)
+
+from .batch import UMR_Batch
+from .categories import *
+from .helper_functions import *
 
 # Imports UMR
 from .suggestions_lists import *
-from .helper_functions import *
-from .categories import *
-
 from .umr_baseclasses import UMR_FileWithDescription
-from .batch import UMR_Batch
 from .umr_reference_classes import UMR_EntityReference
 
 m_package = SchemaPackage(aliases=['UMR_schemas.substrate']) 
@@ -305,11 +312,11 @@ class UMR_AddStandardSubstrateLot(Entity):
             directory, filename = os.path.split(self.m_root().metadata.mainfile)
 
             if directory == "":
-                log_error(self, logger, f"Please always put the Chemical in a separate folder. After doing so, you can create lots, which are automatically stored in the same folder.")
+                log_error(self, logger, "Please always put the Chemical in a separate folder. After doing so, you can create lots, which are automatically stored in the same folder.")
                 return
         
             elif not self.m_parent.lab_id:
-                log_error(self, logger, f"The lab_id of the Standard Substrate must be defined. Please give the name and supplier and save the archive again. The ID is then generated automatically.")
+                log_error(self, logger, "The lab_id of the Standard Substrate must be defined. Please give the name and supplier and save the archive again. The ID is then generated automatically.")
                 return
             
             elif not self.lot or not self.amount:
@@ -324,7 +331,7 @@ class UMR_AddStandardSubstrateLot(Entity):
                     list = []
 
                 if any(item.lot == self.lot for item in list):
-                    log_error(self, logger, f"The lot was not added, because it already exists")
+                    log_error(self, logger, "The lot was not added, because it already exists")
                 else:
                     lab_id = f"{self.m_parent.lab_id}_{self.lot}"
                     file_name = f"{directory}/{lab_id}.archive.json"
@@ -554,7 +561,7 @@ class UMR_InternalSubstrate(UMR_Substrate, EntryData):
             self.load_standard_substrate = False
             
             if not self.standard_substrate_lot:
-                log_error(self, logger, f"Please enter a reference in the standard_substrate_lot field to load the data from this Standard Substrate")
+                log_error(self, logger, "Please enter a reference in the standard_substrate_lot field to load the data from this Standard Substrate")
             else:
                 standard_substrate_entry = self.standard_substrate_lot.standard_substrate
                 

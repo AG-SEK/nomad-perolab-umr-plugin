@@ -1,10 +1,10 @@
 
-import plotly.graph_objects as go   # for go.Scatter Plot
-import plotly.io as pio
-from .update_layout import update_layout_umr
-
 from datetime import datetime
 
+import plotly.graph_objects as go  # for go.Scatter Plot
+import plotly.io as pio
+
+from .update_layout import update_layout_umr
 
 ################## SIMPLE JV CURVE PLOT (Forward and Reverse) ##################
 

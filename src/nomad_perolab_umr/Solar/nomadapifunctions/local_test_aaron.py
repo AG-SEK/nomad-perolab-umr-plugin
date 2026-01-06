@@ -2,6 +2,7 @@
 ###################################### TEST FUNCTIONS - DO NOT USE! ######################################
 
 from getpass import getpass
+
 import requests
 
 # Authentication (Retrieving Accces Token)
@@ -48,7 +49,7 @@ def getAuthenticationHeader_AccessToken(base_url=local_base_url, username=None):
 
 def searchEntry(auth_header, query, base_url=local_base_url):
                 
-    endpoint = f'/entries/archive/query'
+    endpoint = '/entries/archive/query'
     url = f'{base_url}{endpoint}'
 
     json = {

@@ -18,14 +18,12 @@
 
 
 ### IMPORTS ###
-import numpy as np     # Import numpy for numpy arrays
 
+import numpy as np  # Import numpy for numpy arrays
 from nomad.units import ureg
 
-from .read_header_line import read_header_line
 from ..helper_functions import *
-
-from datetime import datetime
+from .read_header_line import read_header_line
 
 ### HELPER FUNCTIONS TO READ LINES FOR SPECIFIC CASES ###
 
@@ -91,7 +89,7 @@ def read_parameters_data(mainfile, encoding):
     section = None       # Current section (header or data)
 
     # Open File and read it line by line
-    with open(mainfile, 'r', encoding=encoding) as file:
+    with open(mainfile, encoding=encoding) as file:
   
         for line in file:
             line = line.strip()         # Remove whitespaces from the line

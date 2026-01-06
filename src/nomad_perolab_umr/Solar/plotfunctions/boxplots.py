@@ -2,16 +2,12 @@
 In this script we collect functions which are used to create the JV Parameter Boxplots
 """
 
+import pandas as pd
 import plotly.graph_objects as go
 
 from ..nomadapifunctions import get_jv_measurements_by_device_list
-from . import get_samples_from_group, get_group_description, update_layout_umr
-
-import pandas as pd
-
 from ..plottemplate.umr_plot_template import colors
-
-
+from . import get_samples_from_group, update_layout_umr
 
 # List with JV parameters (as named in NOMAD Oasis)
 list_of_parameters = [

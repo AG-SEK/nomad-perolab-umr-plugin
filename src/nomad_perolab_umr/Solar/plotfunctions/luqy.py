@@ -1,8 +1,10 @@
 #### WORK IN PROGRESS - AARON
 
 
-import numpy as np
 from datetime import datetime
+
+import numpy as np
+
 
 def read_luqy_data(mainfile, encoding='ISO-8859-1', device_name=None):
     """
@@ -31,7 +33,7 @@ def read_luqy_data(mainfile, encoding='ISO-8859-1', device_name=None):
     first_line = True  # Track first line for datetime
 
     
-    with open(mainfile, 'r', encoding=encoding) as file:
+    with open(mainfile, encoding=encoding) as file:
         for line in file:
             line = line.strip()
             parts = line.split('\t')
@@ -73,17 +75,16 @@ def read_luqy_data(mainfile, encoding='ISO-8859-1', device_name=None):
                     print(f"Error: Invalid header line format -> {line}")
                 
             # Process measurement data
+            elif len(parts) == 3:
+                try:
+                    wavelength, lum_flux, raw_spectrum = map(float, parts)
+                    luqy_dict["Wavelength (nm)"].append(wavelength)
+                    luqy_dict["Luminescence flux density (photons/(s cm² nm))"].append(lum_flux)
+                    luqy_dict["Raw spectrum (counts)"].append(raw_spectrum)
+                except ValueError:
+                    print(f"Error: Invalid measurement data format -> {line}")
             else:
-                if len(parts) == 3:
-                    try:
-                        wavelength, lum_flux, raw_spectrum = map(float, parts)
-                        luqy_dict["Wavelength (nm)"].append(wavelength)
-                        luqy_dict["Luminescence flux density (photons/(s cm² nm))"].append(lum_flux)
-                        luqy_dict["Raw spectrum (counts)"].append(raw_spectrum)
-                    except ValueError:
-                        print(f"Error: Invalid measurement data format -> {line}")
-                else:
-                    print(f"Error: Invalid measurement line length -> {line}")
+                print(f"Error: Invalid measurement line length -> {line}")
     
     # Convert lists to numpy arrays
     for key in data_headers:
@@ -102,11 +103,10 @@ def read_luqy_data(mainfile, encoding='ISO-8859-1', device_name=None):
 ##############################################################################################
 
 import plotly.graph_objects as go
-from . import update_layout_umr, get_samples_from_group
 import plotly.io as pio
-
-import plotly.graph_objects as go
 from scipy.optimize import curve_fit
+
+from . import get_samples_from_group, update_layout_umr
 
 colors = pio.templates["UMR"].layout.colorway
 colors = colors + colors + colors # Liste Colors zu klein!!!
@@ -273,7 +273,7 @@ def convert_nm_to_ev(wavelength_nm):
     float: The equivalent energy in electron volts (eV).
     """
     # Import necessary constants from Solar.constants (h: Planck's constant, c: speed of light, e: elementary charge)
-    from ..constants import h, c, e
+    from ..constants import c, e, h
     
     # Apply the formula to convert wavelength (in nm) to energy (in eV)
     return (h * c) / (wavelength_nm * 1e-9 * e) 
@@ -505,7 +505,6 @@ def plot_and_fit_luqy(luqy_list, showplot=True, names=None, perform_gaussian_fit
 
 ################################
 import pandas as pd
-import plotly.graph_objects as go
 
 
 def create_boxplot_data_luqy(luqy_data, batch, excel_filename=None, double_gauss=True, show_fit=True, show_ivoc_and_luqy=True, showfit=True):

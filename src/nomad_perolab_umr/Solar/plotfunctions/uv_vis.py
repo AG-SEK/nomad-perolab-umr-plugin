@@ -30,26 +30,20 @@ fig_Ab, fig_tauc, E_G = tauc_plot(file_path, names, bandgap = "direct", grid=Tru
 
 
 # Import
-from . import update_layout_umr
 
-
-import sys
+import numpy as np
+import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
-import pandas as pd
-import numpy as np
-from scipy.constants import c, h, e
+from scipy.constants import c, e, h
 from scipy.stats import linregress
-from pprint import pprint
-
 
 ################## LOAD STANDARD PLOT FUNCTIONS ##################
-
 #import Solar.plottemplate # UMR Template is automatically set as default
 from ..plottemplate.umr_plot_template import colors as colors
 from ..plottemplate.umr_plot_template import linepattern as pattern
 from ..plottemplate.umr_plot_template import markers
-
+from . import update_layout_umr
 
 
 def tauc_plot(file_path_T, file_path_R, names, bandgap, grid=False, toggle_grid_button=False, rangemode='normal'):
@@ -79,7 +73,7 @@ def tauc_plot(file_path_T, file_path_R, names, bandgap, grid=False, toggle_grid_
             gamma = 2
             title = '√(Energy x Absorbance) [a.u.]'
         else: 
-            print("ERROR: Value specified for bandgap <{}> is not valid.".format(bandgap)) 
+            print(f"ERROR: Value specified for bandgap <{bandgap}> is not valid.") 
             bandgap = input("Please specify if the bandgap is <direct> or <indirect>: ")
     
     E_G = []
@@ -322,7 +316,7 @@ def tauc_plot(file_path_T, file_path_R, names, bandgap, grid=False, toggle_grid_
         
         # linear part
         
-        print("Cell <{}>".format(dev))
+        print(f"Cell <{dev}>")
         min_E = float(input("Please enter the minimum energy for the linear fit (in eV): "))
         max_E = float(input("Please enter the maximum energy for the linear fit (in eV): "))
         mask1 = (d["Energy"] >= min_E) & (d["Energy"] <= max_E)
@@ -403,7 +397,7 @@ def tauc_plot(file_path_T, file_path_R, names, bandgap, grid=False, toggle_grid_
     
     "-------- Print and save band gap energy ------------"
     for E, name in zip(E_G, names):
-        print("Band gap energy of cell <{}> is {} eV".format(name, E))
+        print(f"Band gap energy of cell <{name}> is {E} eV")
 
 
     return(fig_A, fig_tauc, E_G)

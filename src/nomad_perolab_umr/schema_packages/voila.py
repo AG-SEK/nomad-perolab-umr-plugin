@@ -1,6 +1,6 @@
 from baseclasses.voila import VoilaNotebook
-from nomad.metainfo import Section, SchemaPackage
 from nomad.datamodel.data import EntryData
+from nomad.metainfo import SchemaPackage, Section
 
 m_package = SchemaPackage() 
 

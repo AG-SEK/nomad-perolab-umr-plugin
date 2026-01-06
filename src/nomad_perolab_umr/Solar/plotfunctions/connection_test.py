@@ -1,6 +1,7 @@
-import plotly.graph_objects as go  
+import plotly.graph_objects as go
 import plotly.io as pio
-from .update_layout import update_layout_umr 
+
+from .update_layout import update_layout_umr
 
 ################## CONNECTION TEST PLOT ##################
 

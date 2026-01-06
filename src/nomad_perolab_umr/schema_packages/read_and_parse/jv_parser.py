@@ -18,11 +18,12 @@
 
 
 ### IMPORTS ###
-import numpy as np     # Import numpy for numpy arrays
-
+import numpy as np  # Import numpy for numpy arrays
 from nomad.units import ureg
+
 from ..characterization.jv_measurement import UMR_SolarCellJVCurve
 from .read_header_line import read_header_line
+
 
 def read_JVparameter_line(line, jv_dict, measurement, header_params):  
     """
@@ -105,7 +106,7 @@ def read_jv_data(mainfile, encoding):
     data_section = None   # Current measurement (parameters or JVcurve)
 
     # Open File and read it line by line
-    with open(mainfile, 'r', encoding=encoding) as file:
+    with open(mainfile, encoding=encoding) as file:
   
         for line in file:
             line = line.rstrip()         # Remove trailing whitespaces from the line

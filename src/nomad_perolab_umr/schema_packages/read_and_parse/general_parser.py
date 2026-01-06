@@ -20,22 +20,20 @@
 
 # Python libraries
 import os
-import re
-import json
 from datetime import datetime
 
-# Nomad Classes
-from nomad.datamodel import EntryArchive
-from nomad.parsing import MatchingParser
-
 # HZB methods
-from baseclasses.helper.utilities import get_encoding, search_entry_by_id, create_archive, get_reference
+from baseclasses.helper.utilities import (
+    get_reference,
+)
 
+# Nomad Classes
 # My classes and methods
 from ..helper_functions import *
-from .read_header_line import read_header_line
 from ..suggestions_lists import *
 from ..umr_reference_classes import UMR_EntityReference, UMR_InstrumentReference
+from .read_header_line import read_header_line
+
 
 def read_general_info(mainfile, encoding):
     """
@@ -45,7 +43,7 @@ def read_general_info(mainfile, encoding):
     header_dict = {}
 
     # Open File and read it line by line
-    with open(mainfile, 'r', encoding=encoding) as file:
+    with open(mainfile, encoding=encoding) as file:
         for line in file:
             # Remove whitespaces from the line
             line = line.strip() 
@@ -79,7 +77,7 @@ def parse_general_info(entry, mainfile, encoding):
     # Datetime
     datetime_str = header_dict['Date'] + " " + header_dict['Time']
     initial_datetime = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')     # Parse the date and time without timezone information
-    import pytz                                                                 # Import pytz-Modul für time zones
+    import pytz  # Import pytz-Modul für time zones
     berlin_tz = pytz.timezone('Europe/Berlin')                                  # Define the Berlin timezone
     localized_datetime = berlin_tz.localize(initial_datetime)                   # Localize the initial datetime to the Berlin timezone
     entry.datetime = localized_datetime                                         # Enter localized datetime in entry -> But Datetime is saved in UTC (+00:00) in NOMAD

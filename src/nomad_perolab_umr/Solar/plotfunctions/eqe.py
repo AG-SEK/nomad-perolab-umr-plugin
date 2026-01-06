@@ -1,12 +1,12 @@
-import plotly.graph_objects as go  
-import plotly.io as pio
-from .update_layout import update_layout_umr
-from ..otherfunctions import get_am15g_array
-from ..constants import e, h, c
-
 from datetime import datetime
 
 import numpy as np
+import plotly.graph_objects as go
+import plotly.io as pio
+
+from ..constants import e
+from ..otherfunctions import get_am15g_array
+from .update_layout import update_layout_umr
 
 
 ################## EQE CURVE PLOT ##################
@@ -87,9 +87,9 @@ def plot_eqe(
             # Versuche, die Werte aus dem Dictionary zu extrahieren
             wavelengths = np.array(eqe['wavelength'])
             eqe_values = np.array(eqe['eqe'])  # Convert to percentage
-        except KeyError as err:
+        except KeyError:
             # Falls der Schlüssel nicht gefunden wird
-            print(f"There is no wavelength in the eqe_data given. Most probably you want to enter data in full_eqe_data")
+            print("There is no wavelength in the eqe_data given. Most probably you want to enter data in full_eqe_data")
 
         # Normalize EQE if requested
         if normalized:

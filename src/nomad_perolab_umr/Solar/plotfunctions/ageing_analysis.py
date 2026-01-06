@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # In[3]:
 
 
 import sys
+
 #module_path = 'K:\solar\9_Topics\Python Analysis Scripts' 
 module_path = '/Volumes/Solar/9_Topics/Python Analysis Scripts' # macOS
 
@@ -15,31 +15,19 @@ if module_path not in sys.path:
 # In[4]:
 
 
-from pprint import pprint
-import numpy as np
-import plotly.express as px 
-from collections import Counter
+import io
 import os
+import re
+from collections import Counter
+from pprint import pprint
 
+import pandas as pd
+import plotly.graph_objects as go
 
 #import .. plottemplate # UMR Template is automatically set as default
 #from .. import *
 from ..otherfunctions import generate_gradient
-import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-import plotly.io as pio
-from plotly.subplots import make_subplots
-
-import re
-import io
-from ..plottemplate.umr_plot_template import colors
-from ..plottemplate.umr_plot_template import color_gradients
-from ..plottemplate.umr_plot_template import markers
-from ..otherfunctions import generate_gradient
-
-from pprint import pprint
-
+from ..plottemplate.umr_plot_template import color_gradients, colors, markers
 
 # In[23]:
 
@@ -57,7 +45,7 @@ class DataPlotter:
     
     # read_file takes a file_path and returns the device name and the data as a pandas dataframe
     def read_file(self, file_path):
-        with open(file_path, 'r', encoding='ISO-8859-1') as file:
+        with open(file_path, encoding='ISO-8859-1') as file:
             file_content = file.read()
 
         device_name_match = re.search(r'Device\t([^\n\r]+)', file_content)

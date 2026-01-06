@@ -64,7 +64,9 @@ spin_coating_schema = SpinCoatingSchemaPackageEntryPoint(
 class SprayPyrolysisSchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
     def load(self):
-        from nomad_perolab_umr.schema_packages.processes.spray_pyrolysis import m_package
+        from nomad_perolab_umr.schema_packages.processes.spray_pyrolysis import (
+            m_package,
+        )
 
         return m_package
 

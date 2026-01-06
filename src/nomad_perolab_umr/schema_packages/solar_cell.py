@@ -20,25 +20,29 @@
 # Imports Python
 import numpy as np
 
-# Imports Nomad
-from nomad.datamodel.data import EntryData, ArchiveSection
-from nomad.metainfo import Reference, Quantity, SubSection, Section, Package, MEnum, SchemaPackage
-from nomad.datamodel.metainfo.basesections import Measurement, Process
-
-
 # Imports HZB/Michael Götte
 from baseclasses.solar_energy import SolcarCellSample
-from baseclasses.helper.utilities import get_reference
+
+# Imports Nomad
+from nomad.datamodel.data import EntryData
+from nomad.datamodel.metainfo.basesections import Process
+from nomad.metainfo import (
+    MEnum,
+    Quantity,
+    Reference,
+    SchemaPackage,
+    Section,
+    SubSection,
+)
+
+from .batch import UMR_Batch
+from .categories import *
+from .helper_functions import *
+from .substrate import UMR_Substrate
 
 # Imports UMR
 from .suggestions_lists import *
-from .helper_functions import *
-from .categories import *
-
 from .umr_baseclasses import UMR_Layer, UMR_MeasurementsSubsection
-from .substrate import UMR_Substrate
-from .batch import UMR_Batch
-
 
 m_package = SchemaPackage(aliases=['UMR_schemas.solar_cell']) 
 

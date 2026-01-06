@@ -1,6 +1,6 @@
 # Imports
+
 import requests
-import json
 
 # Base URL NOMAD Oasis
 OASIS_BASE_URL = 'https://vhrz1634.hrz.uni-marburg.de/nomad-oasis/api/v1'
@@ -129,7 +129,7 @@ def get_archive_by_query(query, owner='shared', pagination=None, required=None, 
     """
 
     # API Request
-    endpoint = f'/entries/archive/query'
+    endpoint = '/entries/archive/query'
     url = f'{base_url}{endpoint}'
 
     json=dict(
@@ -490,7 +490,7 @@ def get_jvmeasurement_by_device(device, base_url=OASIS_BASE_URL, auth_header=AUT
     """
 
     # API Request
-    endpoint = f'/entries/archive/query'
+    endpoint = '/entries/archive/query'
     url = f'{base_url}{endpoint}'
 
     json = {

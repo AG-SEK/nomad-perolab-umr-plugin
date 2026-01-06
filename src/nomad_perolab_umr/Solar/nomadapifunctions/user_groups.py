@@ -36,7 +36,7 @@ def list_user_groups(base_url=OASIS_BASE_URL, auth_header=AUTH_HEADER, return_va
             - None: in case of errors or invalid return_value
     """
      
-    endpoint = f'/groups'
+    endpoint = '/groups'
     url = f'{base_url}{endpoint}'
 
     try:
@@ -115,7 +115,7 @@ def create_user_group(group_name, list_user_ids, base_url=OASIS_BASE_URL, auth_h
         "members": list_user_ids
     }
 
-    endpoint = f'/groups'
+    endpoint = '/groups'
     url = f'{base_url}{endpoint}'
 
     

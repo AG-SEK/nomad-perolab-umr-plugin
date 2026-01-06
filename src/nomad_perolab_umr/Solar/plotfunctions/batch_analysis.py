@@ -9,9 +9,16 @@ Furthermore buttons are displayed to toggle between different substrates or grou
 '''
 
 import plotly.io as pio
-import plotly.graph_objects as go
 
-from .helper_functions import find_highest_reverse_efficiency_measurement, sort_measurements_by_device_list, get_group_description, map_colors_to_items, map_linepattern_to_items, find_group_number, get_plotted_cell_descriptions, get_plotted_substrates, find_group_by_lab_id
+from .helper_functions import (
+    find_group_by_lab_id,
+    find_group_number,
+    get_group_description,
+    get_plotted_cell_descriptions,
+    get_plotted_substrates,
+    map_colors_to_items,
+    map_linepattern_to_items,
+)
 
 
 def plot_batch(initial_fig, batch, group_by='group', showplot=True, show_all_button=False):

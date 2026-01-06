@@ -92,8 +92,7 @@ def find_maximum_number_of_substrates(groups):
         number_of_substrates = group["number_of_substrates"]
         
         # Compare with the current maximum number
-        if number_of_substrates > max_substrates:
-            max_substrates = number_of_substrates
+        max_substrates = max(max_substrates, number_of_substrates)
 
     # Return the maximum number of substrates found
     return max_substrates
@@ -141,10 +140,10 @@ class BatchPlanPDF(FPDF):
 
     def layer_body(self, all_layers):
         self.set_font('Arial', 'B', 12)
-        self.cell(60, 10, f"Name", border=1) 
-        self.cell(60, 10, f"Material", border=1) 
-        self.cell(60, 10, f"Layer Type", border=1) 
-        self.cell(60, 10, f"Deposition Method", border=1, ln=True) 
+        self.cell(60, 10, "Name", border=1) 
+        self.cell(60, 10, "Material", border=1) 
+        self.cell(60, 10, "Layer Type", border=1) 
+        self.cell(60, 10, "Deposition Method", border=1, ln=True) 
 
         self.set_font('Arial', '', 12)
         for layers in reversed(all_layers):
@@ -171,7 +170,7 @@ class BatchPlanPDF(FPDF):
             # Subheading
             self.set_font('Arial', 'U', 12)      
             self.set_x(30)
-            self.cell(200, 10, f"Parameter Variation:", ln=True)
+            self.cell(200, 10, "Parameter Variation:", ln=True)
             # Body
             self.set_font('Arial', '', 12)  
             self.set_x(40)
@@ -185,7 +184,7 @@ class BatchPlanPDF(FPDF):
         # Subheading
         self.set_font('Arial', 'U', 12)        
         self.set_x(30)
-        self.cell(200, 10, f"Varied Processes:", ln=True)
+        self.cell(200, 10, "Varied Processes:", ln=True)
         # Body
         self.set_font('Arial', '', 12)  
         for i, process in enumerate(varied_process['varied_processes']):

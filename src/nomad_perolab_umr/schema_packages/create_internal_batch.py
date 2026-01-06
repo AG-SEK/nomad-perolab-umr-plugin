@@ -18,37 +18,44 @@
 
 
 # Imports Python
-import os
-import numpy as np
 import json
 
-# Imports Nomad
-from nomad.metainfo import Reference, Quantity, SubSection, Section, Package, MEnum, Datetime, SchemaPackage
-from nomad.units import ureg
-from nomad.datamodel.metainfo.basesections import BaseSection
-from nomad.datamodel.data import EntryData, ArchiveSection, User
-
+import numpy as np
+from baseclasses import BaseProcess
 
 # Imports HZB
 from baseclasses.experimental_plan import ParametersVaried, get_unit
 from baseclasses.helper.execute_solar_sample_plan import set_value
-from baseclasses import BaseProcess
+from baseclasses.helper.utilities import (
+    create_archive,
+    get_entry_id_from_file_name,
+    get_reference,
+)
 from baseclasses.solar_energy import StandardSampleSolarCell
-from baseclasses.helper.utilities import create_archive, get_entry_id_from_file_name, get_reference, update_archive
-from baseclasses.solution import Solution
+from nomad.datamodel.data import ArchiveSection, EntryData
+from nomad.datamodel.metainfo.basesections import BaseSection
 
+# Imports Nomad
+from nomad.metainfo import (
+    Datetime,
+    MEnum,
+    Quantity,
+    Reference,
+    SchemaPackage,
+    Section,
+    SubSection,
+)
 
+from .batch import UMR_Group, UMR_InternalBatch
+from .categories import *
+from .helper_functions import *
+from .processes.process_baseclasses import UMR_BaseProcess, UMR_ELNProcess
+from .solar_cell import UMR_BasicSample
+from .substrate import UMR_InternalSubstrate, UMR_SubstrateForBatchPlan
 
 # Imports UMR
 from .suggestions_lists import *
-from .helper_functions import *
-from .categories import *
-
 from .umr_reference_classes import UMR_EntityReference
-from .substrate import UMR_InternalSubstrate, UMR_SubstrateForBatchPlan
-from .solar_cell import UMR_InternalSolarCell, UMR_BasicSample
-from .batch import UMR_InternalBatch, UMR_Group
-from .processes.process_baseclasses import UMR_ELNProcess, UMR_BaseProcess
 
 m_package = SchemaPackage(aliases=['UMR_schemas.create_internal_batch']) 
 
@@ -402,9 +409,9 @@ class UMR_SelectProcess(ArchiveSection):
 
         # Automatically generate display_name
         if not self.present:
-            self.display_name = f"- not present -"
+            self.display_name = "- not present -"
         elif not self.selected_process:
-            self.display_name = f"-> No process chosen yet"
+            self.display_name = "-> No process chosen yet"
         else:
             self.display_name = f"{self.selected_process.name}"
         
@@ -777,16 +784,16 @@ class UMR_BatchPlan(BaseSection, EntryData):
 
         # Check current status of Batch Plan and automatically check checkboxes
         if not (self.batch_description and self.batch_number and self.responsible_person):
-            log_warning(self, logger, f"Please enter the 'batch_description', the 'batch_number' and the 'responsible_person' in the Batch Plan")
+            log_warning(self, logger, "Please enter the 'batch_description', the 'batch_number' and the 'responsible_person' in the Batch Plan")
         else:
             self.fill_general_info = True
 
             if not self.substrate:
-                log_warning(self, logger, f"Please enter a Substrate in the Substrate Section")
+                log_warning(self, logger, "Please enter a Substrate in the Substrate Section")
             else:
                 self.choose_substrate = True
                 if not self.standard_processes and not self.create_processes:
-                    log_warning(self, logger, f"Please enter Processes in the 'standard_processes' Subsection")
+                    log_warning(self, logger, "Please enter Processes in the 'standard_processes' Subsection")
                 else:
                     self.create_processes = True
 
@@ -842,7 +849,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
                     
                     # Check if process name is given, so process is not fully empty
                     if not process.name:
-                        log_error(self, logger, f"At least one process in the 'standard_process' Subsection does not have a name. Please Check.")
+                        log_error(self, logger, "At least one process in the 'standard_process' Subsection does not have a name. Please Check.")
                         break
                     
                     # Maybe here one could use no ELN sections first and then automatically create the ELN Archive
@@ -883,7 +890,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
             if self.create_groups:
                 log_warning(self, logger, 'The Groups have already been created. If you entered a higher number groups are added. If you want to create all groups new, first delete all old groups.')
             if not self.substrate:
-                log_error(self, logger, f"There is no substrate given. Pleae give the normally used substrate before creating the groups")
+                log_error(self, logger, "There is no substrate given. Pleae give the normally used substrate before creating the groups")
                 return
 
 

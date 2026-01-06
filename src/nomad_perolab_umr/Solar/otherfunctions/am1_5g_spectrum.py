@@ -1,8 +1,10 @@
-import pandas as pd
 import os
-import numpy as np
 
-from ..constants import h, c, e
+import numpy as np
+import pandas as pd
+
+from ..constants import c, e, h
+
 
 def get_am15g():
     '''

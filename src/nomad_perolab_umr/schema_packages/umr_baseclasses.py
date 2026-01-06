@@ -20,25 +20,34 @@
 # Imports Python
 import numpy as np
 
-# Imports Nomad
-from nomad.datamodel.data import EntryData, ArchiveSection
-from nomad.datamodel.metainfo.basesections import SectionReference, Entity, EntityReference, Measurement, Instrument, InstrumentReference
-from nomad.metainfo import MEnum, Reference, Quantity, SubSection, Section, SchemaPackage, Datetime
-from nomad.datamodel.metainfo.plot import PlotSection
 #from nomad.datamodel.data import user_reference --> Error when importing
-
-
-
 # Imports HZB/Michael Götte
-from baseclasses import LayerProperties, BaseProcess, LayerDeposition
-from baseclasses.helper.utilities import get_reference
-from baseclasses.solar_energy import SolcarCellSample
+from baseclasses import LayerProperties
 
+# Imports Nomad
+from nomad.datamodel.data import ArchiveSection, EntryData
+from nomad.datamodel.metainfo.basesections import (
+    Entity,
+    EntityReference,
+    Instrument,
+    InstrumentReference,
+    Measurement,
+)
+from nomad.metainfo import (
+    Datetime,
+    MEnum,
+    Quantity,
+    Reference,
+    SchemaPackage,
+    Section,
+    SubSection,
+)
+
+from .categories import *
+from .helper_functions import *
 
 # Imports UMR
 from .suggestions_lists import *
-from .helper_functions import *
-from .categories import *
 from .umr_reference_classes import UMR_ChemicalReference, UMR_InstrumentReference
 
 m_package = SchemaPackage(aliases=['UMR_schemas.umr_baseclasses']) 

@@ -1,8 +1,10 @@
 # In this Script we collect functions which are used to create matrices out of several plots.
 
 
-from PIL import Image
 import math
+
+from PIL import Image
+
 
 def make_plot_matrix(list_of_image_paths, filename, n_col=None, n_row=None, image_size=None, background='transparent'):
     """

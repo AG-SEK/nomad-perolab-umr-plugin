@@ -17,35 +17,47 @@
 #
 
 
-from nomad.parsing.parser import MatchingParser
-
-
-
 
 ### Imports ###
-
 # Python libraries
 import os
-import re
-import json
+
+# HZB methods
+from baseclasses.helper.utilities import (
+    create_archive,
+    get_encoding,
+)
 
 # Nomad Classes
 from nomad.datamodel import EntryArchive
+from nomad.parsing.parser import MatchingParser
 
-# HZB methods
-from baseclasses.helper.utilities import get_encoding, search_entry_by_id, create_archive, get_reference
+from ..schema_packages.characterization.connection_test import (
+    UMR_ConnectionTest,
+    UMR_ConnectionTestExtraData,
+    UMR_StabilizedOpenCircuitVoltage,
+    UMR_StabilizedShortCircuitCurrent,
+)
+from ..schema_packages.characterization.eqe_measurement import UMR_EQEMeasurement
+from ..schema_packages.characterization.jv_measurement import UMR_JVMeasurement
+from ..schema_packages.characterization.mpp_tracking import (
+    UMR_MPPTracking,
+    UMR_MPPTrackingJVMeasurement,
+    UMR_MPPTrackingParameters,
+)
+from ..schema_packages.characterization.stability_test import (
+    UMR_StabilityJVMeasurement,
+    UMR_StabilityParameters,
+    UMR_StabilityTest,
+)
 
 # My classes and methods
 from ..schema_packages.helper_functions import *
+from ..schema_packages.read_and_parse.general_parser import (
+    add_data_file,
+    add_standard_instrument,
+)
 from ..schema_packages.read_and_parse.read_header_line import read_header_line
-
-from ..schema_packages.characterization.jv_measurement import UMR_JVMeasurement
-from ..schema_packages.characterization.eqe_measurement import UMR_EQEMeasurement
-from ..schema_packages.characterization.connection_test import UMR_ConnectionTest, UMR_StabilizedShortCircuitCurrent, UMR_StabilizedOpenCircuitVoltage, UMR_ConnectionTestExtraData
-from ..schema_packages.characterization.mpp_tracking import UMR_MPPTracking, UMR_MPPTrackingParameters, UMR_MPPTrackingJVMeasurement
-from ..schema_packages.characterization.stability_test import UMR_StabilityTest, UMR_StabilityParameters, UMR_StabilityJVMeasurement
-
-from ..schema_packages.read_and_parse.general_parser import add_data_file, add_standard_instrument
 
 #from UMR_schemas import UMR_TimeResolvedPhotoluminescence, UMR_PLmeasurement, UMR_Measurement, UMR_UVvismeasurement, UMR_trSPVmeasurement
 
@@ -80,7 +92,7 @@ class CicciTXTParser(MatchingParser):
         header_dict = {}
 
         # Open File and read it line by line
-        with open(mainfile, 'r', encoding=encoding) as file:
+        with open(mainfile, encoding=encoding) as file:
             for line in file:
                 # Remove whitespaces from the line
                 line = line.strip()
@@ -201,7 +213,7 @@ class CicciTXTParser(MatchingParser):
                 add_standard_instrument(entry, archive, logger)
                 #self.addHeaderData_referenceSample(logger, archive, entry, mainfile, header_dict)
                 create_archive(entry, archive, f'{entry.data_file}.archive.json')
-                log_info(self, logger, f"Kein Mode")
+                log_info(self, logger, "Kein Mode")
                 return
             elif header_dict['Mode'] == "Short-Circuit Current": # TODO Change name
                 entry = UMR_StabilizedShortCircuitCurrent()

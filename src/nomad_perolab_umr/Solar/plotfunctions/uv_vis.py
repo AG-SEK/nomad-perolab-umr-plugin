@@ -42,7 +42,7 @@ from scipy.stats import linregress
 #import Solar.plottemplate # UMR Template is automatically set as default
 from ..plottemplate.umr_plot_template import colors, markers
 from ..plottemplate.umr_plot_template import linepattern as pattern
-from . import update_layout_umr
+from .update_layout import update_layout_umr
 
 
 def tauc_plot(file_path_T, file_path_R, names, bandgap, grid=False, toggle_grid_button=False, rangemode='normal'):

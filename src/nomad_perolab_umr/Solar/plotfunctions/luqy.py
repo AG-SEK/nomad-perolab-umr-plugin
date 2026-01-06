@@ -9,7 +9,8 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from scipy.optimize import curve_fit
 
-from . import get_samples_from_group, update_layout_umr
+from .helper_functions import get_samples_from_group
+from .update_layout import update_layout_umr
 
 
 def read_luqy_data(mainfile, encoding='ISO-8859-1', device_name=None):

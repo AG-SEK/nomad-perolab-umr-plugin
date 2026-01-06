@@ -7,7 +7,8 @@ import plotly.graph_objects as go
 
 from ..nomadapifunctions import get_jv_measurements_by_device_list
 from ..plottemplate.umr_plot_template import colors
-from . import get_samples_from_group, update_layout_umr
+from .helper_functions import get_samples_from_group
+from .update_layout import update_layout_umr
 
 # List with JV parameters (as named in NOMAD Oasis)
 list_of_parameters = [

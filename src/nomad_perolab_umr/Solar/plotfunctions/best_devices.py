@@ -7,13 +7,13 @@ from ..nomadapifunctions import (
     get_eqe_measurements_by_device_list,
     get_jv_measurements_by_device_list,
 )
-from . import (
+from .eqe import plot_eqe
+from .helper_functions import (
     find_highest_reverse_efficiency_measurement,
     get_samples_from_group,
-    plot_eqe,
-    plot_jv,
     sort_measurements_by_device_list,
 )
+from .jv import plot_jv
 
 
 def find_and_plot_best_cells(

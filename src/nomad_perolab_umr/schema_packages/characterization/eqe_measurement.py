@@ -20,27 +20,24 @@
 
 
 # Imports Python
+
 import numpy as np
-import os
-import plotly.graph_objects as go
-
-
-# Imports Nomad
-from nomad.datamodel.metainfo.plot import PlotSection, PlotlyFigure
-from nomad.metainfo import MEnum, Quantity, SubSection, Section, SchemaPackage 
-from nomad.datamodel.data import EntryData, ArchiveSection
-from nomad.datamodel.metainfo.eln import SolarCellEQE
-
-# Imports HZB
-from baseclasses.solar_energy import EQEMeasurement
+from baseclasses import BaseMeasurement  # TODO
 from baseclasses.helper.utilities import get_encoding
 
-from baseclasses import BaseMeasurement # TODO
+# Imports HZB
+from nomad.datamodel.data import ArchiveSection, EntryData
+from nomad.datamodel.metainfo.eln import SolarCellEQE
+
+# Imports Nomad
+from nomad.datamodel.metainfo.plot import PlotlyFigure, PlotSection
+from nomad.metainfo import MEnum, Quantity, SchemaPackage, Section, SubSection
 
 # Imports UMR
 from nomad_perolab_umr.Solar.plotfunctions import plot_eqe
-from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass
+
 from ..categories import *
+from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass
 from ..helper_functions import *
 
 m_package = SchemaPackage(aliases=['UMR_schemas.characterization.eqe_measurement']) 
@@ -179,7 +176,7 @@ class UMR_EQEMeasurement(BaseMeasurement, PlotSection, EntryData, UMR_Measuremen
 
             with archive.m_context.raw_file(self.data_file, encoding=encoding) as f:
                 log_info(self, logger, f"Normalize EQE Measurement: Parse data from file: {f.name} | Encoding: {encoding}")
-                from ..read_and_parse.general_parser import parse_general_info          
+                from ..read_and_parse.general_parser import parse_general_info
                 parse_general_info(self, f.name, encoding)
                 from ..read_and_parse.eqe_parser import parse_eqe_data_to_archive
                 parse_eqe_data_to_archive(self, f.name, encoding)
@@ -193,7 +190,7 @@ class UMR_EQEMeasurement(BaseMeasurement, PlotSection, EntryData, UMR_Measuremen
           
         # REFERENCE SAMPLE
         if self.data_file and not self.solar_cell_was_referenced:
-            from ..read_and_parse.general_parser import reference_sample          
+            from ..read_and_parse.general_parser import reference_sample
             reference_sample(self, logger, archive)
 
 

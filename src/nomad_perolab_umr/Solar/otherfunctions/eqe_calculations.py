@@ -1,15 +1,12 @@
 # Functions for calculations on EQE measurements
 
 
-import plotly.graph_objects as go  
+import numpy as np
+import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-import numpy as np
-
-from . import get_am15g_array
 from ..constants import *
-
-
+from . import get_am15g_array
 
 # Get AM1.5G spectrum
 wavelength_am15g = get_am15g_array('wavelength') # in nm

@@ -1,8 +1,10 @@
 # --file contents--
 # mthods to access the nomad api
 
-import requests
 import getpass
+
+import requests
+
 
 def init_cache():
     import requests_cache
@@ -348,7 +350,6 @@ def get_all_measurements_except_JV(url, token, sample_ids):
     return res
 
 def get_all_eqe(url, token, sample_ids, eqe_type="perolab_EQEmeasurement"):
-    #
     query = {
         'required': {
             'metadata': '*'
@@ -390,7 +391,6 @@ def get_all_eqe(url, token, sample_ids, eqe_type="perolab_EQEmeasurement"):
     return res
 
 def get_all_mppt(url, token, sample_ids, mppt_type="perolab_SimpleMPPTracking"):
-    #
     query = {
         'required': {
             'metadata': '*'

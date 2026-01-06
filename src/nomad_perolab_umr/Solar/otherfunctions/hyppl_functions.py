@@ -1,14 +1,13 @@
-import plotly.io as pio
-import plotly.graph_objects as go
-import pandas as pd
 import h5py
 import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+import plotly.io as pio
 import scipy.constants as const
 from scipy.interpolate import interp1d
-from scipy.stats import linregress
-from scipy.optimize import curve_fit
 from scipy.ndimage import gaussian_filter
-
+from scipy.optimize import curve_fit
+from scipy.stats import linregress
 
 
 # normalize a cube if this is not already done
@@ -153,7 +152,7 @@ def get_hypPL_video_cubes(file_path):
 
 
 def get_ESP32_data(file_path):
-    with open(file_path, 'r') as file:
+    with open(file_path) as file:
         lines = file.readlines()
 
     # Prepare lists to hold the parsed data

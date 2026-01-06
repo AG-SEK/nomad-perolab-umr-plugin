@@ -1,13 +1,9 @@
 # This file includes functions for the calculation of the radiative limit
 
 import numpy as np
-import scipy.integrate as integrate
 import plotly.graph_objects as go
-import pandas as pd
 
-from ..constants import e, h, c, k_B
-from ..plottemplate import umr_plot_template
-
+from ..constants import c, e, h, k_B
 
 
 def add_rainbow_to_figure(figure, xaxis="eV", y_height=100, opacity=0.3, deep_copy=True):
@@ -95,6 +91,7 @@ def add_rainbow_to_figure(figure, xaxis="eV", y_height=100, opacity=0.3, deep_co
 
 
 from ..otherfunctions import get_am15g_array
+
 am15g_wavelengths_nm = get_am15g_array('wavelength')
 am15g_irradiance_mW_per_cm2_per_nm = get_am15g_array('spectral_irradiance_per_nm')
 

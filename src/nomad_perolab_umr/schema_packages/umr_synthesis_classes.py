@@ -20,29 +20,49 @@
 
 
 #Impors Python
-import numpy as np
 import os
 
-# Imports NOMAD
-from nomad.metainfo import Quantity, SubSection, Section, SchemaPackage, Reference
-from nomad.datamodel.data import EntryData
-from nomad.datamodel.metainfo.basesections import CASPureSubstanceSection, PureSubstance, Entity, PubChemPureSubstanceSection, EntityReference
-from nomad.metainfo import MEnum, Datetime
-from nomad.datamodel.metainfo.eln import Chemical
+import numpy as np
+from baseclasses import ReadableIdentifiersCustom
 
 # Imports HZB
 from baseclasses.chemical_energy import Electrode, Environment
-from baseclasses.solution import Solution, Ink, SolutionPreparationStandard, SolutionChemical
-from baseclasses import ReadableIdentifiersCustom
-from baseclasses.helper.utilities import get_reference, create_archive, get_entry_id_from_file_name
+from baseclasses.helper.utilities import (
+    create_archive,
+    get_reference,
+)
+from baseclasses.solution import (
+    Ink,
+    Solution,
+    SolutionChemical,
+    SolutionPreparationStandard,
+)
+from nomad.datamodel.data import EntryData
+from nomad.datamodel.metainfo.basesections import (
+    CASPureSubstanceSection,
+    Entity,
+    PubChemPureSubstanceSection,
+    PureSubstance,
+)
+from nomad.datamodel.metainfo.eln import Chemical
 
+# Imports NOMAD
+from nomad.metainfo import (
+    Datetime,
+    MEnum,
+    Quantity,
+    Reference,
+    SchemaPackage,
+    Section,
+    SubSection,
+)
+
+from .categories import *
+from .helper_functions import *
 
 # Imports UMR
 from .suggestions_lists import *
-from .helper_functions import *
-from .categories import *
-
-from .umr_baseclasses import UMR_Room, UMR_Instrument
+from .umr_baseclasses import UMR_Instrument, UMR_Room
 
 m_package = SchemaPackage(aliases=['UMR_schemas.umr_synthesis_classes']) 
 
@@ -133,15 +153,15 @@ class UMR_AddChemicalLot(Entity):
             directory, filename = os.path.split(self.m_root().metadata.mainfile)
             
             if directory == "":
-                log_error(self, logger, f"Please always put the Chemical in a separate folder. After doing so, you can create lots, which are automatically stored in the same folder.")
+                log_error(self, logger, "Please always put the Chemical in a separate folder. After doing so, you can create lots, which are automatically stored in the same folder.")
                 return
             
             elif not self.m_parent.lab_id:
-                log_error(self, logger, f"The lab_id of the chemical must be defined. Please give the name and supplier and save the archive again. The ID is then generated automatically.")
+                log_error(self, logger, "The lab_id of the chemical must be defined. Please give the name and supplier and save the archive again. The ID is then generated automatically.")
                 return
               
             elif not self.lot or not (self.mass or self.volume):
-                log_error(self, logger, f"Please always give at least the lot (lot, charge or batch), the order date (estimate if unknownn) and either the mass or the volume (depending if solid or liquid)")
+                log_error(self, logger, "Please always give at least the lot (lot, charge or batch), the order date (estimate if unknownn) and either the mass or the volume (depending if solid or liquid)")
                 return
 
 
@@ -153,7 +173,7 @@ class UMR_AddChemicalLot(Entity):
                     list = []
 
                 if any(item.lot == self.lot for item in list):
-                    log_error(self, logger, f"The lot was not added, because it already exists")
+                    log_error(self, logger, "The lot was not added, because it already exists")
                 else:
                     lab_id = f"{self.m_parent.lab_id}_{self.lot}"
                     file_name = f"{directory}/{lab_id}.archive.json"

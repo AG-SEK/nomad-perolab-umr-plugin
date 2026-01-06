@@ -21,28 +21,28 @@
 import numpy as np
 import pandas as pd
 
+# Imports HZB
+from baseclasses.helper.utilities import (
+    create_archive,
+    get_entry_id_from_file_name,
+    get_reference,
+)
+from nomad.datamodel.data import EntryData
 
 # Imports Nomad
 from nomad.datamodel.metainfo.eln import Entity
-from nomad.datamodel.data import EntryData
-from nomad.metainfo import Quantity, SubSection, Section, Package, MEnum, SchemaPackage
+from nomad.metainfo import MEnum, Quantity, SchemaPackage, Section, SubSection
 from nomad.units import ureg
 
-# Imports HZB
-from baseclasses.helper.utilities import create_archive, get_reference, get_entry_id_from_file_name, update_archive
-
+from .batch import UMR_ExternalBatch
+from .categories import *
+from .helper_functions import *
+from .solar_cell import UMR_BasicSample, UMR_ExternalSolarCell
+from .substrate import UMR_ExternalSubstrate, UMR_Substrate
 
 # Imports UMR
 from .suggestions_lists import *
-from .helper_functions import *
-from .categories import *
-
-from .substrate import UMR_ExternalSubstrate, UMR_Substrate
-from .solar_cell import UMR_ExternalSolarCell, UMR_BasicSample
-from .batch import UMR_ExternalBatch
 from .umr_reference_classes import UMR_EntityReference
-
-
 
 m_package = SchemaPackage(aliases=['UMR_schemas.create_external_batch '])
 

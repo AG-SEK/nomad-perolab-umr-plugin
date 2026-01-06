@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def get_ipce(filepath):
     '''
     Loads measured ipce data from txt file.
@@ -15,7 +16,7 @@ def get_ipce(filepath):
         'intensity' in mW/cm2
 
     '''
-    with open(filepath, 'r') as file:
+    with open(filepath) as file:
         lines = file.readlines()
     data_start = lines.index('## Data ##\t\t\t\t\n') + 3  # find the start of the data section
     column_names = ['wavelength', 'eqe', 'current_density', 'integrated_current_density', 'intensity']

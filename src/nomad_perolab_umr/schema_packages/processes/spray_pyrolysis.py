@@ -17,33 +17,26 @@
 #
 
 # Imports Python
-import numpy as np
-import json
 
 # Imports Nomad
-from nomad.metainfo import Quantity, SubSection, Section, SchemaPackage, Reference
-from nomad.datamodel.data import EntryData, ArchiveSection
-from nomad.datamodel.metainfo.basesections import SectionReference
+from baseclasses.helper.utilities import rewrite_json
 
 # Imports HZB
-from baseclasses.material_processes_misc import Cleaning, SolutionCleaning, PlasmaCleaning, UVCleaning, Annealing
-from baseclasses.wet_chemical_deposition import PrecursorSolution, SpinCoating, SpinCoatingRecipe, WetChemicalDeposition, SprayPyrolysis, BladeCoating
-from baseclasses.material_processes_misc.quenching import AntiSolventQuenching
-from baseclasses.helper.utilities import create_archive
-from baseclasses import BaseProcess
-from baseclasses.helper.utilities import rewrite_json
+from baseclasses.wet_chemical_deposition import SprayPyrolysis
+from nomad.datamodel.data import EntryData
+from nomad.metainfo import Reference, SchemaPackage, Section, SubSection
+
+from ..categories import *
+from ..helper_functions import *
+from ..processes.process_baseclasses import (
+    UMR_BaseProcess,
+    UMR_ELNProcess,
+    UMR_PrecursorSolution,
+)
 
 # Imports UMR
 from ..suggestions_lists import *
-from ..helper_functions import *
-from ..categories import *
-
 from ..umr_baseclasses import UMR_Layer
-from ..batch import UMR_Batch
-from ..solar_cell import UMR_InternalSolarCell
-from ..umr_reference_classes import UMR_EntityReference
-
-from ..processes.process_baseclasses import UMR_BaseProcess, UMR_ELNProcess, UMR_PrecursorSolution, UMR_SolarCellSettings
 
 m_package = SchemaPackage(aliases=['UMR_schemas.processes.spray_pyrolysis']) 
 

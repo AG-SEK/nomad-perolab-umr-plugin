@@ -1,11 +1,11 @@
 
 # Imports
-import requests
 import json
-from datetime import datetime, timedelta
 import os
+from datetime import datetime, timedelta
 from getpass import getpass
 
+import requests
 
 # Base URL NOMAD Oasis
 oasis_base_url = 'https://vhrz1634.hrz.uni-marburg.de/nomad-oasis/api/v1'
@@ -32,13 +32,13 @@ def get_new_app_token(days_until_expiration, auth_header, base_url=oasis_base_ur
             or None if the API request failed (e.g., due to validation error).
     """
             
-    print(f"Generating new App Token...")
+    print("Generating new App Token...")
 
     # Calculate expiration date
     expiration_date = datetime.now() + timedelta(days=days_until_expiration)
 
     # API Request
-    endpoint = f'/auth/app_token'
+    endpoint = '/auth/app_token'
     url = f'{base_url}{endpoint}'
     params = dict(
         expires_in = days_until_expiration*24*60*60 # in seconds
@@ -88,7 +88,7 @@ def get_authentication_header_with_app_token():
     path_to_json_file = os.path.join(parent_path, 'nomad_oasis_app_token.json' )  # In this json file the app token is stored
 
     # Import JSON file with App Tokens as list
-    with open(path_to_json_file, 'r') as file:
+    with open(path_to_json_file) as file:
         app_token_json_list = json.load(file)
 
     # Create Copy of List because when deleting items during iteration problems occur (indices are changed)

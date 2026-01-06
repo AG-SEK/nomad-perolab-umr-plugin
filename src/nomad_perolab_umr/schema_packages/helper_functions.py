@@ -21,11 +21,13 @@
 
 import datetime as dt
 import json
+
+from baseclasses.helper.utilities import (
+    create_archive,
+    get_entry_id_from_file_name,
+    get_reference,
+)
 from natsort import natsorted
-import re
-
-
-from baseclasses.helper.utilities import get_reference, create_archive, get_entry_id_from_file_name
 
 
 # Function to sort and deduplicate a List in a subsection (e.g. samples, selected_samples)
@@ -50,7 +52,7 @@ def sort_and_deduplicate_subsection(subsection, sort_by="name", deduplicate_by="
 
 # Function to determine the delimiter of a csv file, depending on the first line
 def get_delimiter(file_path):
-    with open(file_path, 'r') as file:
+    with open(file_path) as file:
         first_line = file.readline()
     
     # Überprüfe das Trennzeichen in der ersten Zeile

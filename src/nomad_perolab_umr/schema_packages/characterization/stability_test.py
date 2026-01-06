@@ -20,26 +20,36 @@
 
 
 # Imports Python
+
 import numpy as np
-import os
-import plotly.graph_objects as go
-
-
-# Imports Nomad
-from nomad.datamodel.metainfo.plot import PlotSection, PlotlyFigure
-from nomad.metainfo import MEnum, Quantity, SubSection, Section, SchemaPackage, Reference, Datetime 
-from nomad.datamodel.data import EntryData, ArchiveSection
-
-# Imports HZB
-from baseclasses.helper.utilities import get_encoding, get_reference
-
 from baseclasses import BaseMeasurement
 
-# Imports UMR
-from .measurement_baseclasses import UMR_MeasurementBaseclass, UMR_TrackingData, UMR_JVParameters, UMR_CollectedJVMeasurements
-from .jv_measurement import UMR_JVMeasurement
+# Imports HZB
+from baseclasses.helper.utilities import get_encoding
+from nomad.datamodel.data import EntryData
+
+# Imports Nomad
+from nomad.datamodel.metainfo.plot import PlotlyFigure, PlotSection
+from nomad.metainfo import (
+    Datetime,
+    Quantity,
+    Reference,
+    SchemaPackage,
+    Section,
+    SubSection,
+)
+
 from ..categories import *
 from ..helper_functions import *
+from .jv_measurement import UMR_JVMeasurement
+
+# Imports UMR
+from .measurement_baseclasses import (
+    UMR_CollectedJVMeasurements,
+    UMR_JVParameters,
+    UMR_MeasurementBaseclass,
+    UMR_TrackingData,
+)
 
 #from Solar.plotfunctions import plot_stability_parameter
 
@@ -213,15 +223,17 @@ class UMR_StabilityTest(UMR_MeasurementBaseclass, BaseMeasurement, PlotSection, 
 
             with archive.m_context.raw_file(self.data_file, encoding=encoding) as f:
                 log_info(self, logger, f"Normalize Stability Test Measurement: Parse data from file: {f.name} | Encoding: {encoding}")
-                from ..read_and_parse.general_parser import parse_general_info          
+                from ..read_and_parse.general_parser import parse_general_info
                 parse_general_info(self, f.name, encoding)
-                from ..read_and_parse.stability_parser import parse_stabilityTracking_data_to_archive
+                from ..read_and_parse.stability_parser import (
+                    parse_stabilityTracking_data_to_archive,
+                )
                 parse_stabilityTracking_data_to_archive(self, f.name, encoding)
           
                
         # REFERENCE SAMPLE
         if self.data_file and not self.solar_cell_was_referenced:
-            from ..read_and_parse.general_parser import reference_sample          
+            from ..read_and_parse.general_parser import reference_sample
             reference_sample(self, logger, archive)
 
         # REFERENCE THE 2 StabilityParameters ENTRIES

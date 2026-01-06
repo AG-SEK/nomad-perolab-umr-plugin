@@ -1,23 +1,24 @@
 __author__ = "Edgar Nandayapa"
 __version__ = "v0.0.1 2023"
 
-from glob import glob
-import pandas as pd
-import seaborn as sns
 import operator
 import os
 import re
+
+# from openpyxl.styles import Font
+import warnings
+from glob import glob
+
 import numpy as np
+
 #import matplotlib
 #import matplotlib.pyplot as plt
 import openpyxl
-from openpyxl.utils.dataframe import dataframe_to_rows
-from openpyxl import load_workbook
-# from openpyxl.styles import Font
-import warnings
+import pandas as pd
 import plotly.graph_objects as go
+from openpyxl import load_workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
 from plotly.subplots import make_subplots
-import plotly.express as px
 
 #matplotlib.use('module://ipympl.backend_nbagg')
 
@@ -31,6 +32,7 @@ def is_running_in_jupyter():
         return False
 
 import plotly.io as pio
+
 pio.renderers.default = 'notebook' if is_running_in_jupyter() else 'browser'
 
 
@@ -139,7 +141,7 @@ def add_extra_info(df, file_path, data_type):
 
 
 def find_separators_in_file(file_path):
-    with open(file_path, "r") as file:
+    with open(file_path) as file:
         lines = file.readlines()
 
     positions = []
@@ -237,14 +239,14 @@ def jv_plot_curve_best(path, jvc, cur):
         x = plotted["Voltage (V)"].iloc[:, c]
         y = plotted["Current Density(mA/cm2)"].iloc[:, c]
 
-        marker_symbol = 'x' if dire[c] == "Reverse" else 'circle'
+        marker_symbol = 'x' if p == "Reverse" else 'circle'
         
         fig.add_trace(go.Scatter(
             x=x, 
             y=y,
             mode='lines+markers',
             marker=dict(symbol=marker_symbol),
-            name=f"{dire[c]} ({ilum[c]})",
+            name=f"{p} ({ilum[c]})",
             hovertemplate='Voltage: %{x:.3f} V<br>Current Density: %{y:.3f} mA/cm²<br>%{text}',
             text=[f"Sample: {sample}, Cell: {cell}" for _ in x]
         ))
@@ -346,7 +348,7 @@ def jv_plot_curve_best(path, jvc, cur):
     sample_name = "JV_best_device.html"
     if not is_running_in_jupyter():
         fig.write_html(path + sample_name)
-        print(f"Saved JV curve of best device")
+        print("Saved JV curve of best device")
 
     return fig, sample_name
 
@@ -354,7 +356,6 @@ def jv_plot_curve_best(path, jvc, cur):
 
 def jv_plot_by_cell_3x2(df, sample, path):
     """Plot JV curves for each cell in a 2x3 grid using Plotly"""
-    from plotly.subplots import make_subplots
     import plotly.graph_objects as go
     
     # Filter the DataFrame for the specified sample
@@ -428,10 +429,10 @@ def jv_plot_by_cell_3x2(df, sample, path):
                     # Convert to mA/cm² if values are very small (likely in A/cm²)
                     if abs(current_values.max()) < 0.1:  # If max current is less than 0.1, likely in A
                         current_values_ma = current_values * 1000  # Convert A to mA
-                        print(f"Debug: Converted to mA/cm² (factor 1000)")
+                        print("Debug: Converted to mA/cm² (factor 1000)")
                     else:
                         current_values_ma = current_values
-                        print(f"Debug: Using values as-is (already in mA/cm²)")
+                        print("Debug: Using values as-is (already in mA/cm²)")
                     
                     # Plot the curve
                     label = f"{direction} ({ilum})"
@@ -651,9 +652,8 @@ def jv_plot_together(df1, df2, path, namestring):
     unique_samples = source_data[['sample', 'cell']].drop_duplicates()
     
     # Create a color palette with enough colors for all curves
-    import plotly.express as px
-    import random
     import colorsys
+    import random
     
     # Generate a large set of distinct colors
     def generate_distinct_colors(n):
@@ -1549,7 +1549,7 @@ def plotting_string_action(plot_list, wb, data, supp, is_voila=False):
             #print("Plotting ONLY WORKING cells")
             fig, fig_name = jv_plot_together(filtered_jv, complete_cur, path, "Filtered")
         elif "Co" in pl:  # Only omitted (non-working cells)
-            print(f"Plotting ONLY NON-WORKING cells")
+            print("Plotting ONLY NON-WORKING cells")
             print(f"omitted_jv shape: {omitted_jv.shape}")
             print(f"sample/cell combinations: {omitted_jv[['sample', 'cell']].drop_duplicates().shape[0]}")
             fig, fig_name = jv_plot_together(omitted_jv, complete_cur, path, "Omitted")

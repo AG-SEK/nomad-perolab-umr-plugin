@@ -1,10 +1,11 @@
-import ipywidgets as widgets
-from IPython.display import display, HTML
-import json
-import io
 import base64
+import io
+import json
 from datetime import datetime
 from pathlib import Path
+
+import ipywidgets as widgets
+from IPython.display import display
 
 try:
     from experiment_excel_builder import ExperimentExcelBuilder
@@ -39,13 +40,13 @@ class MinimalistExperimentBuilder:
         """Load templates from JSON file"""
         try:
             if self.templates_file.exists():
-                with open(self.templates_file, 'r') as f:
+                with open(self.templates_file) as f:
                     data = json.load(f)
                     self.templates = data.get('templates', {})
                     
                 print(f"✅ Loaded {len(self.templates)} templates")
             else:
-                print(f"Creating default template file...")
+                print("Creating default template file...")
                 self.create_default_template()
                 
             self._update_template_dropdown()
@@ -165,7 +166,7 @@ class MinimalistExperimentBuilder:
         try:
             guide_file = Path("guide.html")
             if guide_file.exists():
-                with open(guide_file, 'r', encoding='utf-8') as f:
+                with open(guide_file, encoding='utf-8') as f:
                     return f.read()
             else:
                 # Fallback content if file doesn't exist

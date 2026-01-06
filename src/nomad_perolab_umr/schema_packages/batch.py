@@ -19,18 +19,16 @@
 
 
 # Imports Nomad
-from nomad.config import config
 from nomad.datamodel.data import EntryData
 from nomad.datamodel.metainfo.basesections import Entity
-from nomad.metainfo import Quantity, SubSection, Section, Reference, Package, MEnum, SchemaPackage
+from nomad.metainfo import MEnum, Quantity, SchemaPackage, Section, SubSection
+
+from .categories import *
+from .helper_functions import *
 
 # Imports UMR
 from .suggestions_lists import *
-from .helper_functions import *
-from .categories import *
-
 from .umr_reference_classes import UMR_EntityReference
-
 
 m_package = SchemaPackage(aliases=['UMR_schemas.batch'])
 

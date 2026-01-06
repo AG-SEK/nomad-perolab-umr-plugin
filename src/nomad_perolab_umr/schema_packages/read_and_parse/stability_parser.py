@@ -18,19 +18,15 @@
 
 
 ### IMPORTS ###
-import numpy as np     # Import numpy for numpy arrays
-
-from nomad.units import ureg
-
-from .read_header_line import read_header_line
-from ..helper_functions import *
-
-from .mppt_parser import read_MPPTracking_line
-
 from datetime import datetime
 
-from ..characterization.stability_test import UMR_StabilityTracking
+import numpy as np  # Import numpy for numpy arrays
+from nomad.units import ureg
 
+from ..characterization.stability_test import UMR_StabilityTracking
+from ..helper_functions import *
+from .mppt_parser import read_MPPTracking_line
+from .read_header_line import read_header_line
 
 ### MAIN FUNCTIONS TO READ JV DATA FROM TXT FILE ###
 
@@ -52,7 +48,7 @@ def read_stabilityTracking_data(mainfile, encoding):
     section = None       # Current section (header or data)
 
     # Open File and read it line by line
-    with open(mainfile, 'r', encoding=encoding) as file:
+    with open(mainfile, encoding=encoding) as file:
   
         for line in file:
             line = line.strip()         # Remove whitespaces from the line

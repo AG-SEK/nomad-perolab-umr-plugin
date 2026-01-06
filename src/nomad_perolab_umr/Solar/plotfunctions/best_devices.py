@@ -3,8 +3,17 @@ In this script we collect functiosn which are used to determine the best devices
 """
 
 
-from . import find_highest_reverse_efficiency_measurement, plot_batch, get_samples_from_group, find_highest_reverse_efficiency_measurement, plot_jv, plot_eqe, sort_measurements_by_device_list
-from ..nomadapifunctions import get_eqe_measurements_by_device_list, get_jv_measurements_by_device_list
+from ..nomadapifunctions import (
+    get_eqe_measurements_by_device_list,
+    get_jv_measurements_by_device_list,
+)
+from . import (
+    find_highest_reverse_efficiency_measurement,
+    get_samples_from_group,
+    plot_eqe,
+    plot_jv,
+    sort_measurements_by_device_list,
+)
 
 
 def find_and_plot_best_cells(

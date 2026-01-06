@@ -18,23 +18,22 @@
 
 
 # Imports Python
-import numpy as np
 
 # Imports Nomad
-from nomad.datamodel.data import EntryData, ArchiveSection
-from nomad.datamodel.metainfo.basesections import SectionReference, EntityReference, InstrumentReference
-from nomad.metainfo import Quantity, SubSection, Section, Package, SchemaPackage
+from nomad.datamodel.metainfo.basesections import (
+    EntityReference,
+    InstrumentReference,
+    SectionReference,
+)
 from nomad.datamodel.metainfo.plot import PlotSection
+from nomad.metainfo import Quantity, SchemaPackage, Section
 
+from .categories import *
+from .helper_functions import *
 
 # Imports HZB/Michael Götte
-from baseclasses.solar_energy import SolcarCellSample
-
-
 # Imports UMR
 from .suggestions_lists import *
-from .helper_functions import *
-from .categories import *
 
 m_package = SchemaPackage(aliases=['UMR_schemas.umr_reference_classes']) 
 

@@ -22,7 +22,9 @@ from nomad.config.models.plugins import SchemaPackageEntryPoint
 class ConnectionTestSchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
     def load(self):
-        from nomad_perolab_umr.schema_packages.characterization.connection_test import m_package
+        from nomad_perolab_umr.schema_packages.characterization.connection_test import (
+            m_package,
+        )
 
         return m_package
 
@@ -36,7 +38,9 @@ connection_test_schema = ConnectionTestSchemaPackageEntryPoint(
 class EQESchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
     def load(self):
-        from nomad_perolab_umr.schema_packages.characterization.eqe_measurement import m_package
+        from nomad_perolab_umr.schema_packages.characterization.eqe_measurement import (
+            m_package,
+        )
 
         return m_package
 
@@ -50,7 +54,9 @@ eqe_schema = EQESchemaPackageEntryPoint(
 class JVSchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
     def load(self):
-        from nomad_perolab_umr.schema_packages.characterization.jv_measurement import m_package
+        from nomad_perolab_umr.schema_packages.characterization.jv_measurement import (
+            m_package,
+        )
 
         return m_package
 
@@ -64,7 +70,9 @@ jv_schema = JVSchemaPackageEntryPoint(
 class MPPTrackingSchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
     def load(self):
-        from nomad_perolab_umr.schema_packages.characterization.mpp_tracking import m_package
+        from nomad_perolab_umr.schema_packages.characterization.mpp_tracking import (
+            m_package,
+        )
 
         return m_package
 
@@ -78,7 +86,9 @@ mpp_tracking_schema = MPPTrackingSchemaPackageEntryPoint(
 class StabilityTestSchemaPackageEntryPoint(SchemaPackageEntryPoint):
 
     def load(self):
-        from nomad_perolab_umr.schema_packages.characterization.stability_test import m_package
+        from nomad_perolab_umr.schema_packages.characterization.stability_test import (
+            m_package,
+        )
 
         return m_package
 

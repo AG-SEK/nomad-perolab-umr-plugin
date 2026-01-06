@@ -18,6 +18,7 @@
 
 from nomad.config.models.plugins import ParserEntryPoint
 
+
 class CicciTXTParserEntryPoint(ParserEntryPoint):
 
     def load(self):

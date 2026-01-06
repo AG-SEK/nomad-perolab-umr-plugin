@@ -1,25 +1,27 @@
+from baseclasses.helper.utilities import rewrite_json
 from baseclasses.vapour_based_deposition import Evaporations
+from nomad.datamodel.data import EntryData
 
 # Imports Nomad
-from nomad.metainfo import Quantity, SubSection, Section, SchemaPackage, MEnum, Reference
-from nomad.datamodel.data import EntryData, ArchiveSection
-from nomad.datamodel.metainfo.basesections import SectionReference
+from nomad.metainfo import (
+    Reference,
+    SchemaPackage,
+    Section,
+    SubSection,
+)
 
-from baseclasses.helper.utilities import rewrite_json
-
-
-from ..processes.process_baseclasses import UMR_BaseProcess, UMR_ELNProcess, UMR_PrecursorSolution, UMR_SolarCellSettings
+from ..categories import *
+from ..helper_functions import *
+from ..processes.process_baseclasses import (
+    UMR_BaseProcess,
+    UMR_ELNProcess,
+)
+from ..solar_cell import UMR_InternalSolarCell
 
 # Imports UMR
 from ..suggestions_lists import *
-from ..helper_functions import *
-from ..categories import *
-
 from ..umr_baseclasses import UMR_Layer
-
-from ..solar_cell import UMR_InternalSolarCell
 from ..umr_reference_classes import UMR_EntityReference
-
 
 m_package = SchemaPackage() 
 

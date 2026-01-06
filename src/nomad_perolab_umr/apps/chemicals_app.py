@@ -1,5 +1,5 @@
 
-from nomad.config.models.ui import SearchQuantities, App, Column, FilterMenu, FilterMenus, Filters, FilterMenuActions, FilterMenuActionCheckbox, Menu, MenuItemHistogram, MenuItemTerms
+from nomad.config.models.ui import App, Column, Filters, Menu, MenuItemTerms
 
 # schema definitions
 schemas = [
@@ -46,11 +46,11 @@ chemicals_app = App(
                 show_input=False,
                 title='Category'),          
             MenuItemTerms(
-                quantity=f'data.state_of_matter#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical',
+                quantity='data.state_of_matter#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical',
                 show_input=False,
                 title='State of Matter'),
             MenuItemTerms(
-                quantity=f'data.supplier#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical',
+                quantity='data.supplier#nomad_perolab_umr.schema_packages.umr_synthesis_classes.UMR_Chemical',
                 show_input=True,
                 title='Supplier Abbreviation'),                  
             ]

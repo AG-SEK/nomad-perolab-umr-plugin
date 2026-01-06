@@ -1,6 +1,7 @@
 import ipywidgets as widgets
 from api_calls import get_batch_ids
 
+
 def create_batch_selection(url, token, load_data_function):
     # Get batch IDs
     batch_ids_list_tmp = list(get_batch_ids(url, token))

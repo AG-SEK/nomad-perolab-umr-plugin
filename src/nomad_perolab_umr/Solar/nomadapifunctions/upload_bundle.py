@@ -1,9 +1,10 @@
-from . import AUTH_HEADER
 import requests
+
+from . import AUTH_HEADER
+
 OASIS_BASE_URL_NEW = 'https://solar-oasis.physik.uni-marburg.de/nomad-oasis/api/v1'
 OASIS_BASE_URL_OLD = 'https://vhrz1634.hrz.uni-marburg.de/nomad-oasis/api/v1'
 import os
-
 
 
 def get_upload_bundle(
@@ -66,7 +67,7 @@ def get_upload_bundle(
                 f.write(response.content)
             print(f"[INFO] Upload bundle saved as ZIP file: '{filename}'")
             return filename
-        except IOError as e:
+        except OSError as e:
             print(f"[ERROR] Failed to write file '{filename}': {e}")
             return None
     else:
@@ -109,7 +110,7 @@ def post_upload_bundle(zip_path,
         None: If an error occurs during the request or file operation.
     """
     
-    endpoint = f'/uploads/bundle'
+    endpoint = '/uploads/bundle'
     url = f'{base_url}{endpoint}'
  
     # Query-Parameter
@@ -144,7 +145,7 @@ def post_upload_bundle(zip_path,
         print(f"[ERROR] API responded with status code {response.status_code}: {response.text}")
         return None
 
-    print(f"[INFO] The upload bundle was succesfully posted to the OASIS")
+    print("[INFO] The upload bundle was succesfully posted to the OASIS")
     return response
 
 
@@ -202,7 +203,7 @@ def transfer_upload_to_oasis(
         return None
 
     # Step 2: Upload bundle
-    print(f"[INFO] Uploading bundle to new OASIS instance...")
+    print("[INFO] Uploading bundle to new OASIS instance...")
     response = post_upload_bundle(
         zip_path,
         base_url=base_url_new,

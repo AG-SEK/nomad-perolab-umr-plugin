@@ -84,6 +84,13 @@ select = [
 
 ignore = [
     "F403", # 'from module import *' used; unable to detect undefined names
+    
+    # Rules added by Aaron to ignore common issues in existing code
+    "E501", # Line too long - too restrictive for existing code
+    "F405", # Star imports - would require extensive refactoring
+    "PLR2004", # Magic numbers - often acceptable for HTTP status codes
+    "PLR0913", # Too many arguments - sometimes necessary
+    "PLR0911", # Too many returns - sometimes necessary
 ]
 
 fixable = ["ALL"]

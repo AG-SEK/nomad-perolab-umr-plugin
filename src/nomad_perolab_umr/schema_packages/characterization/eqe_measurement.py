@@ -35,7 +35,6 @@ from nomad.metainfo import MEnum, Quantity, SchemaPackage, Section, SubSection
 
 # Imports UMR
 from Solar.plotfunctions import plot_eqe
-from nomad_perolab_umr.Solar.plotfunctions import plot_eqe
 
 from ..categories import *
 from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass

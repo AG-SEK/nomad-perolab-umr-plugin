@@ -39,7 +39,7 @@ from baseclasses.helper.utilities import get_encoding
 from ..categories import *
 from ..helper_functions import *
 
-from nomad_perolab_umr.Solar.plotfunctions import plot_jv
+from Solar.plotfunctions import plot_jv
 
 from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass
 

@@ -38,7 +38,7 @@ from baseclasses.helper.utilities import get_encoding
 from baseclasses import BaseMeasurement # TODO
 
 # Imports UMR
-from nomad_perolab_umr.Solar.plotfunctions import plot_eqe
+from Solar.plotfunctions import plot_eqe
 from ..characterization.measurement_baseclasses import UMR_MeasurementBaseclass
 from ..categories import *
 from ..helper_functions import *

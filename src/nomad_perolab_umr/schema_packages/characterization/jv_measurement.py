@@ -33,7 +33,7 @@ from nomad.datamodel.metainfo.eln import SolarCellJV
 from nomad.datamodel.metainfo.plot import PlotlyFigure, PlotSection
 from nomad.metainfo import MEnum, Quantity, SchemaPackage, Section, SubSection
 
-from nomad_perolab_umr.Solar.plotfunctions import plot_jv
+from Solar.plotfunctions import plot_jv
 
 # Imports UMR
 from ..categories import *

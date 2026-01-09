@@ -23,12 +23,19 @@ import datetime as dt
 import json
 import re
 
+import plotly.io as pio
 from baseclasses.helper.utilities import (
     create_archive,
     get_entry_id_from_file_name,
     get_reference,
 )
+
 from natsort import natsorted
+
+from Solar.plottemplate.umr_plot_template import umr
+# Register UMR template
+pio.templates["UMR"] = umr
+
 
 
 # Function to sort and deduplicate a List in a subsection (e.g. samples, selected_samples)
@@ -88,6 +95,7 @@ def plotly_updateLayout_NOMAD(fig):
         yaxis2=axis,
         showlegend=True,
         #font_family = 'Calibri',
+        #template="plotly_dark"
     )
     
     # New font size for tables

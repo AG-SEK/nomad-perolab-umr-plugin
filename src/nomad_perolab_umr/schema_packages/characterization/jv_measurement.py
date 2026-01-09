@@ -274,12 +274,21 @@ class UMR_JVMeasurement(JVMeasurement, UMR_MeasurementBaseclass, PlotSection, En
             # curve['fill_factor'] = round(curve['fill_factor'], 1)
             # TypeError: 'UMR_SolarCellJVCurve' object does not support item assignment
 
-        # Set Settings again (overwrite NOMAD defaults)
-        plotly_updateLayout_NOMAD(fig)
+        # Apply UMR template FIRST (before NOMAD overrides)
+        from Solar.plottemplate.umr_plot_template import umr
+        import plotly.io as pio
         
+        pio.templates["UMR"] = umr
+        fig.update_layout(template="UMR")
+
+        # Set Settings again (overwrite NOMAD defaults, but keep template colors)
+        plotly_updateLayout_NOMAD(fig)
+
         # Append figure to list of plots (Clear list beforehand)   
         self.figures = []
-        fig_json=fig.to_plotly_json()
+        #fig_json=fig.to_plotly_json()
+        fig_json=json.loads(fig.to_json())
+
         fig_json["config"] = plot_config
 
         self.figures.append(PlotlyFigure(label='JV Curve Plot', figure=fig_json))

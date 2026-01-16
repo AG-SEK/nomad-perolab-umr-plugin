@@ -638,7 +638,7 @@ def create_directory(ELN_entry, archive, logger, directory_name):
         log_info(ELN_entry, logger, f"Created Directory '{directory_name}' in '{archive.metadata.upload_name}'.")
     else:
         # Directory already exists; log and skip creation
-        log_warning(ELN_entry, logger, f"Directory '{directory_name}' already exists in '{archive.metadata.upload_name}'.")
+        log_info(ELN_entry, logger, f"Directory '{directory_name}' already exists in '{archive.metadata.upload_name}'.")
 
 
 

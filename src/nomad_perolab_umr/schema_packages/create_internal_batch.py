@@ -806,6 +806,54 @@ class UMR_BatchPlan(BaseSection, EntryData):
             batch_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}"
             self.batch_id=batch_id
 
+    
+        # Sort groups
+        self.groups_for_selection_of_processes = sorted(self.groups_for_selection_of_processes, key=lambda x: x.group_number)
+        # Sort Processes
+        self.standard_processes_for_variation = sorted(self.standard_processes_for_variation, key=lambda x: x.position_in_experimental_plan)
+
+
+        ### Automatically sort and check positions_in_experimental_plan in Subsections ###
+
+        # Enter position in experimental plan automatically in STANDARD_PROCESSES
+        if self.standard_processes:
+            for i, process in enumerate(self.standard_processes):
+                if hasattr(process, 'position_in_experimental_plan'):
+                    if not getattr(process, 'position_in_experimental_plan', None):
+                        process.position_in_experimental_plan = (i+1)
+
+            # Check for duplicates in position_in_experimental_plan
+            processes_list = [process for process in self.standard_processes if hasattr(process, 'position_in_experimental_plan')]
+            positions = [process.position_in_experimental_plan for process in processes_list]
+            if len(positions) != len(set(positions)):
+                log_error(self, logger, f"Duplicate position_in_experimental_plan values found in 'standard_processes' Subsection (Batch Plan {self.batch_id}).- Positions: {positions} | Len(positions): {len(positions)} | Set(positions): {set(positions)} | Len(set(positions)): {len(set(positions))}")
+                return
+            # Sort standard_processes 
+            processes_list.sort(key=lambda x: x.position_in_experimental_plan)
+            self.standard_processes = processes_list
+
+        # Enter position in experimental plan automatically in STANDARD_PROCESSES_FOR_VARIATION
+        if self.standard_processes_for_variation:
+            for i, process in enumerate(self.standard_processes_for_variation):
+                if hasattr(process, 'position_in_experimental_plan'):
+                    if not getattr(process, 'position_in_experimental_plan', None):
+                        process.position_in_experimental_plan = (i+1)
+            # Check for duplicates in position_in_experimental_plan
+            processes_list = [process for process in self.standard_processes_for_variation if hasattr(process, 'position_in_experimental_plan')]
+            positions = [process.position_in_experimental_plan for process in processes_list]
+            if len(positions) != len(set(positions)):
+                log_error(self, logger, f"Duplicate position_in_experimental_plan values found in 'standard_processes_for_variation' Subsection (Batch Plan {self.batch_id}). - Positions: {positions} | Len(positions): {len(positions)} | Set(positions): {set(positions)} | Len(set(positions)): {len(set(positions))}")
+                return
+            # Sort standard_processes_for_variation)
+            processes_list.sort(key=lambda x: x.position_in_experimental_plan)
+            self.standard_processes_for_variation = processes_list
+
+        # Clear created_entities list if no batch was created
+        if not self.batch_was_created:
+            self.created_entities = []
+
+
+
         # TODO KLAPPT NOCH NICHT: FEHLER BEI QUERY
             # Search for InternalBatch and batchPlan with the same ID -> log error if already existing entry is found
             # query = {
@@ -975,164 +1023,74 @@ class UMR_BatchPlan(BaseSection, EntryData):
 
 
         #####################################################################
+        #####################################################################
         # BUTTON: create batch
         if self.create_batch:
             self.create_batch = False
-         
-            # Log possible errors
-            if not self.approved:
-                log_error(self, logger, "The Batch has to be approved before creating the Batch.")
-                return
-            if self.batch_was_created:
-                log_error(self, logger, "The batch has already been created. This can not been undone without deleting the files and entities in the subsection created_entities! If you did that uncheck the solar_cells_were_created checkbox.")
-                return
-            if self.batch_description not in batch_abbreviations:
-                log_error(self, logger, f"This batch description '{self.batch_description}' has no abbreviation yet.")
+            
+            # VALIDATION: All checks first before any creation
+            if not self._validate_batch_plan(logger): # function defined below
                 return
             
-            for group_settings in self.groups_for_selection_of_processes:
-                if group_settings.number_of_substrates != len(group_settings.substrate_engraved_numbers):
-                    log_error(self, logger, f"The number of the given substrate_engraved_numbers does not match the given number_of_substrates. Please check group: {group_settings.group_number}.")
-                    return
-                #elif group_settings.advanced_solar_cell_settings.number_of_solar_cells_on_substrate != len(group_settings.advanced_solar_cell_settings.solar_cell_names):
-                #    log_error(self, logger, f"The number of the given solar_cell_names does not match the given number_of_solar_cells_on_substrate. Please check advanced solar_cell_settings in group: {group_settings.group_number}.")
-                #    return
-                elif supplier_abbreviations.get(group_settings.substrate.supplier) is None:
-                    log_error(self, logger, f"The supplier '{group_settings.supplier}' has no abbreviation yet. Please inform the Oasis administrator. Please check in substrate in group: {group_settings.group_number}.")
-                    return
-   
-            # Check if numbers of substrates and engraved substrate numbers are given
-            for group_settings in self.groups_for_selection_of_processes:
-                if not group_settings.number_of_substrates:
-                    log_error(self, logger, f"No number of substrates given for group {group_settings.group_number}. Please check.")
-                    return
-                if not group_settings.substrate_engraved_numbers:
-                    log_error(self, logger, f"No engraved substrate numbers given for group {group_settings.group_number}. Please check.")
-                    return
-
-                # Check if number of substrates does not match with given engraved_numbers
-                if len(group_settings.substrate_engraved_numbers) != group_settings.number_of_substrates:
-                    log_error(self, logger, f"Number of substrates does not match with given engraved_numbers. Please check group: {self.group_number}")
-                    return
-            
-
-            # Check substrate numbers oberall in every group
-            # Create empty list and fill it with all engraved numbers from all groups
-            all_engraved_numbers =[]
-            for group_settings in self.groups_for_selection_of_processes:
-                if group_settings.substrate_engraved_numbers:
-                # Create empty list and fill it with all engraved numbers from all groups
-                    if group_settings.substrate_engraved_numbers:
-                        all_engraved_numbers += group_settings.substrate_engraved_numbers 
-                # Check if any engraved number is in the list more than one time and log error
-                for engraved_number in group_settings.substrate_engraved_numbers:
-                    if all_engraved_numbers.count(engraved_number) > 1:
-                        log_error(self, logger, f"The engraved_number {engraved_number} was given for more than 1 substrate. Please Check.")
-                        return
-
-
-            # Check processes in every group
-            for group_settings in self.groups_for_selection_of_processes:
-                for i, process in enumerate(group_settings.select_processes):
-                    if process.present:
-                        if not process.selected_process:
-                            log_error(self, logger, f"Error in Group: {group_settings.group_number}. No process chosen. Please choose a process or uncheck present.")
-                            return
-
-
             # Clear the list with created entities
             self.created_entities = []
-
-            # Create Batch folder and Substrate and Sample and SolarCell Folder
-            create_directory(self, archive, logger, "Batch")
-            create_directory(self, archive, logger, "Batch/Substrates")
-            create_directory(self, archive, logger, "Batch/Samples")
-            create_directory(self, archive, logger, "Batch/SolarCells")
-
-            # CREATE BATCH
+            
+            # Create directory structure
+            for dir_path in ["Batch", "Batch/Substrates", "Batch/Samples", "Batch/SolarCells"]:
+                create_directory(self, archive, logger, dir_path)
+            
+            # Prepare batch identifiers
             batch_abbreviation = batch_abbreviations[self.batch_description]  
             batch_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}"
-            batch_name = f"batch_{batch_lab_id}"
-            batch_file_name = f"Batch/{batch_name}.archive.json"
-            batch = UMR_InternalBatch(
-                name = f"Batch {batch_lab_id}",
-                datetime = self.datetime,
-                lab_id = batch_lab_id,
-                batch_number = self.batch_number,
-                batch_description = self.batch_description,
-                responsible_person=self.responsible_person,
-                description = self.description,
-                project = self.project,
-                picture_stack = self.picture_stack,
-                samples = [],
-                substrates = [],
-            )
-            try:
-                create_archive(batch, archive, batch_file_name) #, overwrite=True)
-                log_info(self, logger, f"Created batch archive: {batch_file_name} with lab_id '{batch_lab_id}'")
-            except Exception as e:
-                # Catch Errors, because Batch folder does not exist
-                log_error(self, logger, f"An error occured when creating an Internal Batch. --- Exception {e}")
-                return
+            batch_file_name = f"Batch/batch_{batch_lab_id}.archive.json"
             
-            # Create batch reference in created_entities
-            batch_entry_id = get_entry_id_from_file_name(batch_file_name, archive)
+            # CREATE BATCH (initialize only, save later)
+            batch = UMR_InternalBatch(
+                name=f"Batch {batch_lab_id}",
+                datetime=self.datetime,
+                lab_id=batch_lab_id,
+                batch_number=self.batch_number,
+                batch_description=self.batch_description,
+                responsible_person=self.responsible_person,
+                description=self.description,
+                project=self.project,
+                picture_stack=self.picture_stack,
+                samples=[],
+                substrates=[],
+                groups=[]
+            )
+            
+            # Get batch entry ID (will be created at the end)
+            batch_entry_id = f"{archive.metadata.upload_id}/{batch_file_name}"
             batch_reference = UMR_EntityReference(
-                name = batch.name,
+                name=batch.name,
                 reference=get_reference(archive.metadata.upload_id, batch_entry_id),
-                lab_id = batch.lab_id)
+                lab_id=batch.lab_id
+            )
             self.created_entities.append(batch_reference)
-            log_info(self, logger, f"Added batch reference to created_entities: {batch.name} ({batch.lab_id})")
-
-
-            # UPDATE PROCESSES (Effizienter: Jeder Prozess wird nur einmal geupdatet)
-            updated_processes = set()
-            for group_settings in self.groups_for_selection_of_processes:
-                for i, process in enumerate(group_settings.select_processes):
-                    if process.present:
-                        mainfile = process.selected_process.m_root().metadata.mainfile
-                        if mainfile in updated_processes:
-                            continue  # Prozess wurde schon geupdatet
-                        with archive.m_context.raw_file(mainfile, 'r') as file:
-                            data = json.load(file)
-                        process_entry = self.from_dict(data['data'])
-                        # Empty samples
-                        process_entry.selected_samples = []
-                        process_entry.samples = []
-                        # Take time from Batch Plan for Process
-                        process_entry.datetime = self.datetime
-                        # Add position in experimental plan
-                        process_entry.position_in_experimental_plan = i+1
-                        # Reference Batch
-                        process_entry.batch = get_reference(archive.metadata.upload_id, batch_entry_id)
-                        create_archive(process_entry, archive, mainfile, overwrite=True)
-                        log_info(self, logger, f"Updated process archive: {mainfile} for process '{process_entry.name}' with batch reference")
-                        updated_processes.add(mainfile)
-
-            # CREATE GROUPS
+            
+            # Initialize process updates dictionary
+            process_updates = {}
+            
+            # MAIN LOOP: Create all entities group by group
             for group_settings in self.groups_for_selection_of_processes:
                 group = UMR_Group(
-                    name = group_settings.display_name,
-                    group_number = group_settings.group_number,
-                    group_description = group_settings.group_description,
-                    number_of_substrates = group_settings.number_of_substrates,
-                    description = group_settings.description,
-                    substrates = [],
+                    name=group_settings.display_name,
+                    group_number=group_settings.group_number,
+                    group_description=group_settings.group_description,
+                    number_of_substrates=group_settings.number_of_substrates,
+                    description=group_settings.description,
+                    substrates=[],
+                    samples=[]
                 )
-
-                # CREATE SUBSTRATES UND SAMPLES EFFIZIENTER
-
-                # Sammle alle zu erstellenden Substrate und Samples in Listen, um sie später in einem Rutsch zu verarbeiten.
-                substrates_to_create = []
-                # samples_to_create = []  # Unused variable, commented out
-                processes_to_update = []
-
+                
+                # CREATE SUBSTRATES AND SAMPLES
                 for engraved_number in group_settings.substrate_engraved_numbers:
+                    # Substrate setup
                     substrate_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}_{str(engraved_number)}"
-                    substrate_name = f"substrate_{substrate_lab_id}"
-                    substrate_file_name = f"Batch/Substrates/{substrate_name}.archive.json"
+                    substrate_file_name = f"Batch/Substrates/substrate_{substrate_lab_id}.archive.json"
+                    substrate_entry_id = get_entry_id_from_file_name(substrate_file_name, archive)
 
-                    # Substrate-Objekt erzeugen und Informationen kopieren
                     substrate = UMR_InternalSubstrate()
                     substrate.m_update_from_dict(group_settings.substrate.m_to_dict())
                     substrate.name = f"Substrate {substrate_lab_id}"
@@ -1141,137 +1099,473 @@ class UMR_BatchPlan(BaseSection, EntryData):
                     substrate.batch = get_reference(archive.metadata.upload_id, batch_entry_id)
                     substrate.group_number = group_settings.group_number
                     substrate.samples = []
-
-                    # Referenz für später
-                    substrates_to_create.append((substrate, substrate_file_name, engraved_number))
-
-                # Jetzt alle Substrate anlegen und Referenzen sammeln
-                substrate_references = {}
-                for substrate, substrate_file_name, engraved_number in substrates_to_create:
-                    create_archive(substrate, archive, substrate_file_name)
-                    log_info(self, logger, f"Created substrate archive: {substrate_file_name} with lab_id '{substrate.lab_id}' for group {group_settings.group_number}")
-
-                    substrate_entry_id = get_entry_id_from_file_name(substrate_file_name, archive)
-                    substrate_reference = UMR_EntityReference(
-                        name=substrate.name,
-                        reference=get_reference(archive.metadata.upload_id, substrate_entry_id),
-                        lab_id=substrate.lab_id)
-                    batch.substrates.append(substrate_reference)
-                    group.substrates.append(substrate_reference)
-                    self.created_entities.append(substrate_reference)
-                    substrate_references[substrate.lab_id] = (substrate, substrate_reference, substrate_file_name, substrate_entry_id)
-
-                # Jetzt alle Samples anlegen und Referenzen sammeln
-                for substrate_lab_id, (substrate, substrate_reference, substrate_file_name, substrate_entry_id) in substrate_references.items():
-                    engraved_number = substrate_lab_id.split('_')[-1]
-                    sample_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}_{str(engraved_number)}_X"
-                    sample_name = f"sample_{sample_lab_id}"
-                    sample_file_name = f'Batch/Samples/{sample_name}.archive.json'
+                    
+                    # Create sample
+                    sample_lab_id = f"{substrate_lab_id}_X"
+                    sample_file_name = f"Batch/Samples/sample_{sample_lab_id}.archive.json"
                     sample = UMR_BasicSample(
                         name=f"Sample {sample_lab_id}",
                         datetime=self.datetime,
                         lab_id=sample_lab_id,
                         batch=get_reference(archive.metadata.upload_id, batch_entry_id),
-                        substrate=get_reference(archive.metadata.upload_id, substrate_entry_id),
+                        substrate = get_reference(archive.metadata.upload_id, substrate_entry_id)
+                        #substrate=get_reference(archive.metadata.upload_id, f"{archive.metadata.upload_id}/{substrate_file_name}"),
                         group_number=group_settings.group_number,
                         width=group_settings.substrate.width,
                         length=group_settings.substrate.length,
-                        processes=[],
+                        processes=[]
                     )
+                    
+                    # Save sample and get reference
                     create_archive(sample, archive, sample_file_name)
                     sample_entry_id = get_entry_id_from_file_name(sample_file_name, archive)
                     sample_reference = UMR_EntityReference(
                         name=sample.name,
                         reference=get_reference(archive.metadata.upload_id, sample_entry_id),
-                        lab_id=sample.lab_id)
+                        lab_id=sample.lab_id
+                    )
+                    
+                    # Add sample to substrate
                     substrate.samples.append(sample_reference)
+                    
+                    # Save substrate with sample reference
+                    #substrate.normalize(archive, logger)
+                    create_archive(substrate, archive, substrate_file_name)
+                    
+                    # Create substrate reference
+                    #substrate_entry_id = get_entry_id_from_file_name(substrate_file_name, archive)
+                    substrate_reference = UMR_EntityReference(
+                        name=substrate.name,
+                        reference=get_reference(archive.metadata.upload_id, substrate_entry_id),
+                        lab_id=substrate.lab_id
+                    )
+                    
+                    # Add to batch, group, and created_entities
+                    batch.substrates.append(substrate_reference)
                     batch.samples.append(sample_reference)
+                    group.substrates.append(substrate_reference)
                     group.samples.append(sample_reference)
+                    self.created_entities.append(substrate_reference)
                     self.created_entities.append(sample_reference)
-
-                    # Prozesse für spätere Updates sammeln
+                    
+                    # UPDATE PROCESSES: Add sample to processes
                     for i, process in enumerate(group_settings.select_processes):
                         if process.present:
                             mainfile = process.selected_process.m_root().metadata.mainfile
-                            processes_to_update.append((mainfile, sample_reference))
+                            
+                            # Load process if not already in updates,, each process only once updated
+                            if mainfile not in process_updates:
+                                with archive.m_context.raw_file(mainfile, 'r') as file:
+                                    data = json.load(file)
+                                 # Get the process class from the selected_process reference
+                                process_class = type(process.selected_process.m_resolved())
+                                process_entry = process_class.m_from_dict(data['data'])
+                                #process_entry = self.m_from_dict(data['data'])  --> klappt nicht deserializierd in BatchPLan
 
-                    # Substrate nach Sample-Referenz aktualisieren
-                    substrate.normalize(archive, logger)
-                    create_archive(substrate, archive, substrate_file_name, overwrite=True)
-                    log_info(self, logger, f"Updated substrate archive: {substrate_file_name} with lab_id '{substrate.lab_id}' for group {group_settings.group_number}")
 
-                # Prozesse effizient updaten: pro Prozess nur einmal öffnen/speichern
-                process_sample_map = {}
-                for mainfile, sample_reference in processes_to_update:
-                    process_sample_map.setdefault(mainfile, []).append(sample_reference)
-
-                for mainfile, sample_refs in process_sample_map.items():
-                    with archive.m_context.raw_file(mainfile, 'r') as file:
-                        data = json.load(file)
-                    process_entry = self.from_dict(data['data'])
-                    process_entry.selected_samples.extend(sample_refs)
-                    create_archive(process_entry, archive, mainfile, overwrite=True)
-                    log_info(self, logger, f"Samples {[s.lab_id for s in sample_refs]} added to process entry {process_entry.name}")
-
-                # Append groups to batch
+                                process_entry.selected_samples = []
+                                process_entry.samples = []
+                                process_entry.datetime = self.datetime
+                                process_entry.position_in_experimental_plan = i + 1
+                                process_entry.batch = get_reference(archive.metadata.upload_id, batch_entry_id)
+                                process_updates[mainfile] = process_entry
+                            
+                            # Add sample to process, but each sample added to process
+                            process_updates[mainfile].selected_samples.append(sample_reference)
+                
+                # Add group to batch
                 batch.groups.append(group)
-            # Update Batch Archive (because of appended solar cell and substrate references)
-            create_archive(batch, archive, batch_file_name, overwrite=True)
-            log_info(self, logger, f"Updated batch archive: {batch_file_name} with lab_id '{batch.lab_id}' for group {group_settings.group_number}")
-
-            # Check box batch_was_created
-            self.batch_was_created = True 
-        
-
-        # Sort groups
-        self.groups_for_selection_of_processes = sorted(self.groups_for_selection_of_processes, key=lambda x: x.group_number)
-        # Sort Processes
-        self.standard_processes_for_variation = sorted(self.standard_processes_for_variation, key=lambda x: x.position_in_experimental_plan)
+            
+            # SAVE BATCH (only once, at the end)
+            try:
+                create_archive(batch, archive, batch_file_name)
+                log_info(self, logger, f"Created batch archive: {batch_file_name} with lab_id '{batch_lab_id}'")
+            except Exception as e:
+                log_error(self, logger, f"An error occurred when creating an Internal Batch. --- Exception {e}")
+                return
+            
+            # WRITE ALL PROCESS UPDATES (after normalize phase)
+            for mainfile, process_entry in process_updates.items():
+                create_archive(process_entry, archive, mainfile, overwrite=True)
+                #with archive.m_context.raw_file(mainfile, 'w') as file:
+                #    json.dump({'data': process_entry.m_to_dict()}, file)
+                log_info(self, logger, f"Updated process: {process_entry.name} with {len(process_entry.selected_samples)} samples")
+            
+            # Mark batch as created
+            
+            self.batch_was_created = True
+            log_info(self, logger, f"Batch {batch_lab_id} created successfully with {len(batch.groups)} groups, {len(batch.substrates)} substrates, {len(batch.samples)} samples")
 
         # Normalize Created Entiteies im gleichen Prozess wie creaing those archives hat ncht geklappt.
         # Entweder Proxy not found oder fehlende oder defekte Referenz
 
-
-        ### Automatically sort and check positions_in_experimental_plan in Subsections ###
-
-        # Enter position in experimental plan automatically in STANDARD_PROCESSES
-        for i, process in enumerate(self.standard_processes):
-            if hasattr(process, 'position_in_experimental_plan'):
-                if not getattr(process, 'position_in_experimental_plan', None):
-                    process.position_in_experimental_plan = (i+1)
-        # Check for duplicates in position_in_experimental_plan
-        processes_list = [process for process in self.standard_processes if hasattr(process, 'position_in_experimental_plan')]
-        positions = [process.position_in_experimental_plan for process in processes_list]
-        if len(positions) != len(set(positions)):
-            log_error(self, logger, f"Duplicate position_in_experimental_plan values found in 'standard_processes' Subsection (Batch Plan {self.batch_id}).")
-            return
-        # Sort standard_processes 
-        processes_list.sort(key=lambda x: x.position_in_experimental_plan)
-        self.standard_processes = processes_list
-
-        # Enter position in experimental plan automatically in STANDARD_PROCESSES_FOR_VARIATION
-        for i, process in enumerate(self.standard_processes_for_variation):
-            if hasattr(process, 'position_in_experimental_plan'):
-                if not getattr(process, 'position_in_experimental_plan', None):
-                    process.position_in_experimental_plan = (i+1)
-        # Check for duplicates in position_in_experimental_plan
-        processes_list = [process for process in self.standard_processes_for_variation if hasattr(process, 'position_in_experimental_plan')]
-        positions = [process.position_in_experimental_plan for process in processes_list]
-        if len(positions) != len(set(positions)):
-            log_error(self, logger, f"Duplicate position_in_experimental_plan values found in 'standard_processes_for_variation' Subsection (Batch Plan {self.batch_id}).")
-            return
-        # Sort standard_processes_for_variation)
-        processes_list.sort(key=lambda x: x.position_in_experimental_plan)
-        self.standard_processes_for_variation = processes_list
-
-        # Clear created_entities list if no batch was created
-        if not self.batch_was_created:
-            self.created_entities = []
-
-
-
-
         super().normalize(archive, logger)
+
+    def _validate_batch_plan(self, logger):
+        """Validate all batch plan requirements before creation"""
+        # Basic checks
+        if not self.approved:
+            log_error(self, logger, "The Batch has to be approved before creating the Batch.")
+            return False
+        
+        if self.batch_was_created:
+            log_error(self, logger, "The batch has already been created.")
+            return False
+        
+        if self.batch_description not in batch_abbreviations:
+            log_error(self, logger, f"This batch description '{self.batch_description}' has no abbreviation yet. Please contact the Oasis Administrator.")
+            return False
+        
+        # Group-specific checks
+        all_engraved_numbers = []
+        for group_settings in self.groups_for_selection_of_processes:
+            # Check substrate numbers
+            if not group_settings.number_of_substrates:
+                log_error(self, logger, f"No number of substrates given for group {group_settings.group_number}. Please check.")
+                return False
+            
+            if not group_settings.substrate_engraved_numbers:
+                log_error(self, logger, f"No engraved substrate numbers given for group {group_settings.group_number}. Please check.")
+                return False
+            
+            if len(group_settings.substrate_engraved_numbers) != group_settings.number_of_substrates:
+                log_error(self, logger, f"Number of substrates does not match with given engraved_numbers. Please check group: {group_settings.group_number}")
+                return False
+            
+            # Check supplier
+            if supplier_abbreviations.get(group_settings.substrate.supplier) is None:
+                log_error(self, logger, f"The supplier '{group_settings.substrate.supplier}' has no abbreviation yet. Please inform the Oasis administrator. Please check substrate in group: {group_settings.group_number}.")
+                return False
+            
+            # Collect all engraved numbers for duplicate check
+            all_engraved_numbers.extend(group_settings.substrate_engraved_numbers)
+            
+            # Check processes
+            for process in group_settings.select_processes:
+                if process.present and not process.selected_process:
+                    log_error(self, logger, f"Error in Group: {group_settings.group_number}. No process chosen. Please choose a process or uncheck present.")
+                    return False
+        
+        # Check for duplicate engraved numbers across all groups
+        if len(all_engraved_numbers) != len(set(all_engraved_numbers)):
+            duplicates = [num for num in all_engraved_numbers if all_engraved_numbers.count(num) > 1]
+            log_error(self, logger, f"Duplicate engraved_numbers found: {set(duplicates)}. Each number can only be used once.")
+            return False
+        
+        return True
+
+m_package.__init_metainfo__()
+
+        # # BUTTON: create batch
+        # if self.create_batch:
+        #     self.create_batch = False
+         
+        #     # Log possible errors
+        #     if not self.approved:
+        #         log_error(self, logger, "The Batch has to be approved before creating the Batch.")
+        #         return
+        #     if self.batch_was_created:
+        #         log_error(self, logger, "The batch has already been created. This can not been undone without deleting the files and entities in the subsection created_entities! If you did that uncheck the solar_cells_were_created checkbox.")
+        #         return
+        #     if self.batch_description not in batch_abbreviations:
+        #         log_error(self, logger, f"This batch description '{self.batch_description}' has no abbreviation yet.")
+        #         return
+            
+        #     for group_settings in self.groups_for_selection_of_processes:
+        #         if group_settings.number_of_substrates != len(group_settings.substrate_engraved_numbers):
+        #             log_error(self, logger, f"The number of the given substrate_engraved_numbers does not match the given number_of_substrates. Please check group: {group_settings.group_number}.")
+        #             return
+        #         #elif group_settings.advanced_solar_cell_settings.number_of_solar_cells_on_substrate != len(group_settings.advanced_solar_cell_settings.solar_cell_names):
+        #         #    log_error(self, logger, f"The number of the given solar_cell_names does not match the given number_of_solar_cells_on_substrate. Please check advanced solar_cell_settings in group: {group_settings.group_number}.")
+        #         #    return
+        #         elif supplier_abbreviations.get(group_settings.substrate.supplier) is None:
+        #             log_error(self, logger, f"The supplier '{group_settings.supplier}' has no abbreviation yet. Please inform the Oasis administrator. Please check in substrate in group: {group_settings.group_number}.")
+        #             return
+   
+        #     # Check if numbers of substrates and engraved substrate numbers are given
+        #     for group_settings in self.groups_for_selection_of_processes:
+        #         if not group_settings.number_of_substrates:
+        #             log_error(self, logger, f"No number of substrates given for group {group_settings.group_number}. Please check.")
+        #             return
+        #         if not group_settings.substrate_engraved_numbers:
+        #             log_error(self, logger, f"No engraved substrate numbers given for group {group_settings.group_number}. Please check.")
+        #             return
+
+        #         # Check if number of substrates does not match with given engraved_numbers
+        #         if len(group_settings.substrate_engraved_numbers) != group_settings.number_of_substrates:
+        #             log_error(self, logger, f"Number of substrates does not match with given engraved_numbers. Please check group: {self.group_number}")
+        #             return
+            
+
+        #     # Check substrate numbers oberall in every group
+        #     # Create empty list and fill it with all engraved numbers from all groups
+        #     all_engraved_numbers =[]
+        #     for group_settings in self.groups_for_selection_of_processes:
+        #         if group_settings.substrate_engraved_numbers:
+        #         # Create empty list and fill it with all engraved numbers from all groups
+        #             if group_settings.substrate_engraved_numbers:
+        #                 all_engraved_numbers += group_settings.substrate_engraved_numbers 
+        #         # Check if any engraved number is in the list more than one time and log error
+        #         for engraved_number in group_settings.substrate_engraved_numbers:
+        #             if all_engraved_numbers.count(engraved_number) > 1:
+        #                 log_error(self, logger, f"The engraved_number {engraved_number} was given for more than 1 substrate. Please Check.")
+        #                 return
+
+
+        #     # Check processes in every group
+        #     for group_settings in self.groups_for_selection_of_processes:
+        #         for i, process in enumerate(group_settings.select_processes):
+        #             if process.present:
+        #                 if not process.selected_process:
+        #                     log_error(self, logger, f"Error in Group: {group_settings.group_number}. No process chosen. Please choose a process or uncheck present.")
+        #                     return
+
+
+        #     # Clear the list with created entities
+        #     self.created_entities = []
+
+        #     # Create Batch folder and Substrate and Sample and SolarCell Folder
+        #     create_directory(self, archive, logger, "Batch")
+        #     create_directory(self, archive, logger, "Batch/Substrates")
+        #     create_directory(self, archive, logger, "Batch/Samples")
+        #     create_directory(self, archive, logger, "Batch/SolarCells")
+
+        #     # CREATE BATCH
+        #     batch_abbreviation = batch_abbreviations[self.batch_description]  
+        #     batch_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}"
+        #     batch_name = f"batch_{batch_lab_id}"
+        #     batch_file_name = f"Batch/{batch_name}.archive.json"
+        #     batch = UMR_InternalBatch(
+        #         name = f"Batch {batch_lab_id}",
+        #         datetime = self.datetime,
+        #         lab_id = batch_lab_id,
+        #         batch_number = self.batch_number,
+        #         batch_description = self.batch_description,
+        #         responsible_person=self.responsible_person,
+        #         description = self.description,
+        #         project = self.project,
+        #         picture_stack = self.picture_stack,
+        #         samples = [],
+        #         substrates = [],
+        #     )
+        #     try:
+        #         create_archive(batch, archive, batch_file_name) #, overwrite=True)
+        #         log_info(self, logger, f"Created batch archive: {batch_file_name} with lab_id '{batch_lab_id}'")
+        #     except Exception as e:
+        #         # Catch Errors, because Batch folder does not exist
+        #         log_error(self, logger, f"An error occured when creating an Internal Batch. --- Exception {e}")
+        #         return
+            
+        #     # Create batch reference in created_entities
+        #     batch_entry_id = get_entry_id_from_file_name(batch_file_name, archive)
+        #     batch_reference = UMR_EntityReference(
+        #         name = batch.name,
+        #         reference=get_reference(archive.metadata.upload_id, batch_entry_id),
+        #         lab_id = batch.lab_id)
+        #     self.created_entities.append(batch_reference)
+        #     log_info(self, logger, f"Added batch reference to created_entities: {batch.name} ({batch.lab_id})")
+
+
+        #     # UPDATE PROCESSES (Effizienter: Jeder Prozess wird nur einmal geupdatet)
+        #     # Store process updates to apply after group creation
+        #     process_updates = {}
+        #     for group_settings in self.groups_for_selection_of_processes:
+        #         for i, process in enumerate(group_settings.select_processes):
+        #             if process.present:
+        #                 mainfile = process.selected_process.m_root().metadata.mainfile
+        #                 if mainfile not in process_updates:
+        #                     with archive.m_context.raw_file(mainfile, 'r') as file:
+        #                         data = json.load(file)
+        #                     process_entry = self.from_dict(data['data'])
+        #                     # Empty samples
+        #                     process_entry.selected_samples = []
+        #                     process_entry.samples = []
+        #                     # Take time from Batch Plan for Process
+        #                     process_entry.datetime = self.datetime
+        #                     # Add position in experimental plan
+        #                     process_entry.position_in_experimental_plan = i+1
+        #                     # Reference Batch
+        #                     process_entry.batch = get_reference(archive.metadata.upload_id, batch_entry_id)
+        #                     # Store for later update (not during normalize)
+        #                     process_updates[mainfile] = process_entry
+        #                     log_info(self, logger, f"Queued process archive: {mainfile} for process '{process_entry.name}' with batch reference")
+
+        #     # CREATE GROUPS
+        #     for group_settings in self.groups_for_selection_of_processes:
+        #         group = UMR_Group(
+        #             name = group_settings.display_name,
+        #             group_number = group_settings.group_number,
+        #             group_description = group_settings.group_description,
+        #             number_of_substrates = group_settings.number_of_substrates,
+        #             description = group_settings.description,
+        #             substrates = [],
+        #         )
+
+        #         # CREATE SUBSTRATES UND SAMPLES EFFIZIENTER
+
+        #         # Sammle alle zu erstellenden Substrate und Samples in Listen, um sie später in einem Rutsch zu verarbeiten.
+        #         substrates_to_create = []
+        #         # samples_to_create = []  # Unused variable, commented out
+        #         map_samples_to_processes = []
+
+        #         for engraved_number in group_settings.substrate_engraved_numbers:
+        #             substrate_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}_{str(engraved_number)}"
+        #             substrate_name = f"substrate_{substrate_lab_id}"
+        #             substrate_file_name = f"Batch/Substrates/{substrate_name}.archive.json"
+
+        #             # Substrate-Objekt erzeugen und Informationen kopieren
+        #             substrate = UMR_InternalSubstrate()
+        #             substrate.m_update_from_dict(group_settings.substrate.m_to_dict())
+        #             substrate.name = f"Substrate {substrate_lab_id}"
+        #             substrate.datetime = self.datetime
+        #             substrate.lab_id = substrate_lab_id
+        #             substrate.batch = get_reference(archive.metadata.upload_id, batch_entry_id)
+        #             substrate.group_number = group_settings.group_number
+        #             substrate.samples = []
+
+        #             # Referenz für später
+        #             substrates_to_create.append((substrate, substrate_file_name, engraved_number))
+
+        #         # Jetzt alle Substrate anlegen und Referenzen sammeln
+        #         substrate_references = {}
+        #         for substrate, substrate_file_name, engraved_number in substrates_to_create:
+        #             #create_archive(substrate, archive, substrate_file_name)
+        #             #log_info(self, logger, f"Created substrate archive: {substrate_file_name} with lab_id '{substrate.lab_id}' for group {group_settings.group_number}")
+
+        #             substrate_entry_id = get_entry_id_from_file_name(substrate_file_name, archive)
+        #             substrate_reference = UMR_EntityReference(
+        #                 name=substrate.name,
+        #                 reference=get_reference(archive.metadata.upload_id, substrate_entry_id),
+        #                 lab_id=substrate.lab_id)
+        #             batch.substrates.append(substrate_reference)
+        #             group.substrates.append(substrate_reference)
+        #             self.created_entities.append(substrate_reference)
+        #             substrate_references[substrate.lab_id] = (substrate, substrate_reference, substrate_file_name, substrate_entry_id)
+
+        #         # Jetzt alle Samples anlegen und Referenzen sammeln
+        #         for substrate_lab_id, (substrate, substrate_reference, substrate_file_name, substrate_entry_id) in substrate_references.items():
+        #             engraved_number = substrate_lab_id.split('_')[-1]
+        #             sample_lab_id = f"{batch_abbreviation}_{str(self.batch_number).zfill(3)}_{str(engraved_number)}_X"
+        #             sample_name = f"sample_{sample_lab_id}"
+        #             sample_file_name = f'Batch/Samples/{sample_name}.archive.json'
+        #             sample = UMR_BasicSample(
+        #                 name=f"Sample {sample_lab_id}",
+        #                 datetime=self.datetime,
+        #                 lab_id=sample_lab_id,
+        #                 batch=get_reference(archive.metadata.upload_id, batch_entry_id),
+        #                 substrate=get_reference(archive.metadata.upload_id, substrate_entry_id),
+        #                 group_number=group_settings.group_number,
+        #                 width=group_settings.substrate.width,
+        #                 length=group_settings.substrate.length,
+        #                 processes=[],
+        #             )
+        #             create_archive(sample, archive, sample_file_name)
+        #             sample_entry_id = get_entry_id_from_file_name(sample_file_name, archive)
+        #             sample_reference = UMR_EntityReference(
+        #                 name=sample.name,
+        #                 reference=get_reference(archive.metadata.upload_id, sample_entry_id),
+        #                 lab_id=sample.lab_id)
+        #             substrate.samples.append(sample_reference)
+        #             batch.samples.append(sample_reference)
+        #             group.samples.append(sample_reference)
+        #             self.created_entities.append(sample_reference)
+
+        #             # Prozesse für spätere Updates sammeln
+        #             for i, process in enumerate(group_settings.select_processes):  
+
+        #                 if process.present:
+        #                     mainfile = process.selected_process.m_root().metadata.mainfile
+        #                     map_samples_to_processes.append((mainfile, sample_reference))
+
+        #             # Substrate nach Sample-Referenz aktualisieren
+        #             substrate.normalize(archive, logger)
+        #             create_archive(substrate, archive, substrate_file_name)
+        #             log_info(self, logger, f"Created substrate archive: {substrate_file_name} with lab_id '{substrate.lab_id}' for group {group_settings.group_number}")
+        #             #create_archive(substrate, archive, substrate_file_name, overwrite=True)
+        #             #log_info(self, logger, f"Updated substrate archive: {substrate_file_name} with lab_id '{substrate.lab_id}' for group {group_settings.group_number}")
+
+        #         # Prozesse effizient updaten: pro Prozess nur einmal öffnen/speichern
+        #         process_sample_map = {}
+        #         for mainfile, sample_reference in map_samples_to_processes:
+        #             process_sample_map.setdefault(mainfile, []).append(sample_reference)
+
+        #         for mainfile, sample_refs in process_sample_map.items():
+        #             # Use already updated process
+        #             process_entry = process_updates[mainfile]
+        #             # Add samples directly to the process in the dictionary
+        #             process_entry.selected_samples.extend(sample_refs)
+        #             log_info(self, logger, f"Queued samples {[s.lab_id for s in sample_refs]} to process entry {process_entry.name}")
+
+        #         # Append groups to batch
+        #         batch.groups.append(group)
+        #     # Update Batch Archive (because of appended solar cell and substrate references)
+        #     create_archive(batch, archive, batch_file_name, overwrite=True)
+        #     log_info(self, logger, f"Updated batch archive: {batch_file_name} with lab_id '{batch.lab_id}' for group {group_settings.group_number}")
+
+        #     # NOW: Write all queued process updates directly (after normalize phase)
+        #     for mainfile, process_entry in process_updates.items():
+        #         create_archive(process_entry, archive, mainfile, overwrite=True)
+        #         #with archive.m_context.raw_file(mainfile, 'w') as file:
+        #         #    json.dump({'data': process_entry.m_to_dict()}, file)
+        #         #log_info(self, logger, f"Updated process archive: {mainfile} for process '{process_entry.name}'")
+
+        #     # Check box batch_was_created
+        #     self.batch_was_created = True 
+        
+
+
+        # # Sort groups
+        # self.groups_for_selection_of_processes = sorted(self.groups_for_selection_of_processes, key=lambda x: x.group_number)
+        # # Sort Processes
+        # self.standard_processes_for_variation = sorted(self.standard_processes_for_variation, key=lambda x: x.position_in_experimental_plan)
+
+        # # Normalize Created Entiteies im gleichen Prozess wie creaing those archives hat ncht geklappt.
+        # # Entweder Proxy not found oder fehlende oder defekte Referenz
+
+
+        # ### Automatically sort and check positions_in_experimental_plan in Subsections ###
+
+        # # Enter position in experimental plan automatically in STANDARD_PROCESSES
+        # if self.standard_processes:
+        #     for i, process in enumerate(self.standard_processes):
+        #         if hasattr(process, 'position_in_experimental_plan'):
+        #             if not getattr(process, 'position_in_experimental_plan', None):
+        #                 process.position_in_experimental_plan = (i+1)
+
+        #     # Check for duplicates in position_in_experimental_plan
+        #     processes_list = [process for process in self.standard_processes if hasattr(process, 'position_in_experimental_plan')]
+        #     positions = [process.position_in_experimental_plan for process in processes_list]
+        #     if len(positions) != len(set(positions)):
+        #         log_error(self, logger, f"Duplicate position_in_experimental_plan values found in 'standard_processes' Subsection (Batch Plan {self.batch_id}).- Positions: {positions} | Len(positions): {len(positions)} | Set(positions): {set(positions)} | Len(set(positions)): {len(set(positions))}")
+        #         return
+        #     # Sort standard_processes 
+        #     processes_list.sort(key=lambda x: x.position_in_experimental_plan)
+        #     self.standard_processes = processes_list
+
+        # # Enter position in experimental plan automatically in STANDARD_PROCESSES_FOR_VARIATION
+        # if self.standard_processes_for_variation:
+        #     for i, process in enumerate(self.standard_processes_for_variation):
+        #         if hasattr(process, 'position_in_experimental_plan'):
+        #             if not getattr(process, 'position_in_experimental_plan', None):
+        #                 process.position_in_experimental_plan = (i+1)
+        #     # Check for duplicates in position_in_experimental_plan
+        #     processes_list = [process for process in self.standard_processes_for_variation if hasattr(process, 'position_in_experimental_plan')]
+        #     positions = [process.position_in_experimental_plan for process in processes_list]
+        #     if len(positions) != len(set(positions)):
+        #         log_error(self, logger, f"Duplicate position_in_experimental_plan values found in 'standard_processes_for_variation' Subsection (Batch Plan {self.batch_id}). - Positions: {positions} | Len(positions): {len(positions)} | Set(positions): {set(positions)} | Len(set(positions)): {len(set(positions))}")
+        #         return
+        #     # Sort standard_processes_for_variation)
+        #     processes_list.sort(key=lambda x: x.position_in_experimental_plan)
+        #     self.standard_processes_for_variation = processes_list
+
+        # # Clear created_entities list if no batch was created
+        # if not self.batch_was_created:
+        #     self.created_entities = []
+
+
+
+
+        # super().normalize(archive, logger)
 
 
 
@@ -1296,7 +1590,3 @@ class UMR_BatchPlan(BaseSection, EntryData):
                                 #    solar_cell.layers.append(process.selected_process.m_resolved().layer)
 
                         #log_info(self, logger, f"SOLAR CELL: {solar_cell}")
-
-
-
-m_package.__init_metainfo__()

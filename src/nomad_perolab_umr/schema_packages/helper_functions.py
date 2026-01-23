@@ -483,14 +483,18 @@ def add_process_and_layer_to_sample(ELN_entry, archive, logger, sample_ref, proc
             sample_entry.layers.append(layer.m_resolved().m_copy(deep=True))
 
     # Add the sample reference to the ELN entry's samples list
-    ELN_entry.samples.append(sample_ref.m_resolved().m_copy(deep=True)) # without m_copy it would be a CompositeSystem Reference not a UMR_EntityReference!
+    #ELN_entry.samples.append(sample_ref.m_resolved().m_copy(deep=True)) # without m_copy it would be a CompositeSystem Reference not a UMR_EntityReference!
 
-    #ELN_entry.selected_samples.remove(sample_ref)
+    # Use m_copy(deep=False) for shallow copy to avoid issues with parent class SubSections
+    resolved_sample = sample_ref.m_resolved()
+    sample_copy = resolved_sample.m_copy(deep=False)
+    ELN_entry.samples.append(sample_copy)
 
-    # Save updated sample back to the archive, allowing overwrites
-    create_archive(sample_entry, archive, mainfile, overwrite=True)
+    # PERFORMANCE: Don't save here - will be batched later to reduce I/O
+    # The caller is responsible for saving all updated samples at once
+    # create_archive(sample_entry, archive, mainfile, overwrite=True)
 
-    return sample_entry
+    return sample_entry, mainfile
 
 
 
@@ -589,35 +593,42 @@ def create_solar_cell_references(ELN_entry, archive, logger, sample_ref, list_so
     ELN_entry.samples.extend(list_solar_cell_references) #.m_resolved().m_copy(deep=True)) # without m_copy it would be a CompositeSystem Reference not a UMR_EntityReference!
 
 
-    ## Add solar cell references to the associated batch 
-    # Resolve the batch entry from the sample reference    
-    mainfile = sample_ref.reference.batch.m_root().metadata.mainfile
-    batch = get_entry_by_mainfile(ELN_entry, archive, mainfile)
+    # PERFORMANCE: Return batch/substrate info for batched saving later
+    # Don't save here - collect all updates first
+    try:
+        batch_resolved = sample_ref.reference.batch.m_resolved()
+        batch_mainfile = batch_resolved.m_root().metadata.mainfile
+        batch = get_entry_by_mainfile(ELN_entry, archive, batch_mainfile)
+        
+        # Append all solar cell references to the batch's samples list
+        batch.samples.extend(list_solar_cell_references)
+        
+        # Add the solar cell references to the appropriate group in the batch
+        group_number = sample_ref.reference.group_number
+        if group_number and (1 <= group_number <= len(batch.groups)):
+            batch.groups[group_number-1].samples.extend(list_solar_cell_references)
+        elif group_number:
+            log_error(ELN_entry, logger, f"Invalid group number '{group_number}' for batch.")
+    except Exception as e:
+        log_error(ELN_entry, logger, f"Could not update batch: {e}")
+        batch = None
+        batch_mainfile = None
+
+    # Get substrate info
+    try:
+        substrate_resolved = sample_ref.reference.substrate.m_resolved()
+        substrate_mainfile = substrate_resolved.m_root().metadata.mainfile
+        substrate = get_entry_by_mainfile(ELN_entry, archive, substrate_mainfile)
+        
+        # Append all solar cell references to the substrate's samples list
+        substrate.samples.extend(list_solar_cell_references)
+    except Exception as e:
+        log_error(ELN_entry, logger, f"Could not update substrate: {e}")
+        substrate = None
+        substrate_mainfile = None
     
-    # Append all solar cell references to the batch's samples list
-    batch.samples.extend(list_solar_cell_references)
-
-    # Add the solar cell references to the appropriate group in the batch
-    group_number = sample_ref.reference.group_number
-    if group_number is None or group_number < 1 or group_number > len(batch.groups):
-        log_error(ELN_entry, logger, f"Invalid group number '{group_number}' for batch '{mainfile}'.")
-
-    batch.groups[group_number-1].samples.extend(list_solar_cell_references)
-
-    # Save the updated batch back to the archive
-    create_archive(batch, archive, mainfile, overwrite=True)
-
-    ## Add solar cell references to the associated substrate
-
-    # Resolve the substrate entry from the sample reference
-    mainfile = sample_ref.reference.substrate.m_root().metadata.mainfile
-    substrate = get_entry_by_mainfile(ELN_entry, archive, mainfile)
-
-    # Append all solar cell references to the substrate's samples list
-    substrate.samples.extend(list_solar_cell_references)
-
-    # Save the updated substrate back to the archive
-    create_archive(substrate, archive, mainfile, overwrite=True)
+    # Return entries for batched saving
+    return batch, batch_mainfile, substrate, substrate_mainfile
 
 
 

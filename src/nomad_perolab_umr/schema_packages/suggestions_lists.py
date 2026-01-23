@@ -122,6 +122,7 @@ supplier_chemicals_abbreviations = {
     "LinXole AB": "LinXole",
     "Xiamen Funano Material Technology Co., Ltd": "Funano",
     "Dockweiler Chemicals GmbH": "Dock",
+    "Yingkou Shangsheng Business Co.,Ltd.": "Yingkou",
 }
 
 # Suppliers of Chemicals

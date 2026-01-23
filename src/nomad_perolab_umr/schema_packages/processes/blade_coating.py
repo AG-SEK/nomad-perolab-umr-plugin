@@ -148,11 +148,17 @@ class UMR_BladeCoatingELN(UMR_ELNProcess, UMR_BladeCoating):
                 log_error(self, logger, 'No Samples Selected. Please add the samples on which this process should be applied to the selected_samples section')
                 return
             
+            # PERFORMANCE OPTIMIZATION: Collect all updates and save once at the end
+            samples_to_save = {}  # {mainfile: sample_entry}
+            batches_to_save = {}  # {mainfile: batch_entry}
+            substrates_to_save = {}  # {mainfile: substrate_entry}
+            
             # Create Process and add it to sample entry 
             for sample_ref in self.selected_samples:
                 process_entry = UMR_BladeCoating()
-                sample_entry = add_process_and_layer_to_sample(self, archive, logger, sample_ref, process_entry)
-                # return new sample entry with new process (because this is not yet saved in the referenced sample (sample_ref))
+                sample_entry, mainfile = add_process_and_layer_to_sample(self, archive, logger, sample_ref, process_entry)
+                # Collect sample for later batch save
+                samples_to_save[mainfile] = sample_entry
 
                 list_solar_cell_references=[]
                 # Create Solar Cells
@@ -167,8 +173,24 @@ class UMR_BladeCoatingELN(UMR_ELNProcess, UMR_BladeCoating):
                             lab_id = solar_cell_entry.lab_id)
                         list_solar_cell_references.append(solar_cell_reference)
                     
-                    # Append List of references to batch and substrate entries
-                    create_solar_cell_references(self, archive, logger, sample_ref, list_solar_cell_references)
+                    # Collect batch and substrate updates (don't save yet)
+                    batch, batch_mainfile, substrate, substrate_mainfile = create_solar_cell_references(
+                        self, archive, logger, sample_ref, list_solar_cell_references
+                    )
+                    
+                    # Collect for batched save (use latest version if multiple samples reference same batch/substrate)
+                    if batch and batch_mainfile:
+                        batches_to_save[batch_mainfile] = batch
+                    if substrate and substrate_mainfile:
+                        substrates_to_save[substrate_mainfile] = substrate
+
+            # PERFORMANCE: Save all updated entries at once (batched I/O)
+            for mainfile, sample_entry in samples_to_save.items():
+                create_archive(sample_entry, archive, mainfile, overwrite=True)
+            for mainfile, batch_entry in batches_to_save.items():
+                create_archive(batch_entry, archive, mainfile, overwrite=True)
+            for mainfile, substrate_entry in substrates_to_save.items():
+                create_archive(substrate_entry, archive, mainfile, overwrite=True)
 
             # Empty selected_samples Section
             self.selected_samples = []

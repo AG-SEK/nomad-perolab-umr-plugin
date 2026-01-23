@@ -782,6 +782,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
     def normalize(self, archive, logger):
         self.method = "Batch Plan"
         #archive.metadata.entry_type = "UMR_BatchPlan"
+        super().normalize(archive, logger)
 
         # Check current status of Batch Plan and automatically check checkboxes
         if not (self.batch_description and self.batch_number and self.responsible_person):
@@ -1061,7 +1062,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
             )
             
             # Get batch entry ID (will be created at the end)
-            batch_entry_id = f"{archive.metadata.upload_id}/{batch_file_name}"
+            batch_entry_id = get_entry_id_from_file_name(batch_file_name, archive)
             batch_reference = UMR_EntityReference(
                 name=batch.name,
                 reference=get_reference(archive.metadata.upload_id, batch_entry_id),
@@ -1108,7 +1109,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
                         datetime=self.datetime,
                         lab_id=sample_lab_id,
                         batch=get_reference(archive.metadata.upload_id, batch_entry_id),
-                        substrate = get_reference(archive.metadata.upload_id, substrate_entry_id)
+                        substrate = get_reference(archive.metadata.upload_id, substrate_entry_id),
                         #substrate=get_reference(archive.metadata.upload_id, f"{archive.metadata.upload_id}/{substrate_file_name}"),
                         group_number=group_settings.group_number,
                         width=group_settings.substrate.width,
@@ -1199,7 +1200,6 @@ class UMR_BatchPlan(BaseSection, EntryData):
         # Normalize Created Entiteies im gleichen Prozess wie creaing those archives hat ncht geklappt.
         # Entweder Proxy not found oder fehlende oder defekte Referenz
 
-        super().normalize(archive, logger)
 
     def _validate_batch_plan(self, logger):
         """Validate all batch plan requirements before creation"""

@@ -155,18 +155,19 @@ suggestions_supplier_instruments = [supplier for supplier in supplier_instrument
 # Persons/ User
 suggestions_persons = [
     "Aaron Schüller-Ruhl",
-    "Lukas Wagner",
+    "Ali Reza Nazari Pour",
+    "Andrej Huber",
+    "Annika Schneider",
+    "Christopher Janas",
+    "Dominik Muth",
+    "Gülüsüm Babayeva",	
+    "Immo Petersen",			
     "Jan Christoph Goldschmidt",
     "Lea Obermüller",
-    "Dominik Muth",
-    "Sandra Schmidt",
-    "Christopher Janas",
-    "Ali Reza Nazari Pour",
-    "Annika Schneider",
+    "Lukas Wagner",
     "Malwine Lühder",
-    "Gülüsüm Babayeva",	
-    "Max Gorenflo",
-    "Immo Petersen",			
+    "Nora Engel"
+    "Tim Timewell",
 ]
 
 # Dictionary with batch abbreviations

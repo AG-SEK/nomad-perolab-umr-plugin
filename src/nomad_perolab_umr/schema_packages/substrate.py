@@ -350,7 +350,7 @@ class UMR_AddStandardSubstrateLot(Entity):
                     log_warning(self, logger, f"The archive '{directory}/{lab_id}.archive.json' was created")
                   
                     self.m_parent.normalize(archive, logger)
-                    self.m_parent.add_substrate_lot = None
+                    self.m_parent.add_substrate_lot = UMR_AddStandardSubstrateLot()
 
         super().normalize(archive, logger)
 

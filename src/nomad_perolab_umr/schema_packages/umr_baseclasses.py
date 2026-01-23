@@ -128,6 +128,7 @@ class UMR_Layer(LayerProperties):
     m_def = Section(
         label_quantity='layer_type',
         a_eln=dict(
+            hide = ["layer_chemical_id", "product_info"], # New quantities from LayerProperties Baseclasses
             properties=dict(
                 order=['layer_name', 
                        'layer_type','layer_material_name',
@@ -146,6 +147,7 @@ class UMR_Layer(LayerProperties):
         type=str,
         description="Automatically generated from type and material")
     
+    # Deprecated thickness parameter
     thickness = Quantity(  # layer thickness
         type=np.float64,
         unit='nm',
@@ -176,6 +178,7 @@ class UMR_Layer(LayerProperties):
 
     def normalize(self, archive, logger):
 
+
         if self.layer_type and self.layer_name:
             self.display_name = f"{self.layer_type} - {self.layer_name}"
 
@@ -188,6 +191,14 @@ class UMR_Layer(LayerProperties):
         if hasattr(self.m_parent, 'processes'):
             log_info(self, logger, f"Layer normalizer: SET POSITION IN LAYER STACK - parent section: {self.m_parent} - index: {self.m_parent_index}")
             self.position_in_layer_stack = self.m_parent_index + 1
+
+
+        # DEprecated thickness parameter
+        if self.layer_thickness:
+            self.thickness = self.layer_thickness
+        elif self.thickness:
+            self.layer_thickness = self.thickness
+
 
         super().normalize(archive, logger)
 

@@ -405,6 +405,7 @@ class UMR_StandardSubstrate(UMR_Substrate, EntryData):
     lots = Quantity(
         type = ArchiveSection,
         shape = ['*'],
+        label_quantity = 'lab_id',
     )  
 
     files = SubSection(section_def=UMR_FileWithDescription, repeats=True)

@@ -185,6 +185,7 @@ suggestions_projects = [
     "Diamond",
     "PeroGAIN",
     "KPFM",
+    "",  # Empty entry for no project
 ]
 
 # List with paths to variation parameters

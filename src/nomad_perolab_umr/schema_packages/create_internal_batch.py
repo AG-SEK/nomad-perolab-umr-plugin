@@ -198,7 +198,13 @@ class UMR_ParameterVariation(ParametersVaried):
                 # Append different proccesses for each parameter variation to SubSection varied_processes
                 self.varied_processes = []
                 for parameter_tuple in list_parameters:    
-                    process = self.m_parent.process_reference.m_resolved().m_copy(deep=True)
+                    #process = self.m_parent.process_reference.m_resolved().m_copy(deep=True)  # Das hat nicht mehr geklappt data wurde komplett gelösch !!!!!!!!!!!!!! (deep copy verscuht auch parent Klaaen mitzunehemn)
+
+                    # Convert to dict first, then create new instance
+                    process_dict = self.m_parent.process_reference.m_resolved().m_to_dict()
+                    process_class = type(self.m_parent.process_reference.m_resolved())
+                    process = process_class.m_from_dict(process_dict)
+
                     path, value, unit = parameter_tuple
                     try:
                         # Change varied value in process entry
@@ -212,6 +218,7 @@ class UMR_ParameterVariation(ParametersVaried):
                     # Normalize and append varied process
                     process.normalize(archive, logger)
                     self.m_parent.varied_processes.append(process)
+
                 
                 # Fill fields in parent section "VaryProcess"
                 self.m_parent.process_is_varied = True
@@ -298,17 +305,26 @@ class UMR_VaryProcess(ArchiveSection):
                 return
             else:
                 # Append given number of unvaried processes to SubSection varied_processes
-                self.varied_processes = []
+                #self.varied_processes = []
                 for i in range(self.number_of_variations):  
-                    process = self.process_reference.m_resolved().m_copy(deep=True)
+                    #process = self.process_reference.m_resolved().m_copy(deep=True)
+                    # Convert to dict first, then create new instance
+                    process_dict = self.process_reference.m_resolved().m_to_dict()
+                    process_class = type(self.process_reference.m_resolved())
+                    process = process_class.m_from_dict(process_dict)
+
                     process.name += f" - {i}"
                     self.varied_processes.append(process)
+                self.process_is_varied = True # Check process_is_varied checkbox
+
                    
-        # Check process_is_varied checkbox if neccesary
-        if not self.varied_processes:
-            self.process_is_varied = False
-        else:
-            self.process_is_varied = True
+        # Delete variations if checkbox is unchecked
+        if not self.process_is_varied:
+            self.parameter_variation = None
+            self.varied_processes = []
+           
+
+
                     
 
 
@@ -501,9 +517,10 @@ class UMR_GroupSettings(UMR_Group):
 
         # Warning if number of substrates does not match given engraved_numbers
         if self.substrate_engraved_numbers:
-            if len(self.substrate_engraved_numbers) != self.number_of_substrates:
-                log_error(self, logger, f"Number of substrates does not match with given engraved_numbers. Please check group: {self.group_number}")
-                return
+            self.number_of_substrates = len(self.substrate_engraved_numbers)
+            #if len(self.substrate_engraved_numbers) != self.number_of_substrates:
+            #    log_error(self, logger, f"Number of substrates does not match with given engraved_numbers. Please check group: {self.group_number}")
+            #    return
             
         # Warning if a substrate engraved number is used in a different group
         if self.substrate_engraved_numbers:
@@ -926,8 +943,8 @@ class UMR_BatchPlan(BaseSection, EntryData):
                     self.standard_processes_for_variation.append(vary_process)
                     
                 # Empty standard processes
-                #self.standard_processes = [UMR_ELNProcess()] - > Because Error shows up
-                self.standard_processes = []
+                self.standard_processes = [UMR_ELNProcess()] #- > Because Error shows up
+                #self.standard_processes = []
                 self.vary_process = True
 
 
@@ -1233,7 +1250,7 @@ class UMR_BatchPlan(BaseSection, EntryData):
                 return False
             
             # Check supplier
-            if supplier_abbreviations.get(group_settings.substrate.supplier) is None:
+            if supplier_chemicals_abbreviations.get(group_settings.substrate.supplier) is None:
                 log_error(self, logger, f"The supplier '{group_settings.substrate.supplier}' has no abbreviation yet. Please inform the Oasis administrator. Please check substrate in group: {group_settings.group_number}.")
                 return False
             

@@ -54,7 +54,7 @@ class UMR_EntityReference(EntityReference):
 
     def normalize(self, archive, logger):
         super().normalize(archive, logger)
-        if self.reference.name:
+        if self.reference and self.reference.name:
             self.name = self.reference.name
 
         

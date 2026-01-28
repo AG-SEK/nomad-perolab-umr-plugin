@@ -551,7 +551,7 @@ def create_solar_cell_from_basic_sample(ELN_entry, archive, logger, sample_entry
     if ELN_entry.solar_cell_settings.architecture:
         solar_cell_entry.architecture = ELN_entry.solar_cell_settings.architecture # Use timestamp from ELN
     else:
-        log_warning(ELN_entry, logger, f"No architecture given i the solar cell settings for this Process: {ELN_entry}")
+        log_warning(ELN_entry, logger, f"No architecture given in the solar cell settings for this Process: {ELN_entry}")
 
     
     # Save the solar cell entry to the archive under the generated file name
@@ -605,10 +605,13 @@ def create_solar_cell_references(ELN_entry, archive, logger, sample_ref, list_so
         
         # Add the solar cell references to the appropriate group in the batch
         group_number = sample_ref.reference.group_number
-        if group_number and (1 <= group_number <= len(batch.groups)):
-            batch.groups[group_number-1].samples.extend(list_solar_cell_references)
-        elif group_number:
-            log_error(ELN_entry, logger, f"Invalid group number '{group_number}' for batch.")
+        if group_number:
+            # Search for the group with the matching group_number instead of assuming sorted indices
+            matching_group = next((g for g in batch.groups if hasattr(g, 'group_number') and g.group_number == group_number), None)
+            if matching_group:
+                matching_group.samples.extend(list_solar_cell_references)
+            else:
+                log_error(ELN_entry, logger, f"Group with number '{group_number}' not found in batch.")
     except Exception as e:
         log_error(ELN_entry, logger, f"Could not update batch: {e}")
         batch = None

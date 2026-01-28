@@ -135,12 +135,13 @@ class UMR_BasicSample(SolcarCellSample):  # inherit from SolcarCellSample, becau
         # CREATE MEASUREMENTS SUBSECTION
         if not self.measurements:
             self.measurements = UMR_MeasurementsSubsection()
+
         # COLLECT MEASUREMENTS
-        # self.measurements.jv_measurements = collect_referencing_entries(self, archive, logger, "UMR_JVMeasurement")
-        # self.measurements.eqe_measurements = collect_referencing_entries(self, archive, logger, "UMR_EQEMeasurement")
-        # self.measurements.stability_measurements = collect_referencing_entries(self, archive, logger, "UMR_StabilityTest")
-        # self.measurements.mppt_measurements = collect_referencing_entries(self, archive, logger, "UMR_MPPTracking")
-        # self.measurements.other_measurements = collect_referencing_entries(self, archive, logger, ['UMR_StabilizedOpenCircuitVoltage','UMR_StabilizedShortCircuitCurrent', 'UMR_ConnectionTest'])
+        self.measurements.jv_measurements = collect_referencing_entries(self, archive, logger, "UMR_JVMeasurement")
+        self.measurements.eqe_measurements = collect_referencing_entries(self, archive, logger, "UMR_EQEMeasurement")
+        self.measurements.stability_measurements = collect_referencing_entries(self, archive, logger, "UMR_StabilityTest")
+        self.measurements.mppt_measurements = collect_referencing_entries(self, archive, logger, "UMR_MPPTracking")
+        self.measurements.other_measurements = collect_referencing_entries(self, archive, logger, ['UMR_StabilizedOpenCircuitVoltage','UMR_StabilizedShortCircuitCurrent', 'UMR_ConnectionTest'])
 
         # SORT MEASUREMENTS
         # self.measurements.jv_measurements = sorted(self.measurements.jv_measurements, key=lambda x: x.datetime)
@@ -156,6 +157,7 @@ class UMR_BasicSample(SolcarCellSample):  # inherit from SolcarCellSample, becau
         self.measurements.normalize(archive, logger)
 
         # COLLECT PROCESSES
+        # NOT ENCCESARY
         #list_processes = ['UMR_SpinCoating', 'UMR_Cleaning', 'UMR_BladeCoating', 'UMR_SprayPyrolysis']
         #self.processes_ref.processes = collect_referencing_entries(self, archive, logger, list_processes)
 

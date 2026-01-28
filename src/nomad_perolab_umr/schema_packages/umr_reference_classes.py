@@ -44,7 +44,7 @@ class UMR_EntityReference(EntityReference):
     m_def = Section(
         label_quantity='name',
         a_eln=dict(
-            overview=True, # Jede Referenz wird dann als ein Reiter angezeigt, ncht so optimal
+            #overview=True, # Jede Referenz wird dann als einzelner Reiter angezeigt, ncht so optimal
             properties=dict(
                 order=['name', 'reference', 'lab_id','description'])))
 
@@ -56,6 +56,7 @@ class UMR_EntityReference(EntityReference):
         super().normalize(archive, logger)
         try:
             if self.reference and self.reference.m_proxy_resolve() is not None:
+                log_warning(self, logger, f"RESOLVED REFERENCE in UMR_EntityReference: {self.reference}")
                 if self.reference.name:
                     self.name = self.reference.name
         except Exception as e:

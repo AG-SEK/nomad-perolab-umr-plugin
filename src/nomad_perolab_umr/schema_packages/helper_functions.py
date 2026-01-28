@@ -218,21 +218,21 @@ def collect_referencing_entries(entry, archive, logger, entry_type):
         'entry_references.target_entry_id': archive.metadata.entry_id,
         'entry_type:any': entry_type}
     search_result = UMR_search(archive, query)
-    #log_info(entry, logger, f'COLLECT REFERENCING {entry_type} ENTRIES: search result data: {search_result.data} | length: {len(search_result.data)}')
     
     # Extract data from search results
     if search_result.data:
+        log_info(entry, logger, f'Collected {len(search_result.data)} referencing entries of type(s): {entry_type}')
         for res in search_result.data:
             try:
                 upload_id, entry_id = res['upload_id'], res['entry_id']
                 # Create reference
                 reference = get_reference(upload_id, entry_id)
                 references.append(reference)
-                log_info(entry, logger, f'INFORMATION ABOUT COLLECTED {entry_type} ENTRIES: upload_id: {upload_id} | entry_id: {entry_id}')
             except Exception as e:
-                log_error(entry, logger, f"Error during processing (Collecting {entry_type} Entries) --- EXEPTION:{e}")
+                log_error(entry, logger, f"Error during processing (Collecting {entry_type} Entries) --- EXCEPTION: {e}")
     else: 
-        log_warning(entry, logger, f'No {entry_type} Entries referencing this entry: {entry.lab_id}')
+        entry_identifier = getattr(entry, 'lab_id', None) or getattr(entry, 'name', 'unknown')
+        log_info(entry, logger, f'No {entry_type} entries referencing this entry: {entry_identifier}')
 
     return references
 

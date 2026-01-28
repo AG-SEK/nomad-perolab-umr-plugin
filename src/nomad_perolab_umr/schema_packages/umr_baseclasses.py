@@ -98,12 +98,18 @@ class UMR_MeasurementsSubsection(ArchiveSection):
             number_of_best_measurements = check_best_measurements(self, archive, logger, self.jv_measurements)
             if number_of_best_measurements == 0:
                 # Find highest Reverse efficiency measurement and make it best_measurement
-                highest_efficiency_entry = max(self.jv_measurements, key=lambda obj: obj.jv_curve[0].efficiency)
-                # Set best_measurement and update archive
-                highest_efficiency_entry.best_measurement=True
-                highest_efficiency_entry_mainfile = highest_efficiency_entry.m_root().metadata.mainfile
-                create_archive(highest_efficiency_entry, archive, highest_efficiency_entry_mainfile, overwrite=True)
-                log_warning(self, logger, f"The measurement {highest_efficiency_entry.name} -  was set to best_measurement because of the highest reverse efficiency.")
+                # Filter out measurements without jv_curve data
+                valid_measurements = [m for m in self.jv_measurements if hasattr(m, 'jv_curve') and m.jv_curve and len(m.jv_curve) > 0]
+                
+                if valid_measurements:
+                    highest_efficiency_entry = max(valid_measurements, key=lambda obj: obj.jv_curve[0].efficiency)
+                    # Set best_measurement and update archive
+                    highest_efficiency_entry.best_measurement = True
+                    highest_efficiency_entry_mainfile = highest_efficiency_entry.m_root().metadata.mainfile
+                    create_archive(highest_efficiency_entry, archive, highest_efficiency_entry_mainfile, overwrite=True)
+                    log_warning(self, logger, f"The measurement {highest_efficiency_entry.name} - was set to best_measurement because of the highest reverse efficiency.")
+                else:
+                    log_warning(self, logger, "No JV measurements with valid curve data found to determine best measurement.")
 
 
         if self.eqe_measurements:

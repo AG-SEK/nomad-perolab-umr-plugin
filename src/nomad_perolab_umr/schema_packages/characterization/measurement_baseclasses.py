@@ -32,8 +32,10 @@ from nomad.metainfo import (
     MEnum,
     Quantity,
     Section,
+    SubSection,
 )
 
+from ..umr_reference_classes import UMR_EntityReference
 from ..categories import *
 
 # Imports UMR
@@ -93,6 +95,9 @@ class UMR_MeasurementBaseclass(ArchiveSection):
     
     # Helper variable to match JV Measurements to MPP Tracking or Stability Test Measureemnts
     directory = Quantity(type=str)
+
+    samples = SubSection(
+        section_def=UMR_EntityReference, repeats=True)
     
 
 ################################ TRACKING BASECLASS ################################

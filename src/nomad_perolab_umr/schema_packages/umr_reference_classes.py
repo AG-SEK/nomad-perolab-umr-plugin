@@ -44,7 +44,7 @@ class UMR_EntityReference(EntityReference):
     m_def = Section(
         label_quantity='name',
         a_eln=dict(
-            #overview=True, # Jede Referenz wird dann als ein Reiter angezeigt, ncht so optimal
+            overview=True, # Jede Referenz wird dann als ein Reiter angezeigt, ncht so optimal
             properties=dict(
                 order=['name', 'reference', 'lab_id','description'])))
 
@@ -54,8 +54,13 @@ class UMR_EntityReference(EntityReference):
 
     def normalize(self, archive, logger):
         super().normalize(archive, logger)
-        if self.reference and self.reference.name:
-            self.name = self.reference.name
+        try:
+            if self.reference and self.reference.m_proxy_resolve() is not None:
+                if self.reference.name:
+                    self.name = self.reference.name
+        except Exception as e:
+            # Reference could not be resolved, skip setting name
+            log_warning(self, logger, f"Could not resolve reference in UMR_EntityReference: {e}")
 
         
 # Reference class for Instruments
@@ -72,8 +77,11 @@ class UMR_InstrumentReference(InstrumentReference):
 
     def normalize(self, archive, logger):
         super().normalize(archive, logger)
-        if self.reference:
-            self.name = self.reference.name
+        try:
+            if self.reference and self.reference.m_proxy_resolve() is not None:
+                self.name = self.reference.name
+        except Exception as e:
+            log_warning(self, logger, f"Could not resolve reference in UMR_InstrumentReference: {e}")
         # Run super at end of normalizer otherwise name is already set to lab_id!
 
 
@@ -85,8 +93,11 @@ class UMR_ChemicalReference(EntityReference):
     label = Quantity(type=str)
 
     def normalize(self, archive, logger):
-        if self.reference:
-            self.lab_id = self.reference.lab_id
+        try:
+            if self.reference and self.reference.m_proxy_resolve() is not None:
+                self.lab_id = self.reference.lab_id
+        except Exception as e:
+            log_warning(self, logger, f"Could not resolve reference in UMR_ChemicalReference: {e}")
         #self.name = self.reference.name
         self.label = f"{self.lab_id}"
         super().normalize(archive, logger)
@@ -100,9 +111,13 @@ class UMR_MeasurementReference(SectionReference, PlotSection):
     display_name = Quantity(type=str)
 
     def normalize(self, archive, logger):
-        self.name = self.reference.method
-        self.display_name = f"{self.name} {self.reference.datetime}"
-        self.figures=self.reference.figures
+        try:
+            if self.reference and self.reference.m_proxy_resolve() is not None:
+                self.name = self.reference.method
+                self.display_name = f"{self.name} {self.reference.datetime}"
+                self.figures = self.reference.figures
+        except Exception as e:
+            log_warning(self, logger, f"Could not resolve reference in UMR_MeasurementReference: {e}")
         super().normalize(archive, logger)
 
     # TODO Normalizer der Plot aus Referenz darstellt

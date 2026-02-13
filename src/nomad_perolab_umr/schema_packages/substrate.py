@@ -240,6 +240,9 @@ class UMR_Substrate(Substrate):
         #if self.samples:
         #    self.pixel_area = self.samples[0].reference.area         # ONLY VALID IF ALL PIXELS HAVE THE SAME SIZE!
         
+        # Set substrate to substrate_material
+        if not self.substrate and self.substrate_material:
+            self.substrate = self.substrate_material
 
 
 
@@ -378,12 +381,12 @@ class UMR_StandardSubstrate(UMR_Substrate, EntryData):
         a_eln=dict(component='StringEditQuantity'),
     )
 
-    supplier = Quantity(
-        type=MEnum(suggestions_supplier_chemicals),
-        description='Choose the name of the supplier from the dropdown list or type in a new one.',
-        a_eln=dict(
-            component='EnumEditQuantity',
-            props=dict(suggestions=suggestions_supplier_chemicals)))
+    # supplier = Quantity(
+    #     type=MEnum(suggestions_supplier_chemicals),
+    #     description='Choose the name of the supplier from the dropdown list or type in a new one.',
+    #     a_eln=dict(
+    #         component='EnumEditQuantity',
+    #         props=dict(suggestions=suggestions_supplier_chemicals)))
     
     short_name = Quantity(
         type=str,
@@ -506,6 +509,14 @@ class UMR_ExternalSubstrate(UMR_Substrate, EntryData):
                     'description',
                     'structuring','surface_resistivity','transmission'])))
    
+
+    supplier = Quantity(
+        type=MEnum(suggestions_supplier),
+        description='Choose the name of the supplier from the dropdown list or type in a new one.',
+        a_eln=dict(
+            component='EnumEditQuantity',
+            props=dict(suggestions=suggestions_supplier)))
+
     def normalize(self, archive, logger):
         super().normalize(archive,logger)
 
@@ -530,6 +541,13 @@ class UMR_InternalSubstrate(UMR_Substrate, EntryData):
                     'description',
                     'structuring','surface_resistivity','transmission'])))
 
+    supplier = Quantity(
+        type=MEnum(suggestions_supplier_chemicals),
+        description='Choose the name of the supplier from the dropdown list or type in a new one.',
+        a_eln=dict(
+            component='EnumEditQuantity',
+            props=dict(suggestions=suggestions_supplier_chemicals)))
+    
     standard_substrate_lot = Quantity(
         #type=SectionProxy('UMR_StandardSubstrateLot'),
         #description="Click on the Pencil to choose a 'StandardSubstrateLot'. Afterwards click 'Load Data From Standard Substrate'. The ELN fields will be filled with the values from the corresponding Standard Substrate",

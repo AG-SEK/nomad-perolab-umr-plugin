@@ -118,11 +118,11 @@ supplier_chemicals_abbreviations = {
     'Ossila B.V.': 'Ossila',
     "Solaveni GmbH": "Solaveni",
     "Avantama AG": "Avantama",
-    "Liaoning Yike Precision New Energy Technology Co. Ltd.": "LNYK",
+    "Liaoning Yike Precision New Energy Technology Co., Ltd.": "LNYK",
     "LinXole AB": "LinXole",
-    "Xiamen Funano Material Technology Co., Ltd": "Funano",
+    "Xiamen Funano Material Technology Co., Ltd.": "Funano",
     "Dockweiler Chemicals GmbH": "Dock",
-    "Yingkou Shangsheng Business Co.,Ltd.": "Yingkou",
+    "Yingkou Shangsheng Business Co., Ltd.": "Yingkou",
 }
 
 # Suppliers of Chemicals
@@ -166,14 +166,17 @@ suggestions_persons = [
     "Lea Obermüller",
     "Lukas Wagner",
     "Malwine Lühder",
-    "Nora Engel"
+    "Nora Engel",
     "Tim Timewell",
 ]
 
 # Dictionary with batch abbreviations
 batch_abbreviations = {
     "Single Junction NIP Carbon": "SNC",
-    "Single Junction PIN Top Cell": "SPT",
+    "Single Junction PIN Top Cell": "SPT", # Wide Bandgap
+    "Single Junction PIN Bottom Cell": "SPB", # Narrow Bandgap
+    "Tandem Cell PIN Carbon": "TPC",
+    "Tandem Cell PIN": "TP",
     "Test Batch": "Test",
 }
 

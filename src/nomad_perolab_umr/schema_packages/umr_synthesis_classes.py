@@ -276,6 +276,12 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
         a_eln=dict(component='EnumEditQuantity')
     )
 
+    purity = Quantity(
+        type=np.float64,
+        unit='%',
+        description='Purity of the chemical in %.',
+        a_eln=dict(component='NumberEditQuantity', defaultDisplayUnit='%'))
+
     safety_data_sheet = Quantity(
         type=str,
         a_eln=dict(

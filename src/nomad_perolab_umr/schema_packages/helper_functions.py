@@ -60,13 +60,13 @@ def sort_and_deduplicate_subsection(subsection, sort_by="name", deduplicate_by="
 
 # Function to determine the delimiter of a csv file, depending on the first line
 def get_delimiter(file_path):
-    with open(file_path) as file:
+    with open(file_path, "rb") as file:
         first_line = file.readline()
     
     # Überprüfe das Trennzeichen in der ersten Zeile
-    if ',' in first_line:
+    if b',' in first_line:
         return ','
-    elif ';' in first_line:
+    elif b';' in first_line:
         return ';'
     else:
         return None  # Wenn weder Komma noch Semikolon gefunden werden
@@ -460,11 +460,12 @@ def add_process_and_layer_to_sample(ELN_entry, archive, logger, sample_ref, proc
     # Populate the process entry using the metadata from the ELN entry
     process_entry.m_update_from_dict(ELN_entry.m_to_dict())  
     # Clear any existing samples in the process to avoid unintended duplicates
-    process_entry.samples = []
+    #process_entry.samples = []
 
-    # Retrieve the sample entry by resolving the reference to its mainfile
-    mainfile = sample_ref.reference.m_root().metadata.mainfile
-    sample_entry = get_entry_by_mainfile(ELN_entry, archive, mainfile)
+    # Retrieve the sample entry using its own class, not the ELN entry class
+    resolved_sample = sample_ref.reference.m_resolved()
+    mainfile = resolved_sample.m_root().metadata.mainfile
+    sample_entry = get_entry_by_mainfile(resolved_sample, archive, mainfile)
 
     # Merge descriptions from the sample reference and the ELN entry
     if sample_ref.description:
@@ -474,10 +475,14 @@ def add_process_and_layer_to_sample(ELN_entry, archive, logger, sample_ref, proc
             process_entry.description = sample_ref.description
     
     # Append the process to the sample's list of processes
+    if sample_entry.processes is None:
+        sample_entry.processes = []
     sample_entry.processes.append(process_entry)
             
     # If the ELN entry contains layer information, add each layer to the sample
     if hasattr(ELN_entry, 'layer'):
+        if sample_entry.layers is None:
+            sample_entry.layers = []
         for layer in ELN_entry.layer:    # ELN_entry.layer is a list!
             # Deep copy the resolved layer to avoid linking to the original object
             sample_entry.layers.append(layer.m_resolved().m_copy(deep=True))
@@ -490,9 +495,8 @@ def add_process_and_layer_to_sample(ELN_entry, archive, logger, sample_ref, proc
     sample_copy = resolved_sample.m_copy(deep=False)
     ELN_entry.samples.append(sample_copy)
 
-    # PERFORMANCE: Don't save here - will be batched later to reduce I/O
-    # The caller is responsible for saving all updated samples at once
-    # create_archive(sample_entry, archive, mainfile, overwrite=True)
+    # Persist the updated sample to keep processes/layers from being lost
+    create_archive(sample_entry, archive, mainfile, overwrite=True)
 
     return sample_entry, mainfile
 

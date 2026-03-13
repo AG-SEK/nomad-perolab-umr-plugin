@@ -184,6 +184,19 @@ class UMR_Layer(LayerProperties):
 
     def normalize(self, archive, logger):
 
+        # Keep material name consistently string-like: warn on None and auto-fill when missing.
+        # Error message:     ValueError: Cannot convert ['low-iron sodalime glass' 'FTO' None 'CsFAMAPbBrI'] to <class 'str'>.
+        material_name = getattr(self, 'layer_material_name', None)
+        if material_name is None:
+            log_warning(
+                self,
+                logger,
+                'layer_material_name is None. It will be filled automatically.',
+            )
+            self.layer_material_name = self.layer_name if self.layer_name else ''
+        elif material_name == '':
+            self.layer_material_name = self.layer_name if self.layer_name else ''
+
 
         if self.layer_type and self.layer_name:
             self.display_name = f"{self.layer_type} - {self.layer_name}"
@@ -205,6 +218,7 @@ class UMR_Layer(LayerProperties):
         elif self.thickness:
             self.layer_thickness = self.thickness
 
+        
 
         super().normalize(archive, logger)
 

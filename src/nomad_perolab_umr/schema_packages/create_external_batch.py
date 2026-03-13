@@ -122,7 +122,7 @@ class UMR_CreateExternalBatch(Entity, EntryData):
     
     enter_cells = Quantity(
         type=bool,
-        label="2. Enter cells information",
+        label="3. Enter solar cell information",
         description="Enter the number of solar cells on each substrate and all solar cell names. Additionally enter the dimensions of the cells (lenght, width) as well as the cell architecture and if given encapsulation. If you want to add more detailed information about the cells use the 'advanced solar cells settings' section.)",
         default=False,
         a_eln=dict(component='BoolEditQuantity'))

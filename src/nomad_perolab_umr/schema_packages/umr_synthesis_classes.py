@@ -22,6 +22,7 @@
 #Impors Python
 import os
 
+from nomad_perolab_umr.schema_packages.umr_reference_classes import UMR_EntityReference
 import numpy as np
 from baseclasses import ReadableIdentifiersCustom
 
@@ -203,7 +204,7 @@ class UMR_AddChemicalLot(Entity):
                     # Call normalizer of UMR_Cehmical to update list
                     self.m_parent.normalize(archive, logger)
                     # Delete Add Chemical lot section
-                    self.m_parent.add_chemical_lot = UMR_AddChemicalLot()
+                    self.m_parent.add_chemical_lot = None #UMR_AddChemicalLot()
 
         super().normalize(archive, logger)
 
@@ -330,6 +331,10 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
         section_def = UMR_AddChemicalLot
     )
 
+    lots_list = SubSection(
+        section_def = UMR_EntityReference, repeats=True
+    )
+
     def normalize(self, archive, logger):
 
 
@@ -381,6 +386,14 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
         self.lots = references
         self.lots.sort(key=lambda x: x.order_date)
 
+        # Fill subsection lots_list automatically from lots quantity.
+        list_ref = []
+        for ref in self.lots:
+            lot_ref = UMR_EntityReference(reference=ref)
+            list_ref.append(lot_ref)
+        self.lots_list = list_ref
+        for lot_ref in self.lots_list:
+            lot_ref.normalize(archive, logger)
 
 
         

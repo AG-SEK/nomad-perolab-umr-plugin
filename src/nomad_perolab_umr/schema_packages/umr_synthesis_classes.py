@@ -218,7 +218,7 @@ class UMR_Chemical(PureSubstance, Chemical, EntryData):
             properties=dict(
                 order=[
                     'name', 'substance_name', 'short_name', 'supplier',
-                    'product_number', 'link_to_product',
+                    'product_number', 'link_to_product', 'purity',
                     'state_of_matter', 'category', 'chemical_formula',
                     'lab_id',
                     'description',

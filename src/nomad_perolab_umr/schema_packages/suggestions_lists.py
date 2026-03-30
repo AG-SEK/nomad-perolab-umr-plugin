@@ -123,6 +123,11 @@ supplier_chemicals_abbreviations = {
     "Xiamen Funano Material Technology Co., Ltd.": "Funano",
     "Dockweiler Chemicals GmbH": "Dock",
     "Yingkou Shangsheng Business Co., Ltd.": "Yingkou",
+    "Pina Creation Inc.":"Pina",
+    "Xi'an Yuri Solar Co., Ltd.":"Yurisolar",
+    "Nanografi nano Teknoloji":"Nanografi",
+    "Angstrom Engineering":"Angstrom",
+    "Testbourne B.V.":"Testbourne",
 }
 
 # Suppliers of Chemicals

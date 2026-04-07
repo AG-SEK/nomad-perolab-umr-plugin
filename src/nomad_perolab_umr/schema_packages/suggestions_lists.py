@@ -118,6 +118,7 @@ supplier_chemicals_abbreviations = {
     'Ossila B.V.': 'Ossila',
     "Solaveni GmbH": "Solaveni",
     "Avantama AG": "Avantama",
+    "Latech Scientific Supply Pte. Ltd.": "Latech",
     "Liaoning Yike Precision New Energy Technology Co., Ltd.": "LNYK",
     "LinXole AB": "LinXole",
     "Xiamen Funano Material Technology Co., Ltd.": "Funano",

@@ -353,7 +353,7 @@ class UMR_AddStandardSubstrateLot(Entity):
                     log_warning(self, logger, f"The archive '{directory}/{lab_id}.archive.json' was created")
                   
                     self.m_parent.normalize(archive, logger)
-                    self.m_parent.add_substrate_lot = UMR_AddStandardSubstrateLot()
+                    self.m_parent.add_substrate_lot = None # UMR_AddStandardSubstrateLot()
 
         super().normalize(archive, logger)
 
@@ -417,6 +417,11 @@ class UMR_StandardSubstrate(UMR_Substrate, EntryData):
         section_def = UMR_AddStandardSubstrateLot
     )
 
+    lots_list = SubSection(
+        section_def = UMR_EntityReference, repeats=True
+    )
+
+
     def normalize(self, archive, logger):        
         
         # Generate lab_id
@@ -454,6 +459,16 @@ class UMR_StandardSubstrate(UMR_Substrate, EntryData):
         else: 
             log_warning(self, logger, f'No Substrate Lots were found for this Chemical: {self.lab_id}')
         
+
+        # Fill subsection lots_list automatically from lots quantity.
+        list_ref = []
+        for ref in self.lots:
+            lot_ref = UMR_EntityReference(reference=ref)
+            list_ref.append(lot_ref)
+        self.lots_list = list_ref
+        for lot_ref in self.lots_list:
+            lot_ref.normalize(archive, logger)
+
 
         super().normalize(archive,logger)
 

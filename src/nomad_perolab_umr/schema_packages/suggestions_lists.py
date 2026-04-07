@@ -179,6 +179,7 @@ suggestions_persons = [
 # Dictionary with batch abbreviations
 batch_abbreviations = {
     "Single Junction NIP Carbon": "SNC",
+    "Single Junction PIN Carbon": "SPC", # Narrow Bandgap
     "Single Junction PIN Top Cell": "SPT", # Wide Bandgap
     "Single Junction PIN Bottom Cell": "SPB", # Narrow Bandgap
     "Tandem Cell PIN Carbon": "TPC",

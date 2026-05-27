@@ -344,6 +344,7 @@ suggestions_chemical_category = [
     "Hole Transport Material",
     "Additive",
     "Electrode Material",
+    "Low Dimensional Perovskite Precursor",
     "Encapsulation Material",
     "Buffer and Passivation Material",
     "Miscellaneous",

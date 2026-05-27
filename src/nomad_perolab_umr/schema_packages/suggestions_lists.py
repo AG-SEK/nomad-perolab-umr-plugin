@@ -154,6 +154,7 @@ supplier_instruments_abbreviations = {
     'LINSEIS Messgeräte GmbH': 'Linseis',
     "QYB Quantum Yield Berlin GmbH": "QYB",
     "Harry Gestigkeit GmbH": "Gestigkeit",
+    "SCIPRIOS GmbH": "Sciprios",
 }
 
 # Suppliers of Instruments

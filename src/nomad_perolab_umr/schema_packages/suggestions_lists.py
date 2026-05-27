@@ -129,6 +129,7 @@ supplier_chemicals_abbreviations = {
     "Nanografi nano Teknoloji":"Nanografi",
     "Angstrom Engineering":"Angstrom",
     "Testbourne B.V.":"Testbourne",
+    "PlasmaChem GmbH":"PlasmaChem",
 }
 
 # Suppliers of Chemicals
@@ -165,14 +166,20 @@ suggestions_persons = [
     "Andrej Huber",
     "Annika Schneider",
     "Christopher Janas",
+    "Clemens Baretzky",
+    "Django Kriszun",
     "Dominik Muth",
     "Gülüsüm Babayeva",	
     "Immo Petersen",			
     "Jan Christoph Goldschmidt",
     "Lea Obermüller",
+    "Luca Scheuermann",
     "Lukas Wagner",
     "Malwine Lühder",
+    "Marco Hui",
     "Nora Engel",
+    "Pauline Annen",
+    "Rasmus Buchenau",
     "Tim Timewell",
 ]
 
@@ -185,6 +192,9 @@ batch_abbreviations = {
     "Tandem Cell PIN Carbon": "TPC",
     "Tandem Cell PIN": "TP",
     "Test Batch": "Test",
+    "Aluminium Zinc Oxide Sputtering Tests": "AZO",
+    "Atomic Layer Deposition Tests": "ALD",
+    "Single Junction Thin Film Tests": "STF",
 }
 
 # Batch descriptions/ topics

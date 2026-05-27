@@ -130,6 +130,7 @@ supplier_chemicals_abbreviations = {
     "Angstrom Engineering":"Angstrom",
     "Testbourne B.V.":"Testbourne",
     "PlasmaChem GmbH":"PlasmaChem",
+    "Grüssing GmbH": "Gruessing",
 }
 
 # Suppliers of Chemicals

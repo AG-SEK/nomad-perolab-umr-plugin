@@ -155,6 +155,7 @@ supplier_instruments_abbreviations = {
     "QYB Quantum Yield Berlin GmbH": "QYB",
     "Harry Gestigkeit GmbH": "Gestigkeit",
     "SCIPRIOS GmbH": "Sciprios",
+    "Angstrom Engineering":"Angstrom",
 }
 
 # Suppliers of Instruments

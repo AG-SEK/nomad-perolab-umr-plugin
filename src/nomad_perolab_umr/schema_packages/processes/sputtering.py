@@ -1,15 +1,18 @@
-
+import numpy as np
 # Imports HZB
-from baseclasses.vapour_based_deposition import Sputtering # Sputtering Baseclass
+from baseclasses.vapour_based_deposition import Sputtering, SputteringProcess # Sputtering Baseclass
 from baseclasses.helper.utilities import rewrite_json
+from baseclasses.material_processes_misc import Annealing
 
 # Imports Nomad
 from nomad.datamodel.data import EntryData # Baseclass for entering data in Nomad GUI
 from nomad.metainfo import ( # Nomad Baseclasses
+    Quantity,
     Reference,
     SchemaPackage,
     Section,
     SubSection,
+    MEnum,
 )
 
 # Imports UMR
@@ -25,35 +28,247 @@ from ..solar_cell import UMR_InternalSolarCell # Baseclass for the internal sola
 from ..suggestions_lists import * # Import of suggestions lists for the processes, e.g. for dropdown menus in the ELN
 from ..umr_baseclasses import UMR_Layer # Baseclass for the layer subsection of the processes
 from ..umr_reference_classes import UMR_EntityReference # Baseclass for UMR entity references
+from ..umr_synthesis_classes import UMR_ChemicalLot
 
 
 m_package = SchemaPackage() 
 
 
+# UMR Sputtering Process Baseclass, which inherits from HZB Sputtering Process Baseclass
+class UMR_SputteringProcess(SputteringProcess):
+    m_def = Section(
+        a_eln=dict(
+            hide=[
+                    'target',
+                    'target_2',  
+                    'gas',
+                    'gas_2',
+                    'gas_flow_rate',
+                    'pressure',
+                ],
+            properties=dict(
+                order=[
+                    # sources
+                    'target_lot',
+                    'source',
+                    'control_mode',
+                    'pulse_frequency',
+                    'reverse_time',
+                    'tooling_factor', 
+                    # startup          
+                    'base_pressure',
+                    'rotation_rate',
+                    # process
+                    'argon_flow_rate',
+                    'oxygen_flow_rate',
+                    'water_flow_rate',
+                    'capman_pressure',
+                    'pressure_bump',
+                    'ramp_power',
+                    'ramp_rate',
+                    'soak_time',
+                    'burn_in_time',
+                    'temperature',
+                    'deposition_time',
+                    'power',
+                    'voltage',
+                    'thickness',
+                    'description',
+                ]
+            )
+        )
+    )
+
+    target_lot = Quantity(
+        links=['https://purl.archive.org/tfsco/TFSCO_00002035'],
+        type=Reference(UMR_ChemicalLot.m_def),
+        a_eln=dict(
+            component='ReferenceEditQuantity',
+            ),        
+    )
+
+    tooling_factor = Quantity(
+        type=np.dtype(np.float64),
+        description='Tooling factor for thickness calibration',
+        a_eln=dict(
+            component='NumberEditQuantity',
+            props=dict(minValue=0),
+        ),
+    )
+
+    base_pressure = Quantity(
+        links=[
+            'http://purl.obolibrary.org/obo/PATO_0001025',
+            'https://purl.archive.org/tfsco/TFSCO_00005040',
+        ],
+        type=np.dtype(np.float64),
+        unit=('mbar'),
+        a_eln=dict(
+            component='NumberEditQuantity',
+            defaultDisplayUnit='mbar',
+            props=dict(minValue=0),
+        ),
+    )
+
+    suggestions_list=['power', 'voltage', 'current']
+    control_mode = Quantity(
+        type=MEnum(suggestions_list),
+        description='Control mode used for the sputtering process.',
+        a_eln=dict(
+            component='EnumEditQuantity',
+            props=dict(suggestions=suggestions_list)
+        ),
+    )
+
+    pulse_frequency = Quantity(
+        type=np.dtype(np.float64),
+        unit=('kHz'),
+        a_eln=dict(
+            component='NumberEditQuantity',
+            defaultDisplayUnit='kHz',
+            props=dict(minValue=0, maxValue=100),
+        ),
+    )
+
+    reverse_time = Quantity(
+        type=np.dtype(np.float64),
+        unit=('us'),
+        a_eln=dict(
+            component='NumberEditQuantity',
+            defaultDisplayUnit='us',
+            props=dict(minValue=0),
+        ),
+    )
+
+    argon_flow_rate = Quantity(
+        type=np.dtype(np.float64),
+        #unit="cm**3/minute" #'sccm',
+        description='Argon gas flow rate during sputtering.',
+        a_eln=dict(
+            component='NumberEditQuantity',
+            #defaultDisplayUnit="cm**3/minute",
+            props=dict(minValue=0),
+        ),
+    )
+
+    oxygen_flow_rate = Quantity(
+        type=np.dtype(np.float64),
+        #unit="cm**3/minute" #'sccm',
+        description='Oxygen gas flow rate during sputtering.',
+        a_eln=dict(
+            component='NumberEditQuantity',
+            #defaultDisplayUnit="cm**3/minute",
+            props=dict(minValue=0),
+        ),
+    )
+
+    water_flow_rate = Quantity(
+        type=np.dtype(np.float64),
+        #unit="cm**3/minute" #'sccm',
+        description='Water vapour flow rate during sputtering.',
+        a_eln=dict(
+            component='NumberEditQuantity',
+            #defaultDisplayUnit="cm**3/minute",
+            props=dict(minValue=0),
+        ),
+    )
+
+    capman_pressure = Quantity(
+        links=[
+            'http://purl.obolibrary.org/obo/PATO_0001025',
+            'https://purl.archive.org/tfsco/TFSCO_00005040',
+        ],
+        type=np.dtype(np.float64),
+        unit='mbar',
+        description='Process pressure measured by the capacitance manometer.',
+        a_eln=dict(
+            component='NumberEditQuantity',
+            label='process pressure',
+            defaultDisplayUnit='mbar',
+            props=dict(minValue=0),
+        ),
+    )
+
+    pressure_bump = Quantity(
+        type=bool,
+        description='Indicates whether a pressure bump was used during the sputtering recipe.',
+        default=True,
+        a_eln=dict(
+            component='BoolEditQuantity',
+        ),
+    )
+    
+    ramp_power = Quantity(
+        type=np.dtype(np.float64),
+        unit='%',
+        description='ramp of power in percent of the controller maximum',
+        a_eln=dict(
+            component='NumberEditQuantity',
+            defaultDisplayUnit='%',
+            props=dict(minValue=0),
+        ),
+    )
+    
+    ramp_rate = Quantity(
+        type=np.dtype(np.float64),
+        unit='%/min',
+        a_eln=dict(
+            component='NumberEditQuantity',
+            defaultDisplayUnit='%/min',
+            props=dict(minValue=0),
+        ),
+    )
+
+    soak_time = Quantity(
+        type=np.dtype(np.float64),
+        unit='s',
+        description='initial soak time after power ramped up',
+        a_eln=dict(
+            component='NumberEditQuantity',
+            defaultDisplayUnit='s',
+            props=dict(minValue=0),
+        ),
+    )
+
 # UMR Sputtering Baseclass, which inherits from the HZB Sputtering Baseclass and the Nomad EntryData Baseclass. It defines
 class UMR_Sputtering(UMR_BaseProcess, Sputtering, EntryData):
     m_def = Section(
-        label_quantity = 'method', # Defines which quntity is displayed as a alabel in the list (if used as subsection)
+        label_quantity = 'method', # Defines which quantity is displayed as a alabel in the list (if used as subsection)
         a_eln=dict(
-            hide=['present', 'lab_id', 'positon_in_experimental_plan'], # Defines which quantities are hidden in the ELN    
+            hide=[
+                'present',
+                'lab_id',
+                'positon_in_experimental_plan',
+                'location',
+                'position_in_experimental_plan',
+                "atmosphere",
+            ],
             properties=dict(
-                order=[             # Defines order of the  and SUbsections in the ELN
+                order=[ # Defines order of the  and Subsections in the ELN
                     # Quantities
-                    'name', 'datetime', 'end_time', 'location',
+                    'name', 
+                    'datetime', 
+                    'end_time',
                     'description',
-                    'position_in_experimental_plan', "batch",
-                    "description",
+                    'operator',
+                    "batch",
                     # Subsections
                     'layer',
                     "processes",
+                    'annealing',
                     'instruments',
-                    'steps',
                     'samples',
-                    "atmosphere",
+                    'steps',
                 ]))
         )
 
-    layer = SubSection(section_def=UMR_Layer, repeats=True)
+    layer = SubSection(section_def=UMR_Layer, repeats=True) # why needed?
+
+    processes = SubSection(section_def=UMR_SputteringProcess, repeats=False)
+
+    annealing = SubSection(links=['http://purl.obolibrary.org/obo/BFO_0000051'], section_def=Annealing)
+
+
 
 # UMR ELN Sputtering class, which inherits from the UMR Sputtering Baseclass and the UMR ELN Process Baseclass. It defines the category for the ELN and can be used to add ELN specific quantities or subsections in the future.
 class UMR_SputteringELN(UMR_ELNProcess, UMR_Sputtering):

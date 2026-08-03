@@ -147,6 +147,8 @@ spin_coating_schema = "nomad_perolab_umr.schema_packages.processes:spin_coating_
 spray_pyrolysis_schema = "nomad_perolab_umr.schema_packages.processes:spray_pyrolysis_schema"
 evaporation_schema = "nomad_perolab_umr.schema_packages.processes:evaporation_schema"
 sputtering_schema = "nomad_perolab_umr.schema_packages.processes:sputtering_schema"
+ald_schema = "nomad_perolab_umr.schema_packages.processes:ald_schema"
+electrode_lamination_schema = "nomad_perolab_umr.schema_packages.processes:electrode_lamination_schema"
 
 
 connection_test_schema = "nomad_perolab_umr.schema_packages.characterization:connection_test_schema"

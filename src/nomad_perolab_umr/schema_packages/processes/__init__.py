@@ -114,6 +114,34 @@ sputtering_schema = SputteringSchemaPackageEntryPoint(
     description='Schema package containing sections for Sputtering.',
 )
 
+class ElectrodeLaminationSchemaPackageEntryPoint(SchemaPackageEntryPoint):
+
+    def load(self):
+        from nomad_perolab_umr.schema_packages.processes.electrode_lamination import m_package
+
+        return m_package
+
+electrode_lamination_schema = ElectrodeLaminationSchemaPackageEntryPoint(
+    name='Electrode Lamination Schema',
+    description='Schema package containing sections for Electrode Lamination.',
+)
+
+
+class ALDSchemaPackageEntryPoint(SchemaPackageEntryPoint):
+
+    def load(self):
+        from nomad_perolab_umr.schema_packages.processes.atomic_layer_deposition import m_package
+
+        return m_package
+
+ald_schema = ALDSchemaPackageEntryPoint(
+    name='Atomic Layer Deposition Schema',
+    description='Schema package containing sections for Atomic Layer Deposition.',
+)
+
+
+
+
 
 
 

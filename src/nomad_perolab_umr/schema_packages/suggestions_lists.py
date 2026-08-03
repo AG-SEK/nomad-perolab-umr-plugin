@@ -156,6 +156,7 @@ supplier_instruments_abbreviations = {
     "Harry Gestigkeit GmbH": "Gestigkeit",
     "SCIPRIOS GmbH": "Sciprios",
     "Angstrom Engineering":"Angstrom",
+    "Lovibond (Tintometer GmbH)":"Lovibond",
 }
 
 # Suppliers of Instruments

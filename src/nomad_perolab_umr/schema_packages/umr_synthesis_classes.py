@@ -445,7 +445,16 @@ class UMR_ChemicalLot(UMR_AddChemicalLot, EntryData):   ## ggf. hier noch von Ch
     current_storage = Quantity(
         type=np.float64,
         description='Current storage in %.',
-        a_eln=dict(component='NumberEditQuantity')
+        a_eln=dict(component='NumberEditQuantity'),
+        unit =("%")
+    )
+
+    disposed = Quantity(
+        type=bool,
+        default=False,
+        a_eln=dict(
+            label='Lot was disposed',
+            component='BoolEditQuantity')
     )
 
 

@@ -131,6 +131,7 @@ supplier_chemicals_abbreviations = {
     "Testbourne B.V.":"Testbourne",
     "PlasmaChem GmbH":"PlasmaChem",
     "Grüssing GmbH": "Gruessing",
+    "EVOCHEM Advanced Materials": "Evochem",
 }
 
 # Suppliers of Chemicals

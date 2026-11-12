@@ -132,6 +132,7 @@ supplier_chemicals_abbreviations = {
     "PlasmaChem GmbH":"PlasmaChem",
     "Grüssing GmbH": "Gruessing",
     "EVOCHEM Advanced Materials": "Evochem",
+    "Shanghai Macklin Biochemical Technology Co., Ltd.": "Macklin",
 }
 
 # Suppliers of Chemicals

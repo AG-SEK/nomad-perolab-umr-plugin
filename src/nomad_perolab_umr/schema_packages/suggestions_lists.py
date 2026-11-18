@@ -133,6 +133,8 @@ supplier_chemicals_abbreviations = {
     "Grüssing GmbH": "Gruessing",
     "EVOCHEM Advanced Materials": "Evochem",
     "Shanghai Macklin Biochemical Technology Co., Ltd.": "Macklin",
+    "Ningbo GrapheneRich NanoTech Co., Ltd.": "GrapheneRich",
+    "Graphenea S.A.": "Graphenea"
 }
 
 # Suppliers of Chemicals

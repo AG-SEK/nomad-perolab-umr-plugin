@@ -169,9 +169,9 @@ def read_jv_data(mainfile, encoding):
     # Convert scan_order entry from "RV then FW" to "RV -> FW"
     # Needed to be implemented after Cicci Update - 20.11.2026
     if jv_dict['Scan Order'] == "RV then FW":
-        jv_dict['Scan Order'] = "RV -> FW"
+        jv_dict['Scan Order'] = "RV->FW"
     elif jv_dict['Scan Order'] == "FW then RV":
-        jv_dict['Scan Order'] = "FW -> RV"
+        jv_dict['Scan Order'] = "FW->RV"
 
     return jv_dict
     
